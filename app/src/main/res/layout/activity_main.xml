@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
 
     <TextView
         android:id="@+id/user_details"
@@ -15,7 +15,11 @@
         android:layout_height="wrap_content"
         android:text="Hello World!" />
 
-
+    <Button
+        android:id="@+id/btn_view_account"
+        android:text="@string/view_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <Button
         android:text="@string/logout"

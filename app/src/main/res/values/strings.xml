@@ -10,4 +10,10 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="phone_number">Phone Number</string>
+    <string name="view_account">View Account</string>
+    <string name="user_details">User Details</string>
+    <string name="first_name_show">First Name:</string>
+    <string name="last_name_show">Last Name:</string>
+    <string name="phone_number_show">Phone Number:</string>
+    <string name="email_show">Email:</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.luggageassistant.auth;
+package com.example.luggageassistant.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.luggageassistant.MainActivity;
 import com.example.luggageassistant.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,7 +24,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.example.luggageassistant.database.User;
+import com.example.luggageassistant.model.User;
 
 public class Register extends AppCompatActivity {
 

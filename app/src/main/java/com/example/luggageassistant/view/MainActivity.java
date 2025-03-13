@@ -1,4 +1,4 @@
-package com.example.luggageassistant;
+package com.example.luggageassistant.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.luggageassistant.auth.Login;
+import com.example.luggageassistant.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     Button buttonLogout;
+    Button buttonViewAccount;
     TextView textView;
     FirebaseUser user;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         buttonLogout = findViewById(R.id.btn_logout);
+        buttonViewAccount = findViewById(R.id.btn_view_account);
         textView = findViewById(R.id.user_details);
 
         if(user == null) {
@@ -47,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        buttonViewAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Navighează către AccountActivity
+                Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                startActivity(intent);
             }
         });
 
