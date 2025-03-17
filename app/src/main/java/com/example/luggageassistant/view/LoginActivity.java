@@ -22,18 +22,20 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText editTextEmail, editTextPassword;
     Button buttonLogin;
     ProgressBar progressBar;
-//    FirebaseAuth mAuth;
-//    FirebaseFirestore db;
     TextView textViewRegister;
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser != null){
-//            navigateToMain(currentUser.getUid());
-//        }
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(loginViewModel.isUserLoggedIn()) {
+            navigateToMain();
+        }
+    }
+    private void navigateToMain() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

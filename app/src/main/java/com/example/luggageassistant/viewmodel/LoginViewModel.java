@@ -44,4 +44,9 @@ public class LoginViewModel extends ViewModel {
             }
         });
     }
+
+    public boolean isUserLoggedIn() {
+        return loginRepository.isUserLoggedIn();
+    }
+
 }

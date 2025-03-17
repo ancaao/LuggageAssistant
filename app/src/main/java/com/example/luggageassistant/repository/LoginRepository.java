@@ -29,4 +29,9 @@ public class LoginRepository {
                     }
                 });
     }
+
+    public boolean isUserLoggedIn() {
+        return mAuth.getCurrentUser() != null;
+    }
+
 }
