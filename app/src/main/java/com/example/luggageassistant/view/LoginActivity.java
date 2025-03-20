@@ -43,9 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-//        mAuth = FirebaseAuth.getInstance();
-//        db = FirebaseFirestore.getInstance();
-
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         editTextEmail = findViewById(R.id.email);

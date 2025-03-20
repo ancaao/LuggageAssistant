@@ -44,4 +44,18 @@ public class RegisterRepository {
                     }
                 });
     }
+
+    public void checkIfEmailExists(String email, EmailCheckCallback callback) {
+        db.collection("users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        boolean exists = !task.getResult().isEmpty();
+                        callback.onCheckComplete(exists);
+                    } else {
+                        callback.onCheckComplete(false);
+                    }
+                });
+    }
 }

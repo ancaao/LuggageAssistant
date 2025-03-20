@@ -16,4 +16,5 @@
     <string name="last_name_show">Last Name:</string>
     <string name="phone_number_show">Phone Number:</string>
     <string name="email_show">Email:</string>
+    <string name="select_country_code">Select Country Code</string>
 </resources>

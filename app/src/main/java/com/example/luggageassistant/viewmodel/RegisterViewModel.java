@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.luggageassistant.repository.RegisterRepository;
+import com.example.luggageassistant.repository.EmailCheckCallback;
+
 
 public class RegisterViewModel extends ViewModel {
 
@@ -16,13 +18,22 @@ public class RegisterViewModel extends ViewModel {
         registerRepository = new RegisterRepository();
     }
 
-    public void registerUser(String email, String password, String firstName, String lastName, String phone) {
-        isLoading.setValue(true);
-        registerRepository.registerUser(email, password, firstName, lastName, phone, success -> {
-            isLoading.postValue(false);
-            registrationStatus.postValue(success);
-        });
-    }
+//    public void registerUser(String email, String password, String firstName, String lastName, String phone) {
+//        isLoading.setValue(true);
+//
+//        registerRepository.checkIfEmailExists(email, exists -> {
+//            if (exists) {
+//                emailExists.setValue(true);
+//                isLoading.postValue(false);
+//            } else {
+//                emailExists.setValue(false);
+//                registerRepository.registerUser(email, password, firstName, lastName, phone, success -> {
+//                    isLoading.postValue(false);
+//                    registrationStatus.postValue(success);
+//                });
+//            }
+//        });
+//    }
 
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
@@ -31,4 +42,26 @@ public class RegisterViewModel extends ViewModel {
     public LiveData<Boolean> getRegistrationStatus() {
         return registrationStatus;
     }
+
+    public void checkIfEmailExists(String email, EmailCheckCallback callback) {
+        registerRepository.checkIfEmailExists(email, callback);
+    }
+
+    public void registerUser(String email, String password, String firstName, String lastName, String phone, RegisterRepository.RegistrationCallback callback) {
+        isLoading.setValue(true);
+
+        registerRepository.checkIfEmailExists(email, exists -> {
+            if (exists) {
+                isLoading.postValue(false);
+                callback.onComplete(false); // Email deja folosit
+            } else {
+                registerRepository.registerUser(email, password, firstName, lastName, phone, success -> {
+                    isLoading.postValue(false);
+                    callback.onComplete(success);
+                });
+            }
+        });
+    }
+
+
 }
