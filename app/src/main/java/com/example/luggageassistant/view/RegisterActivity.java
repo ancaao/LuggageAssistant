@@ -22,8 +22,8 @@ import com.example.luggageassistant.utils.InputValidator;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputEditText editTextFirstName, editTextLastName, editTextPhone, editTextEmail, editTextPassword;
-    private TextInputLayout firstNameLayout, lastNameLayout, phoneLayout ,emailLayout, passwordLayout;
+    private TextInputEditText editTextFirstName, editTextLastName, editTextPhone, editTextEmail, editTextPassword, editTextConfirmPassword;
+    private TextInputLayout firstNameLayout, lastNameLayout, phoneLayout ,emailLayout, passwordLayout, confirmPasswordLayout;
     private Button buttonRegister;
     private ProgressBar progressBar;
     private RegisterViewModel registerViewModel;
@@ -42,12 +42,14 @@ public class RegisterActivity extends AppCompatActivity {
         editTextFirstName = findViewById(R.id.firstName);
         editTextLastName = findViewById(R.id.lastName);
         editTextPhone = findViewById(R.id.phoneNo);
+        editTextConfirmPassword = findViewById(R.id.confirmPassword);
 
         firstNameLayout = findViewById(R.id.firstNameLayout);
         lastNameLayout = findViewById(R.id.lastNameLayout);
         phoneLayout = findViewById(R.id.phoneNoLayout);
         emailLayout = findViewById(R.id.emailLayout);
         passwordLayout = findViewById(R.id.passwordLayout);
+        confirmPasswordLayout = findViewById(R.id.confirmPasswordLayout);
 
         buttonRegister = findViewById(R.id.btn_register);
         progressBar = findViewById(R.id.progressBar);
@@ -56,10 +58,12 @@ public class RegisterActivity extends AppCompatActivity {
         editTextEmail.addTextChangedListener(new InputValidator(this, emailLayout, editTextEmail));
         editTextPassword.addTextChangedListener(new InputValidator(this, passwordLayout, editTextPassword));
         editTextPhone.addTextChangedListener(new InputValidator(this, phoneLayout, editTextPhone));
+//        editTextConfirmPassword.addTextChangedListener(new InputValidator(this, confirmPasswordLayout, editTextConfirmPassword));
 
         setFocusChangeListener(editTextEmail, emailLayout);
         setFocusChangeListener(editTextPassword, passwordLayout);
         setFocusChangeListener(editTextPhone, phoneLayout);
+//        setFocusChangeListener(editTextConfirmPassword, confirmPasswordLayout);
 
         textViewLogin.setOnClickListener(view -> {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -72,8 +76,9 @@ public class RegisterActivity extends AppCompatActivity {
             String firstName = editTextFirstName.getText().toString().trim();
             String lastName = editTextLastName.getText().toString().trim();
             String phone = editTextPhone.getText().toString().trim();
+            String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || TextUtils.isEmpty(phone)) {
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword) || TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || TextUtils.isEmpty(phone)) {
                 Toast.makeText(RegisterActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -86,6 +91,9 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
+            if (!doPasswordsMatch(password, confirmPassword)) {
+                return;
+            }
 
             progressBar.setVisibility(View.VISIBLE); // Afișează loading
 
@@ -149,6 +157,18 @@ public class RegisterActivity extends AppCompatActivity {
                 resetError(layout, editText);
             }
         });
+    }
+
+    private boolean doPasswordsMatch(String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            confirmPasswordLayout.setError("Passwords do not match!");
+            confirmPasswordLayout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.red));
+            return false;
+        } else {
+            confirmPasswordLayout.setError(null);
+            confirmPasswordLayout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.green));
+            return true;
+        }
     }
 
 

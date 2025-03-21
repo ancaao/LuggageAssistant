@@ -17,4 +17,5 @@
     <string name="phone_number_show">Phone Number:</string>
     <string name="email_show">Email:</string>
     <string name="select_country_code">Select Country Code</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>
