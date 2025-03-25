@@ -1,9 +1,26 @@
  <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.LuggageAssistant" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.LuggageAssistant" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Culori principale -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/onPrimary</item>
+        <item name="colorSecondary">@color/linkColor</item>
+        <item name="colorError">@color/error</item>
+
+        <!-- Fundal și suprafețe -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/onBackground</item>
+        <item name="colorOnBackground">@color/onBackground</item>
+
+        <!-- Status bar & navigation bar -->
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/background</item>
+
+        <!-- Font (opțional) -->
+        <item name="android:textColor">@color/onBackground</item>
+<!--        <item name="android:fontFamily">@font/roboto</item>-->
     </style>
 
-    <style name="Theme.LuggageAssistant" parent="Base.Theme.LuggageAssistant" />
+<!--    <style name="Theme.LuggageAssistant" parent="Base.Theme.LuggageAssistant" />-->
 </resources>

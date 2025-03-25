@@ -102,12 +102,12 @@ public class RegisterActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         progressBar.setVisibility(View.GONE);
                         emailLayout.setError("This email is already in use!");
-                        emailLayout.setBoxStrokeColor(ContextCompat.getColor(RegisterActivity.this, R.color.red));
+                        emailLayout.setBoxStrokeColor(ContextCompat.getColor(RegisterActivity.this, R.color.error));
                     });
                 } else {
                     runOnUiThread(() -> {
                         emailLayout.setError(null);
-                        emailLayout.setBoxStrokeColor(ContextCompat.getColor(RegisterActivity.this, R.color.green));
+                        emailLayout.setBoxStrokeColor(ContextCompat.getColor(RegisterActivity.this, R.color.success));
                     });
 
                     // Înregistrăm utilizatorul doar dacă email-ul NU există
@@ -147,7 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
             new InputValidator(this, layout, editText).validateField();
         } else {
             layout.setError(null);
-            layout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.grey)); // Reset la culoarea normală
+            layout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.primary)); // Reset la culoarea normală
         }
     }
 
@@ -162,11 +162,11 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean doPasswordsMatch(String password, String confirmPassword) {
         if (!password.equals(confirmPassword)) {
             confirmPasswordLayout.setError("Passwords do not match!");
-            confirmPasswordLayout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.red));
+            confirmPasswordLayout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.error));
             return false;
         } else {
             confirmPasswordLayout.setError(null);
-            confirmPasswordLayout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.green));
+            confirmPasswordLayout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.success));
             return true;
         }
     }
