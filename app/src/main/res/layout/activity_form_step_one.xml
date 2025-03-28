@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Age"
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <EditText
+        android:id="@+id/ageInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Enter your age"
+        android:inputType="number" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gender"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <RadioGroup
+        android:id="@+id/genderGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/femaleRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+
+        <RadioButton
+            android:id="@+id/maleRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/otherRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other" />
+    </RadioGroup>
+
+<!--    <Spinner-->
+<!--        android:id="@+id/specialPreferencesSpinner"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="48dp" />-->
+
+    <Button
+        android:id="@+id/selectSpecialPreferencesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Special Preferences" />
+
+    <!-- Aici va fi zona dinamică unde se adaugă partenerii -->
+    <LinearLayout
+        android:id="@+id/partnerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+    <Button
+        android:id="@+id/addPartnerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add trip partner (+)" />
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
+
+</LinearLayout>
+
+
