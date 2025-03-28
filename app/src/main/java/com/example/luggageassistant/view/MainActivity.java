@@ -9,13 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.luggageassistant.R;
+import com.example.luggageassistant.view.TripConfiguration.StepOneActivity;
 import com.example.luggageassistant.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private MainViewModel mainViewModel;
     private TextView textView;
-    private Button buttonLogout, buttonViewAccount;
+    private Button buttonLogout, buttonViewAccount, buttonAddLuggage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.user_details);
         buttonLogout = findViewById(R.id.btn_logout);
         buttonViewAccount = findViewById(R.id.btn_view_account);
+        buttonAddLuggage = findViewById(R.id.btn_add_luggage);
 
         // Observăm statusul utilizatorului
         mainViewModel.getUserEmail().observe(this, email -> {
@@ -48,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
         buttonViewAccount.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+            startActivity(intent);
+        });
+
+        buttonAddLuggage.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, StepOneActivity.class);
             startActivity(intent);
         });
 
