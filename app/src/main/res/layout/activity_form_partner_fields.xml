@@ -5,11 +5,19 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <Button
+        android:id="@+id/removePartnerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove trip partner (-)" />
+
     <EditText
         android:id="@+id/partnerAgeInput"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="@string/age"
+        android:textColor="@color/onBackground"
+        android:textColorHint="@color/inputBorder"
+        android:hint="Enter your age"
         android:inputType="number" />
 
     <RadioGroup
@@ -22,23 +30,26 @@
             android:id="@+id/partnerFemaleRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/onBackground"
             android:text="Female" />
 
         <RadioButton
             android:id="@+id/partnerMaleRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/onBackground"
             android:text="Male" />
 
         <RadioButton
             android:id="@+id/partnerOtherRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/onBackground"
             android:text="Other" />
     </RadioGroup>
 
     <Button
-        android:id="@+id/selectSpecialPreferencesButton"
+        android:id="@+id/partnerSelectSpecialPreferencesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select Special Preferences" />

@@ -1,7 +1,10 @@
 package com.example.luggageassistant.model;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TripConfiguration {
     // step 1: personal information
@@ -29,7 +32,25 @@ public class TripConfiguration {
 
     public TripConfiguration() {
     }
-
+    public Map<String, Object> toMap() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("age", age);
+        result.put("gender", gender);
+        result.put("specialPreferences", specialPreferences);
+        result.put("numberOfLuggages", numberOfLuggages);
+        result.put("luggage", luggage != null ? luggage.stream().map(Luggage::toMap).collect(Collectors.toList()) : null);
+        result.put("specialAccessories", specialAccessories);
+        result.put("country", country);
+        result.put("city", city);
+        result.put("tripStartDate", tripStartDate);
+        result.put("tripEndDate", tripEndDate);
+        result.put("transportType", transportType);
+        result.put("travelPurpose", travelPurpose);
+        result.put("plannedActivities", plannedActivities);
+        result.put("specialEvents", specialEvents);
+        result.put("partner", partner != null ? partner.stream().map(TravelPartner::toMap).collect(Collectors.toList()) : null);
+        return result;
+    }
     public static class Luggage {
         private String luggageType;
         private String dimensionLimit;
@@ -44,6 +65,13 @@ public class TripConfiguration {
             this.weightLimit = weightLimit;
         }
 
+        public Map<String, Object> toMap() {
+            Map<String, Object> result = new HashMap<>();
+            result.put("luggageType", luggageType);
+            result.put("dimensionLimit", dimensionLimit);
+            result.put("weightLimit", weightLimit);
+            return result;
+        }
         public String getDimensionLimit() {
             return dimensionLimit;
         }
@@ -83,6 +111,13 @@ public class TripConfiguration {
             this.specialPreferences = specialPreferences;
         }
 
+        public Map<String, Object> toMap() {
+            Map<String, Object> result = new HashMap<>();
+            result.put("age", age);
+            result.put("gender", gender);
+            result.put("specialPreferences", specialPreferences);
+            return result;
+        }
         public int getAge() {
             return age;
         }
