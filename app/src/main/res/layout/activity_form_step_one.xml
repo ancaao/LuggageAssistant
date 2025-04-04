@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Age"
+        android:text="@string/age"
         android:textAppearance="?attr/textAppearanceListItem" />
     <EditText
         android:id="@+id/ageInput"
@@ -17,13 +17,13 @@
         android:layout_height="48dp"
         android:textColor="@color/onBackground"
         android:textColorHint="@color/inputBorder"
-        android:hint="Enter your age"
+        android:hint="@string/enter_your_age"
         android:inputType="number" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Gender"
+        android:text="@string/gender"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <RadioGroup
@@ -37,21 +37,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/onBackground"
-            android:text="Female" />
+            android:text="@string/female" />
 
         <RadioButton
             android:id="@+id/maleRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/onBackground"
-            android:text="Male" />
+            android:text="@string/male" />
 
         <RadioButton
             android:id="@+id/otherRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/onBackground"
-            android:text="Other" />
+            android:text="@string/other" />
     </RadioGroup>
 
 <!--    <Spinner-->
@@ -63,7 +63,7 @@
         android:id="@+id/selectSpecialPreferencesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Special Preferences" />
+        android:text="@string/select_special_preferences" />
 
     <!-- Aici va fi zona dinamică unde se adaugă partenerii -->
     <LinearLayout
@@ -75,12 +75,23 @@
         android:id="@+id/addPartnerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add trip partner (+)" />
+        android:text="@string/add_trip_partner" />
+<!--    <Button-->
+<!--        android:id="@+id/submitButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Submit" />-->
     <Button
-        android:id="@+id/submitButton"
-        android:layout_width="match_parent"
+        android:id="@+id/stepOneNextButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit" />
+        android:text="@string/next" />
+
+    <Button
+        android:id="@+id/stepOneCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel" />
 
 
 </LinearLayout>

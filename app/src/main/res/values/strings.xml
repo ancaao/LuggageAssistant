@@ -18,8 +18,21 @@
     <string name="email_show">Email:</string>
     <string name="select_country_code">Select Country Code</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="age">Age</string>
+<!--    <string name="age">Age</string>-->
     <string name="add_luggage">Add Luggage</string>
+    <string name="next">Next</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_trip_partner">Add trip partner (+)</string>
+    <string name="select_special_preferences">Select Special Preferences</string>
+    <string name="other">Other</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="gender">Gender</string>
+    <string name="enter_your_age">Enter your age</string>
+    <string name="age">Age</string>
+    <string name="enter_your_partner_s_age">Enter your partner\'s age</string>
+    <string name="remove_trip_partner">Remove trip partner (-)</string>
+    <string name="select_partner_s_special_preferences">Select Partner\'s Special Preferences</string>
     <string-array name="special_preferences">
         <item>Medication</item>
         <item>Dental accessories</item>

@@ -1,6 +1,7 @@
 package com.example.luggageassistant.view.TripConfiguration;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.luggageassistant.R;
+import com.example.luggageassistant.model.TravelPartner;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 
@@ -29,7 +31,7 @@ import java.util.Map;
 
 public class StepOneActivity extends AppCompatActivity {
     private LinearLayout partnerContainer;
-    private Button addPartnerButton, selectSpecialPreferencesButton, submitButton;
+    private Button addPartnerButton, selectSpecialPreferencesButton, nextButton, cancelButton;
     private List<String> userSelectedItems = new ArrayList<>();
     private TripConfigurationViewModel tripConfigurationViewModel;
 
@@ -46,12 +48,35 @@ public class StepOneActivity extends AppCompatActivity {
         partnerContainer = findViewById(R.id.partnerContainer);
         addPartnerButton = findViewById(R.id.addPartnerButton);
         selectSpecialPreferencesButton = findViewById(R.id.selectSpecialPreferencesButton);
-        submitButton = findViewById(R.id.submitButton);
+        nextButton = findViewById(R.id.stepOneNextButton);
+        cancelButton = findViewById(R.id.stepOneCancelButton);
 
         selectSpecialPreferencesButton.setOnClickListener(view -> showSpecialPreferencesDialog(null));
         addPartnerButton.setOnClickListener(view -> addPartnerFields());
-        submitButton.setOnClickListener(view -> submitForm());
 
+        nextButton.setOnClickListener(view -> {
+            EditText ageInput = findViewById(R.id.ageInput);
+            RadioGroup genderGroup = findViewById(R.id.genderGroup);
+            int selectedGenderId = genderGroup.getCheckedRadioButtonId();
+            RadioButton genderButton = findViewById(selectedGenderId);
+
+            int age = 0;
+            try {
+                age = Integer.parseInt(ageInput.getText().toString());
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Please enter a valid age.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String gender = (genderButton != null) ? genderButton.getText().toString() : "";
+            List<String> preferences = new ArrayList<>(userSelectedItems);
+            List<TravelPartner> partners = collectPartnersData();
+
+            tripConfigurationViewModel.updateFormStepOne(age, gender, preferences, partners);
+
+            Intent intent = new Intent(this, StepTwoActivity.class);
+            startActivity(intent);
+        });
+        cancelButton.setOnClickListener(view -> finish());
     }
 
     private void displayMessage(String message) {
@@ -129,8 +154,8 @@ public class StepOneActivity extends AppCompatActivity {
         return preferences;
     }
 
-    private List<TripConfiguration.TravelPartner> collectPartnersData() {
-        List<TripConfiguration.TravelPartner> partners = new ArrayList<>();
+    private List<TravelPartner> collectPartnersData() {
+        List<TravelPartner> partners = new ArrayList<>();
 
         for (int i = 0; i < partnerContainer.getChildCount(); i++) {
             View partnerView = partnerContainer.getChildAt(i);
@@ -152,7 +177,7 @@ public class StepOneActivity extends AppCompatActivity {
             }
 
             if (!gender.isEmpty()) {
-                TripConfiguration.TravelPartner partner = new TripConfiguration.TravelPartner(age, gender, specialPreferences);
+                TravelPartner partner = new TravelPartner(age, gender, specialPreferences);
                 partners.add(partner);
             }
         }
@@ -160,24 +185,19 @@ public class StepOneActivity extends AppCompatActivity {
         return partners;
     }
 
-    private void setupFormSubmission() {
-        Button submitButton = findViewById(R.id.submitButton);
-        submitButton.setOnClickListener(v -> submitForm());
-    }
-
-    private void submitForm() {
-        EditText ageInput = findViewById(R.id.ageInput);
-        String age = ageInput.getText().toString();
-
-        RadioGroup genderGroup = findViewById(R.id.genderGroup);
-        int selectedId = genderGroup.getCheckedRadioButtonId();
-        RadioButton genderButton = findViewById(selectedId);
-        String gender = (genderButton != null) ? genderButton.getText().toString() : "";
-
-        List<String> preferences = new ArrayList<>(userSelectedItems);
-        List<TripConfiguration.TravelPartner> partners = collectPartnersData();
-
-        tripConfigurationViewModel.updateTripConfiguration(age, gender, preferences, partners);
-        tripConfigurationViewModel.saveTripConfiguration();
-    }
+//    private void submitForm() {
+//        EditText ageInput = findViewById(R.id.ageInput);
+//        String age = ageInput.getText().toString();
+//
+//        RadioGroup genderGroup = findViewById(R.id.genderGroup);
+//        int selectedId = genderGroup.getCheckedRadioButtonId();
+//        RadioButton genderButton = findViewById(selectedId);
+//        String gender = (genderButton != null) ? genderButton.getText().toString() : "";
+//
+//        List<String> preferences = new ArrayList<>(userSelectedItems);
+//        List<TravelPartner> partners = collectPartnersData();
+//
+//        tripConfigurationViewModel.updateTripConfiguration(age, gender, preferences, partners);
+//        tripConfigurationViewModel.saveTripConfiguration();
+//    }
 }

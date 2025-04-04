@@ -4,6 +4,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.luggageassistant.model.TravelPartner;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.TripConfigurationRepository;
 
@@ -17,12 +18,21 @@ public class TripConfigurationViewModel extends ViewModel {
     private List<String> selectedPreferences = new ArrayList<>(); // Listă pentru stocarea preferințelor selectate
 
     public TripConfigurationViewModel() {
-        tripConfiguration = new TripConfiguration();
+        if (tripConfiguration == null) {
+            tripConfiguration = new TripConfiguration();
+        }
         tripConfigurationRepository = new TripConfigurationRepository();
     }
-
-    public void updateTripConfiguration(String age, String gender, List<String> preferences, List<TripConfiguration.TravelPartner> partners) {
+    public void updateTripConfiguration(String age, String gender, List<String> preferences, List<TravelPartner> partners) {
         tripConfiguration.setAge(Integer.parseInt(age));
+        tripConfiguration.setGender(gender);
+        tripConfiguration.setSpecialPreferences(preferences);
+        tripConfiguration.setPartner(partners);
+        setSelectedPreferences(preferences);
+    }
+
+    public void updateFormStepOne(int age, String gender, List<String> preferences, List<TravelPartner> partners) {
+        tripConfiguration.setAge(age);
         tripConfiguration.setGender(gender);
         tripConfiguration.setSpecialPreferences(preferences);
         tripConfiguration.setPartner(partners);
@@ -39,7 +49,6 @@ public class TripConfigurationViewModel extends ViewModel {
     }
 
     public void saveTripConfiguration() {
-//        Log.d("SaveData", "Saving Trip Configuration: " + tripConfiguration.toMap().toString());
         tripConfigurationRepository.saveTripConfiguration(tripConfiguration, new TripConfigurationRepository.OnDataSavedCallback() {
             @Override
             public void onSuccess() {
@@ -51,5 +60,12 @@ public class TripConfigurationViewModel extends ViewModel {
                 messageLiveData.postValue("Error saving data: " + e.getMessage());
             }
         });
+    }
+
+    public TripConfiguration getTripConfiguration() {
+        return tripConfiguration;
+    }
+    public void setTripConfiguration(TripConfiguration newConfiguration) {
+        this.tripConfiguration = newConfiguration;
     }
 }

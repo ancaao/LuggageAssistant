@@ -9,7 +9,7 @@
         android:id="@+id/removePartnerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Remove trip partner (-)" />
+        android:text="@string/remove_trip_partner" />
 
     <EditText
         android:id="@+id/partnerAgeInput"
@@ -17,7 +17,7 @@
         android:layout_height="48dp"
         android:textColor="@color/onBackground"
         android:textColorHint="@color/inputBorder"
-        android:hint="Enter your age"
+        android:hint="@string/enter_your_partner_s_age"
         android:inputType="number" />
 
     <RadioGroup
@@ -52,5 +52,5 @@
         android:id="@+id/partnerSelectSpecialPreferencesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Special Preferences" />
+        android:text="@string/select_partner_s_special_preferences" />
 </LinearLayout>

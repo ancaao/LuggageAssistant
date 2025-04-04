@@ -11,7 +11,7 @@ public class TripConfiguration {
     private int age;
     private String gender;
     private List<String> specialPreferences;
-    private List<TravelPartner> partner;
+    private List<TravelPartner> partners;
 
     // step 2: luggage information
     private int numberOfLuggages;
@@ -48,99 +48,16 @@ public class TripConfiguration {
         result.put("travelPurpose", travelPurpose);
         result.put("plannedActivities", plannedActivities);
         result.put("specialEvents", specialEvents);
-        result.put("partner", partner != null ? partner.stream().map(TravelPartner::toMap).collect(Collectors.toList()) : null);
+        result.put("partners", partners != null ? partners.stream().map(TravelPartner::toMap).collect(Collectors.toList()) : null);
         return result;
     }
-    public static class Luggage {
-        private String luggageType;
-        private String dimensionLimit;
-        private String weightLimit;
 
-        public Luggage() {}
+    public void updateFromStepOne(int age, String gender, List<String> preferences, List<TravelPartner> partners) {
+        this.age = age;
+        this.gender = gender;
+        this.specialPreferences = preferences;
+        this.partners = partners;
 
-        public Luggage(String bagType, String luggageCategory, String dimensionLimit,
-                   String weightLimit, List<String> specialAccessories) {
-            this.luggageType = bagType;
-            this.dimensionLimit = dimensionLimit;
-            this.weightLimit = weightLimit;
-        }
-
-        public Map<String, Object> toMap() {
-            Map<String, Object> result = new HashMap<>();
-            result.put("luggageType", luggageType);
-            result.put("dimensionLimit", dimensionLimit);
-            result.put("weightLimit", weightLimit);
-            return result;
-        }
-        public String getDimensionLimit() {
-            return dimensionLimit;
-        }
-
-        public void setDimensionLimit(String dimensionLimit) {
-            this.dimensionLimit = dimensionLimit;
-        }
-
-        public String getLuggageType() {
-            return luggageType;
-        }
-
-        public void setLuggageType(String luggageType) {
-            this.luggageType = luggageType;
-        }
-
-        public String getWeightLimit() {
-            return weightLimit;
-        }
-
-        public void setWeightLimit(String weightLimit) {
-            this.weightLimit = weightLimit;
-        }
-    }
-
-    public static class TravelPartner {
-        private int age;
-        private String gender;
-        private List<String> specialPreferences;
-
-        public TravelPartner() {
-        }
-
-        public TravelPartner(int age, String gender, List<String> specialPreferences) {
-            this.age = age;
-            this.gender = gender;
-            this.specialPreferences = specialPreferences;
-        }
-
-        public Map<String, Object> toMap() {
-            Map<String, Object> result = new HashMap<>();
-            result.put("age", age);
-            result.put("gender", gender);
-            result.put("specialPreferences", specialPreferences);
-            return result;
-        }
-        public int getAge() {
-            return age;
-        }
-
-        public void setAge(int age) {
-            this.age = age;
-        }
-
-        public String getGender() {
-            return gender;
-        }
-
-        public void setGender(String gender) {
-            this.gender = gender;
-        }
-
-        public List<String> getSpecialPreferences() {
-            return specialPreferences;
-        }
-
-        public void setSpecialPreferences(List<String> specialPreferences) {
-            this.specialPreferences = specialPreferences;
-        }
     }
 
     public int getAge() {
@@ -168,11 +85,11 @@ public class TripConfiguration {
     }
 
     public List<TravelPartner> getPartner() {
-        return partner;
+        return partners;
     }
 
-    public void setPartner(List<TravelPartner> partner) {
-        this.partner = partner;
+    public void setPartner(List<TravelPartner> partners) {
+        this.partners = partners;
     }
 
     public int getNumberOfLuggages() {
