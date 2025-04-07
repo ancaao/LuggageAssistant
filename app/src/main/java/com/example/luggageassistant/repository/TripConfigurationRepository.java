@@ -5,17 +5,33 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TripConfigurationRepository {
     private FirebaseFirestore db;
+    private static TripConfigurationRepository instance;
+    private TripConfiguration tripConfiguration;
 
-    public TripConfigurationRepository() {
+    private TripConfigurationRepository() {
         db = FirebaseFirestore.getInstance();
+        tripConfiguration = new TripConfiguration();
     }
 
+    public static synchronized TripConfigurationRepository getInstance() {
+        if (instance == null) {
+            instance = new TripConfigurationRepository();
+        }
+        return instance;
+    }
     public void saveTripConfiguration(TripConfiguration tripConfiguration, OnDataSavedCallback callback) {
         db.collection("tripConfigurations").add(tripConfiguration.toMap())
                 .addOnSuccessListener(documentReference -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onError(e));
     }
 
+    public TripConfiguration getTripConfiguration() {
+        return tripConfiguration;
+    }
+
+    public void setTripConfiguration(TripConfiguration tripConfiguration) {
+        this.tripConfiguration = tripConfiguration;
+    }
     public interface OnDataSavedCallback {
         void onSuccess();
         void onError(Exception e);

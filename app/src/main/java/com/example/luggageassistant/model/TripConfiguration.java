@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class TripConfiguration {
     // step 1: personal information
+    private String name;
     private int age;
     private String gender;
     private List<String> specialPreferences;
@@ -34,6 +35,7 @@ public class TripConfiguration {
     }
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
+        result.put("name", name);
         result.put("age", age);
         result.put("gender", gender);
         result.put("specialPreferences", specialPreferences);
@@ -52,7 +54,8 @@ public class TripConfiguration {
         return result;
     }
 
-    public void updateFromStepOne(int age, String gender, List<String> preferences, List<TravelPartner> partners) {
+    public void updateFromStepOne(String name, int age, String gender, List<String> preferences, List<TravelPartner> partners) {
+        this.name = name;
         this.age = age;
         this.gender = gender;
         this.specialPreferences = preferences;
@@ -60,6 +63,12 @@ public class TripConfiguration {
 
     }
 
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
     public int getAge() {
         return age;
     }

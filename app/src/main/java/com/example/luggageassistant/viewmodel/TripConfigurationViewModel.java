@@ -15,23 +15,15 @@ public class TripConfigurationViewModel extends ViewModel {
     private TripConfiguration tripConfiguration;
     private TripConfigurationRepository tripConfigurationRepository;
     public MutableLiveData<String> messageLiveData = new MutableLiveData<>();
-    private List<String> selectedPreferences = new ArrayList<>(); // Listă pentru stocarea preferințelor selectate
+    private List<String> selectedPreferences = new ArrayList<>();
 
     public TripConfigurationViewModel() {
-        if (tripConfiguration == null) {
-            tripConfiguration = new TripConfiguration();
-        }
-        tripConfigurationRepository = new TripConfigurationRepository();
-    }
-    public void updateTripConfiguration(String age, String gender, List<String> preferences, List<TravelPartner> partners) {
-        tripConfiguration.setAge(Integer.parseInt(age));
-        tripConfiguration.setGender(gender);
-        tripConfiguration.setSpecialPreferences(preferences);
-        tripConfiguration.setPartner(partners);
-        setSelectedPreferences(preferences);
+        tripConfigurationRepository = TripConfigurationRepository.getInstance();
+        tripConfiguration = tripConfigurationRepository.getTripConfiguration();
     }
 
-    public void updateFormStepOne(int age, String gender, List<String> preferences, List<TravelPartner> partners) {
+    public void updateFormStepOne(String name, int age, String gender, List<String> preferences, List<TravelPartner> partners) {
+        tripConfiguration.setName(name);
         tripConfiguration.setAge(age);
         tripConfiguration.setGender(gender);
         tripConfiguration.setSpecialPreferences(preferences);

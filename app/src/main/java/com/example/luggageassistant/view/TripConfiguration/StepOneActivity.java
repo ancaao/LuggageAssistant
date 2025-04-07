@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,10 +57,13 @@ public class StepOneActivity extends AppCompatActivity {
         addPartnerButton.setOnClickListener(view -> addPartnerFields());
 
         nextButton.setOnClickListener(view -> {
+            TextView nameInput = findViewById(R.id.nameInput);
             EditText ageInput = findViewById(R.id.ageInput);
             RadioGroup genderGroup = findViewById(R.id.genderGroup);
             int selectedGenderId = genderGroup.getCheckedRadioButtonId();
             RadioButton genderButton = findViewById(selectedGenderId);
+
+            String name = nameInput.getText().toString();
 
             int age = 0;
             try {
@@ -71,7 +76,7 @@ public class StepOneActivity extends AppCompatActivity {
             List<String> preferences = new ArrayList<>(userSelectedItems);
             List<TravelPartner> partners = collectPartnersData();
 
-            tripConfigurationViewModel.updateFormStepOne(age, gender, preferences, partners);
+            tripConfigurationViewModel.updateFormStepOne(name, age, gender, preferences, partners);
 
             Intent intent = new Intent(this, StepTwoActivity.class);
             startActivity(intent);
@@ -160,6 +165,7 @@ public class StepOneActivity extends AppCompatActivity {
         for (int i = 0; i < partnerContainer.getChildCount(); i++) {
             View partnerView = partnerContainer.getChildAt(i);
 
+            TextView nameInput = partnerView.findViewById(R.id.partnerNameInput);
             EditText ageInput = partnerView.findViewById(R.id.partnerAgeInput);
             RadioGroup genderGroup = partnerView.findViewById(R.id.partnerGenderGroup);
             int selectedId = genderGroup.getCheckedRadioButtonId();
@@ -168,6 +174,7 @@ public class StepOneActivity extends AppCompatActivity {
 
             List<String> specialPreferences = getSpecialPreferencesForPartner(partnerView);
 
+            String name = nameInput.getText().toString();
             int age = 0;
             try {
                 age = Integer.parseInt(ageInput.getText().toString());
@@ -177,27 +184,11 @@ public class StepOneActivity extends AppCompatActivity {
             }
 
             if (!gender.isEmpty()) {
-                TravelPartner partner = new TravelPartner(age, gender, specialPreferences);
+                TravelPartner partner = new TravelPartner(name, age, gender, specialPreferences);
                 partners.add(partner);
             }
         }
 
         return partners;
     }
-
-//    private void submitForm() {
-//        EditText ageInput = findViewById(R.id.ageInput);
-//        String age = ageInput.getText().toString();
-//
-//        RadioGroup genderGroup = findViewById(R.id.genderGroup);
-//        int selectedId = genderGroup.getCheckedRadioButtonId();
-//        RadioButton genderButton = findViewById(selectedId);
-//        String gender = (genderButton != null) ? genderButton.getText().toString() : "";
-//
-//        List<String> preferences = new ArrayList<>(userSelectedItems);
-//        List<TravelPartner> partners = collectPartnersData();
-//
-//        tripConfigurationViewModel.updateTripConfiguration(age, gender, preferences, partners);
-//        tripConfigurationViewModel.saveTripConfiguration();
-//    }
 }

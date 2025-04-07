@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,44 +23,19 @@ import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StepTwoActivity extends AppCompatActivity {
+public class StepThreeActivity extends AppCompatActivity {
     private Button backButton, nextButton;
-    private Button increaseButton, decreaseButton;
     private TripConfigurationViewModel tripConfigurationViewModel;
-    private int luggageCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_form_step_two);
+        setContentView(R.layout.activity_form_step_three);
 
         tripConfigurationViewModel = new ViewModelProvider(this).get(TripConfigurationViewModel.class);
 
-        TextView numberOfLuggages = findViewById(R.id.numberOfLuggages);
-
-        backButton = findViewById(R.id.stepTwoBackButton);
-        nextButton = findViewById(R.id.stepTwoNextButton);
-        increaseButton = findViewById(R.id.increaseButton);
-        decreaseButton = findViewById(R.id.decreaseButton);
-
-
-        increaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                luggageCount++;
-                numberOfLuggages.setText(String.valueOf(luggageCount));
-            }
-        });
-
-        decreaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (luggageCount > 0) {
-                    luggageCount--;
-                    numberOfLuggages.setText(String.valueOf(luggageCount));
-                }
-            }
-        });
+        backButton = findViewById(R.id.stepThreeBackButton);
+        nextButton = findViewById(R.id.stepThreeNextButton);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +45,9 @@ public class StepTwoActivity extends AppCompatActivity {
         });
 
         nextButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, StepThreeActivity.class);
+            Intent intent = new Intent(this, StepFourActivity.class);
             startActivity(intent);
         });
-    }
 
+    }
 }
