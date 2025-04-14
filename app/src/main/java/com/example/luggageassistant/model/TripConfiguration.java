@@ -15,16 +15,13 @@ public class TripConfiguration {
     private List<TravelPartner> partners;
 
     // step 2: luggage information
-    private int numberOfLuggages;
-    private List<Luggage> luggage;
-    private List<String> specialAccessories;
+    private List<Luggage> luggages;
 
     // step 3: trip details
     private String country;
     private String city;
     private Date tripStartDate;
     private Date tripEndDate;
-    private String transportType;
 
     // step 4: trip purpose
     private String travelPurpose;
@@ -39,14 +36,11 @@ public class TripConfiguration {
         result.put("age", age);
         result.put("gender", gender);
         result.put("specialPreferences", specialPreferences);
-        result.put("numberOfLuggages", numberOfLuggages);
-        result.put("luggage", luggage != null ? luggage.stream().map(Luggage::toMap).collect(Collectors.toList()) : null);
-        result.put("specialAccessories", specialAccessories);
+        result.put("luggages", luggages != null ? luggages.stream().map(Luggage::toMap).collect(Collectors.toList()) : null);
         result.put("country", country);
         result.put("city", city);
         result.put("tripStartDate", tripStartDate);
         result.put("tripEndDate", tripEndDate);
-        result.put("transportType", transportType);
         result.put("travelPurpose", travelPurpose);
         result.put("plannedActivities", plannedActivities);
         result.put("specialEvents", specialEvents);
@@ -101,28 +95,12 @@ public class TripConfiguration {
         this.partners = partners;
     }
 
-    public int getNumberOfLuggages() {
-        return numberOfLuggages;
-    }
-
-    public void setNumberOfLuggages(int numberOfLuggages) {
-        this.numberOfLuggages = numberOfLuggages;
-    }
-
     public List<Luggage> getLuggage() {
-        return luggage;
+        return luggages;
     }
 
     public void setLuggage(List<Luggage> luggage) {
-        this.luggage = luggage;
-    }
-
-    public List<String> getSpecialAccessories() {
-        return specialAccessories;
-    }
-
-    public void setSpecialAccessories(List<String> specialAccessories) {
-        this.specialAccessories = specialAccessories;
+        this.luggages = luggage;
     }
 
     public String getCity() {
@@ -155,14 +133,6 @@ public class TripConfiguration {
 
     public void setTripEndDate(Date tripEndDate) {
         this.tripEndDate = tripEndDate;
-    }
-
-    public String getTransportType() {
-        return transportType;
-    }
-
-    public void setTransportType(String transportType) {
-        this.transportType = transportType;
     }
 
     public String getTravelPurpose() {

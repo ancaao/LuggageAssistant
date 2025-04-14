@@ -4,6 +4,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.luggageassistant.model.Luggage;
 import com.example.luggageassistant.model.TravelPartner;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.TripConfigurationRepository;
@@ -29,6 +30,14 @@ public class TripConfigurationViewModel extends ViewModel {
         tripConfiguration.setSpecialPreferences(preferences);
         tripConfiguration.setPartner(partners);
         setSelectedPreferences(preferences);
+    }
+
+    public void updateFormStepTwo(List<Luggage> luggages) {
+//        tripConfiguration.setLuggage(luggages);
+        List<Luggage> current = tripConfiguration.getLuggage();
+        if (current == null) current = new ArrayList<>();
+        current.addAll(luggages);
+        tripConfiguration.setLuggage(current);
     }
 
     public List<String> getSelectedPreferences() {

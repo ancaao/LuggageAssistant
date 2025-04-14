@@ -183,10 +183,8 @@ public class StepOneActivity extends AppCompatActivity {
                 continue;
             }
 
-            if (!gender.isEmpty()) {
-                TravelPartner partner = new TravelPartner(name, age, gender, specialPreferences);
-                partners.add(partner);
-            }
+            TravelPartner partner = new TravelPartner(name, age, gender, specialPreferences);
+            partners.add(partner);
         }
 
         return partners;

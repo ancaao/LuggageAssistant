@@ -41,6 +41,8 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.52")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("org.json:json:20210307")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

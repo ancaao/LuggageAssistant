@@ -19,7 +19,6 @@
     <string name="select_country_code">Select Country Code</string>
     <string name="confirm_password">Confirm Password</string>
 <!--    <string name="age">Age</string>-->
-    <string name="add_luggage">Add Luggage</string>
     <string name="next">Next</string>
     <string name="cancel">Cancel</string>
     <string name="add_trip_partner">Add trip partner (+)</string>
@@ -34,10 +33,18 @@
     <string name="remove_trip_partner">Remove trip partner (-)</string>
     <string name="select_partner_s_special_preferences">Select Partner\'s Special Preferences</string>
     <string name="name">Name</string>
+    <string name="add_luggage">Add luggage</string>
+    <string name="add_another_luggage">Add luggage (+)</string>
+    <string name="back">Back</string>
     <string-array name="special_preferences">
         <item>Medication</item>
         <item>Dental accessories</item>
         <item>Hearing aid</item>
         <item>Contact lenses</item>
+    </string-array>
+    <string-array name="luggage_type_options">
+        <item>Personal item</item>
+        <item>Carry-on</item>
+        <item>Checked item</item>
     </string-array>
 </resources>

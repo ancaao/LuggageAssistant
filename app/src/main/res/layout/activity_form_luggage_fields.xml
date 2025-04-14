@@ -1,23 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/luggageOwnerLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Luggage Owner">
+        android:orientation="vertical"
+        android:padding="24dp">
 
-        <AutoCompleteTextView
-            android:id="@+id/luggageOwnerDropdown"
+        <Button
+            android:id="@+id/removePartnerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:dropDownHeight="wrap_content"
-            android:dropDownWidth="match_parent"
-            android:dropDownVerticalOffset="10dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:text="Remove luggage (-)" />
 
+        <!-- Owner(s) -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Owner(s)"
+            app:boxStrokeColor="@color/inputBorder"
+            app:boxBackgroundColor="@color/surface">
+
+            <TextView
+                android:id="@+id/ownerSelectedText"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:text="Select owner(s)"
+                android:textColor="@color/inputText"
+                android:background="@android:color/transparent"
+                android:focusable="true"
+                android:clickable="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Luggage Type -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Luggage Type"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp"
+            android:textSize="14sp" />
+
+        <Spinner
+            android:id="@+id/luggageTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface"
+            android:padding="28dp" />
+
+        <!-- Length -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Length (cm)"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/inputBorder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lengthInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Width -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Width (cm)"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/inputBorder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/widthInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Height -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Height (cm)"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/inputBorder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/heightInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Weight -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Weight (kg)"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/inputBorder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/weightInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Accessories -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Special Accessories"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/accessoriesSelectedText"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:paddingHorizontal="12dp"
+            android:gravity="center_vertical"
+            android:text="Select accessories"
+            android:textColor="@color/inputText"
+            android:background="@color/surface"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="16dp" />
+    </LinearLayout>
 </LinearLayout>

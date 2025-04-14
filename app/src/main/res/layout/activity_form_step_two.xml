@@ -1,52 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="16dp">
+        android:orientation="vertical"
+        android:padding="24dp">
 
-        <Button
-            android:id="@+id/decreaseButton"
-            android:layout_width="wrap_content"
+        <!-- Owner(s) -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="-" />
+            android:hint="Owner(s)"
+            app:boxStrokeColor="@color/inputBorder"
+            app:boxBackgroundColor="@color/surface">
+
+            <TextView
+                android:id="@+id/ownerSelectedText"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:text="Select owner(s)"
+                android:textColor="@color/inputText"
+                android:background="@android:color/transparent"
+                android:focusable="true"
+                android:clickable="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Luggage Type -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Luggage Type"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp"
+            android:textSize="14sp" />
+
+        <Spinner
+            android:id="@+id/luggageTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface"
+            android:padding="8dp" />
+
+        <!-- Length -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Length (cm)"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/inputBorder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lengthInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Width -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Width (cm)"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/inputBorder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/widthInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Height -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Height (cm)"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/inputBorder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/heightInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Weight -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Weight (kg)"
+            app:boxBackgroundColor="@color/surface"
+            app:boxStrokeColor="@color/inputBorder">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/weightInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Accessories -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Special Accessories"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp"
+            android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/numberOfLuggages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:textSize="18sp"/>
+            android:id="@+id/accessoriesSelectedText"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:paddingHorizontal="12dp"
+            android:gravity="center_vertical"
+            android:text="Select accessories"
+            android:textColor="@color/inputText"
+            android:background="@color/surface"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="16dp" />
 
+    <LinearLayout
+        android:id="@+id/luggageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+        <!-- Add luggage -->
         <Button
-            android:id="@+id/increaseButton"
-            android:layout_width="wrap_content"
+            android:id="@+id/addLuggageButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="+" />
+            android:text="@string/add_another_luggage"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/onPrimary"
+            android:layout_marginVertical="12dp" />
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/stepTwoBackButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/back"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/onPrimary"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/stepTwoNextButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/onPrimary"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/stepTwoBackButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back" />
-
-    <Button
-        android:id="@+id/stepTwoNextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next" />
-</LinearLayout>
-
-
+</ScrollView>

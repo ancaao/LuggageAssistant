@@ -4,32 +4,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 public class Luggage {
+    private List<String> owners;
     private String luggageType;
-    private String dimensionLimit;
-    private String weightLimit;
+    private int length;
+    private int width;
+    private int height;
+    private int weight;
+    private List<String> specialAccessories;
 
     public Luggage() {}
 
-    public Luggage(String bagType, String luggageCategory, String dimensionLimit,
-                   String weightLimit, List<String> specialAccessories) {
-        this.luggageType = bagType;
-        this.dimensionLimit = dimensionLimit;
-        this.weightLimit = weightLimit;
+    public Luggage(List <String> owners, String luggageType, int length,
+                   int width, int height, int weight, List<String> specialAccessories) {
+        this.owners = owners;
+        this.luggageType = luggageType;
+        this.length = length;
+        this.width = width;
+        this.height = height;
+        this.weight = weight;
+        this.specialAccessories = specialAccessories;
     }
 
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
+        result.put("owners", owners);
         result.put("luggageType", luggageType);
-        result.put("dimensionLimit", dimensionLimit);
-        result.put("weightLimit", weightLimit);
+        result.put("length", length);
+        result.put("width", width);
+        result.put("height", height);
+        result.put("weight", weight);
+        result.put("specialAccessories", specialAccessories);
         return result;
-    }
-    public String getDimensionLimit() {
-        return dimensionLimit;
-    }
-
-    public void setDimensionLimit(String dimensionLimit) {
-        this.dimensionLimit = dimensionLimit;
     }
 
     public String getLuggageType() {
@@ -40,11 +45,49 @@ public class Luggage {
         this.luggageType = luggageType;
     }
 
-    public String getWeightLimit() {
-        return weightLimit;
+    public int getLength() {
+        return length;
     }
 
-    public void setWeightLimit(String weightLimit) {
-        this.weightLimit = weightLimit;
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public List<String> getSpecialAccessories() {
+        return specialAccessories;
+    }
+
+    public void setSpecialAccessories(List<String> specialAccessories) {
+        this.specialAccessories = specialAccessories;
+    }
+    public List<String> getOwners() {
+        return owners;
+    }
+    public void setOwners(List<String> owners) {
+        this.owners = owners;
     }
 }
