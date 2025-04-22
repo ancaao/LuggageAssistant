@@ -21,6 +21,7 @@
 
         <Spinner
             android:id="@+id/countrySpinner"
+            android:hint="Select country"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/surface"
@@ -30,16 +31,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="City"
-            android:textColor="@color/onBackground"
+            android:textColor="@color/inputText"
             android:layout_marginTop="8dp"/>
 
-        <Spinner
+        <EditText
             android:id="@+id/citySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/surface"
-            android:padding="24dp" />
+            android:hint="Enter city"
+            android:inputType="textCapWords"
+            android:background="@color/inputBorder"
+            android:textColor="@color/inputText"
+            android:padding="16dp"/>
 
         <!-- Start Date -->
         <com.google.android.material.textfield.TextInputLayout

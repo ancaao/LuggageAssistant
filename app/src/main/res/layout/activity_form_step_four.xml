@@ -7,6 +7,71 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Travel Purpose"
+        android:textColor="@color/onBackground"
+        android:paddingTop="16dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/travelPurposeSelectedText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingHorizontal="12dp"
+        android:gravity="center_vertical"
+        android:text="Select purpose"
+        android:textColor="@color/inputText"
+        android:background="@color/surface"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Planned Activities -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Planned Activities"
+        android:textColor="@color/onBackground"
+        android:paddingTop="16dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/activitiesSelectedText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingHorizontal="12dp"
+        android:gravity="center_vertical"
+        android:text="Select activities"
+        android:textColor="@color/inputText"
+        android:background="@color/surface"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Special Events -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Special Events"
+        android:textColor="@color/onBackground"
+        android:paddingTop="16dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/specialEventsSelectedText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingHorizontal="12dp"
+        android:gravity="center_vertical"
+        android:text="Select events"
+        android:textColor="@color/inputText"
+        android:background="@color/surface"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="16dp" />
+
     <Button
         android:id="@+id/stepFourBackButton"
         android:layout_width="wrap_content"

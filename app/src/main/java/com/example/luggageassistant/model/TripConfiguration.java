@@ -20,8 +20,8 @@ public class TripConfiguration {
     // step 3: trip details
     private String country;
     private String city;
-    private Date tripStartDate;
-    private Date tripEndDate;
+    private String tripStartDate;
+    private String tripEndDate;
 
     // step 4: trip purpose
     private String travelPurpose;
@@ -119,19 +119,19 @@ public class TripConfiguration {
         this.country = country;
     }
 
-    public Date getTripStartDate() {
+    public String getTripStartDate() {
         return tripStartDate;
     }
 
-    public void setTripStartDate(Date tripStartDate) {
+    public void setTripStartDate(String tripStartDate) {
         this.tripStartDate = tripStartDate;
     }
 
-    public Date getTripEndDate() {
+    public String getTripEndDate() {
         return tripEndDate;
     }
 
-    public void setTripEndDate(Date tripEndDate) {
+    public void setTripEndDate(String tripEndDate) {
         this.tripEndDate = tripEndDate;
     }
 

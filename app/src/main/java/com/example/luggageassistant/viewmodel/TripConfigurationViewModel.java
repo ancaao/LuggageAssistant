@@ -9,8 +9,12 @@ import com.example.luggageassistant.model.TravelPartner;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.TripConfigurationRepository;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class TripConfigurationViewModel extends ViewModel {
     private TripConfiguration tripConfiguration;
@@ -33,12 +37,31 @@ public class TripConfigurationViewModel extends ViewModel {
     }
 
     public void updateFormStepTwo(List<Luggage> luggages) {
-//        tripConfiguration.setLuggage(luggages);
         List<Luggage> current = tripConfiguration.getLuggage();
         if (current == null) current = new ArrayList<>();
         current.addAll(luggages);
         tripConfiguration.setLuggage(current);
     }
+
+    public void updateFormStepThree(String country, String city, String startDateStr, String endDateStr) {
+        tripConfiguration.setCountry(country);
+        tripConfiguration.setCity(city);
+        tripConfiguration.setTripStartDate(startDateStr);
+        tripConfiguration.setTripEndDate(endDateStr);
+    }
+
+    public void setTravelPurpose(List<String> travelPurpose) {
+        tripConfiguration.setTravelPurpose(travelPurpose != null && !travelPurpose.isEmpty() ? travelPurpose.get(0) : null);
+    }
+
+    public void setPlannedActivities(List<String> activities) {
+        tripConfiguration.setPlannedActivities(activities);
+    }
+
+    public void setSpecialEvents(List<String> events) {
+        tripConfiguration.setSpecialEvents(events);
+    }
+
 
     public List<String> getSelectedPreferences() {
         return selectedPreferences;
