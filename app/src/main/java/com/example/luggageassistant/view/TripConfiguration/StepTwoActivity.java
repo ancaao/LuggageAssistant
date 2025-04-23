@@ -75,8 +75,9 @@ public class StepTwoActivity extends AppCompatActivity {
         setupLuggageTypeSpinner(luggageTypeSpinner);
         String selectedLuggageType = luggageTypeSpinner.getSelectedItem().toString();
 
-        TextView accessoriesTextView = findViewById(R.id.accessoriesSelectedText);
-        setupAccessoriesSelection(accessoriesTextView);
+        Button accessoriesButton = findViewById(R.id.selectSpecialAccessoriesButton);
+        TextView accessoriesSummary = findViewById(R.id.accessoriesSelectedText);
+        setupAccessoriesSelection(accessoriesButton, accessoriesSummary);
 
         addLuggageButton.setOnClickListener(view -> addLuggageFields());
 
@@ -94,10 +95,9 @@ public class StepTwoActivity extends AppCompatActivity {
             Intent intent = new Intent(this, StepThreeActivity.class);
             startActivity(intent);
         });
-
     }
 
-    private void setupAccessoriesSelection(TextView accessoriesTextView) {
+    private void setupAccessoriesSelection(Button triggerButton, TextView summaryTextView) {
         String[] accessoriesOptions = {
                 "Baby equipment",
                 "Musical instruments",
@@ -106,8 +106,7 @@ public class StepTwoActivity extends AppCompatActivity {
         };
         boolean[] checkedItems = new boolean[accessoriesOptions.length];
 
-        accessoriesTextView.setOnClickListener(view -> {
-            // Creează layout custom pentru EditText "altele"
+        triggerButton.setOnClickListener(view -> {
             LinearLayout dialogLayout = new LinearLayout(this);
             dialogLayout.setOrientation(LinearLayout.VERTICAL);
             dialogLayout.setPadding(50, 20, 50, 0);
@@ -138,9 +137,9 @@ public class StepTwoActivity extends AppCompatActivity {
                 }
 
                 if (selectedAccessories.isEmpty()) {
-                    accessoriesTextView.setText("Select accessories");
+                    summaryTextView.setText("No accessories selected");
                 } else {
-                    accessoriesTextView.setText(String.join(", ", selectedAccessories));
+                    summaryTextView.setText(String.join(", ", selectedAccessories));
                 }
             });
 
@@ -148,7 +147,6 @@ public class StepTwoActivity extends AppCompatActivity {
             builder.create().show();
         });
     }
-
 
     private void setupOwnerSelection(TextView ownerTextView, String[] namesArray, boolean[] checkedItems) {
         ownerTextView.setOnClickListener(view -> {

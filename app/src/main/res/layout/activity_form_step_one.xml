@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     android:background="@color/background">
 
-    <!-- Singurul copil al ScrollView -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="32dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -23,99 +27,129 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
-                android:inputType="textCapWords" />
+                android:inputType="textCapWords"
+                android:textColor="@color/inputText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ageInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Age"
+                android:inputType="number"
+                android:textColor="@color/inputText" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/age"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <EditText
-            android:id="@+id/ageInput"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:textColor="@color/onBackground"
-            android:textColorHint="@color/inputBorder"
-            android:hint="@string/enter_your_age"
-            android:inputType="number" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/gender"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:text="Gender"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/onBackground" />
 
         <RadioGroup
             android:id="@+id/genderGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
             <RadioButton
                 android:id="@+id/femaleRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/onBackground"
-                android:text="@string/female" />
+                android:text="Female" />
 
             <RadioButton
                 android:id="@+id/maleRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:textColor="@color/onBackground"
-                android:text="@string/male" />
+                android:text="Male" />
 
             <RadioButton
                 android:id="@+id/otherRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:textColor="@color/onBackground"
-                android:text="@string/other" />
+                android:text="Other" />
         </RadioGroup>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/selectSpecialPreferencesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/select_special_preferences" />
+            android:layout_marginTop="16dp"
+            android:text="Select Special Preferences"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/onPrimary" />
 
-        <!-- Zona dinamică pentru parteneri -->
+        <TextView
+            android:id="@+id/specialPreferencesSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No preferences selected"
+            android:textColor="@color/onBackground"
+            android:paddingTop="8dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
         <LinearLayout
             android:id="@+id/partnerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:layout_marginTop="16dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addPartnerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_trip_partner" />
+            android:text="Add Trip Partner"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/onPrimary" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="24dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/stepOneCancelButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel"
-                android:layout_marginEnd="8dp" />
+                android:text="Cancel"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/surface"
+                android:textColor="@color/onPrimary" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/stepOneNextButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/next"
-                android:layout_marginStart="8dp" />
+                android:text="Next"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/success"
+                android:textColor="@color/onPrimary" />
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

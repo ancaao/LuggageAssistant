@@ -48,11 +48,6 @@ public class StepFourActivity extends AppCompatActivity {
         setupPlannedActivitiesSelection(activitiesText);
         setupSpecialEventsSelection(eventsText);
 
-        View rootView = findViewById(android.R.id.content);
-        setupTravelPurposeSelection(rootView);
-        setupPlannedActivitiesSelection(rootView);
-        setupSpecialEventsSelection(rootView);
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,56 +62,6 @@ public class StepFourActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void setupTravelPurposeSelection(View view) {
-        TextView purposeText = view.findViewById(R.id.travelPurposeSelectedText);
-        String[] options = {"Leisure", "Business", "Study", "Medical", "Other"};
-        boolean[] checkedItems = new boolean[options.length];
-        List<String> selected = new ArrayList<>();
-
-        purposeText.setOnClickListener(v -> MultiSelectDialog.showCustomMultiSelectDialog(
-                this,
-                "Select travel purpose",
-                options,
-                checkedItems,
-                selected,
-                purposeText
-        ));
-    }
-
-    private void setupPlannedActivitiesSelection(View view) {
-        TextView activitiesText = view.findViewById(R.id.activitiesSelectedText);
-        String[] options = {"Hiking", "Museum visits", "Shopping", "Beach", "Nightlife"};
-        boolean[] checkedItems = new boolean[options.length];
-        List<String> selected = new ArrayList<>();
-
-        activitiesText.setOnClickListener(v -> MultiSelectDialog.showCustomMultiSelectDialog(
-                this,
-                "Select activities",
-                options,
-                checkedItems,
-                selected,
-                activitiesText
-        ));
-    }
-
-    private void setupSpecialEventsSelection(View view) {
-        TextView eventsText = view.findViewById(R.id.specialEventsSelectedText);
-        String[] options = {"Wedding", "Festival", "Conference", "Birthday", "Anniversary"};
-        boolean[] checkedItems = new boolean[options.length];
-        List<String> selected = new ArrayList<>();
-
-        eventsText.setOnClickListener(v -> MultiSelectDialog.showCustomMultiSelectDialog(
-                this,
-                "Select special events",
-                options,
-                checkedItems,
-                selected,
-                eventsText
-        ));
-
-    }
-
 
     private void submitForm() {
         TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
@@ -284,6 +229,4 @@ public class StepFourActivity extends AppCompatActivity {
             builder.create().show();
         });
     }
-
-
 }

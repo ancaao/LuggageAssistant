@@ -1,70 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/surface"
+    android:padding="16dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp"
+    android:elevation="2dp">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/removePartnerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/remove_trip_partner" />
+        android:text="Remove Partner"
+        android:backgroundTint="@color/error"
+        android:textColor="@color/onPrimary" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:errorEnabled="true">
+        android:layout_marginTop="12dp"
+        android:hint="Name"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeWidth="2dp"
+        app:boxBackgroundColor="@color/surface"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/partnerNameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"
+            android:textColor="@color/inputText" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/partnerAgeInput"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:textColor="@color/onBackground"
-        android:textColorHint="@color/inputBorder"
-        android:hint="@string/enter_your_partner_s_age"
-        android:inputType="number" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Age"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeWidth="2dp"
+        app:boxBackgroundColor="@color/surface"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/partnerAgeInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textColor="@color/inputText" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gender"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/onBackground" />
 
     <RadioGroup
         android:id="@+id/partnerGenderGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
 
         <RadioButton
             android:id="@+id/partnerFemaleRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/onBackground"
-            android:text="Female" />
+            android:text="Female"
+            android:textColor="@color/onBackground" />
 
         <RadioButton
             android:id="@+id/partnerMaleRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/onBackground"
-            android:text="Male" />
+            android:layout_marginStart="16dp"
+            android:text="Male"
+            android:textColor="@color/onBackground" />
 
         <RadioButton
             android:id="@+id/partnerOtherRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/onBackground"
-            android:text="Other" />
+            android:layout_marginStart="16dp"
+            android:text="Other"
+            android:textColor="@color/onBackground" />
     </RadioGroup>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/partnerSelectSpecialPreferencesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/select_partner_s_special_preferences" />
+        android:layout_marginTop="16dp"
+        android:text="Select Special Preferences"
+        android:backgroundTint="@color/primary"
+        android:textColor="@color/onPrimary" />
+
+    <TextView
+        android:id="@+id/partnerPreferencesSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No preferences selected"
+        android:textColor="@color/onBackground"
+        android:paddingTop="8dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 </LinearLayout>

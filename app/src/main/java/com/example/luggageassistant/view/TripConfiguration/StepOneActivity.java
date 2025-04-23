@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.luggageassistant.R;
@@ -38,6 +39,8 @@ public class StepOneActivity extends AppCompatActivity {
     private TripConfigurationViewModel tripConfigurationViewModel;
 
     private Map<View, List<String>> partnerPreferencesMap = new HashMap<>();
+    private TextView specialPreferencesSummary;
+//    private AppCompatEditText partnerPreferencesSummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class StepOneActivity extends AppCompatActivity {
         selectSpecialPreferencesButton = findViewById(R.id.selectSpecialPreferencesButton);
         nextButton = findViewById(R.id.stepOneNextButton);
         cancelButton = findViewById(R.id.stepOneCancelButton);
+        specialPreferencesSummary = findViewById(R.id.specialPreferencesSummary);
 
         selectSpecialPreferencesButton.setOnClickListener(view -> showSpecialPreferencesDialog(null));
         addPartnerButton.setOnClickListener(view -> addPartnerFields());
@@ -89,15 +93,22 @@ public class StepOneActivity extends AppCompatActivity {
     }
     private void addPartnerFields() {
         View partnerView = LayoutInflater.from(this).inflate(R.layout.activity_form_partner_fields, partnerContainer, false);
+
         Button removePartnerButton = partnerView.findViewById(R.id.removePartnerButton);
         Button selectPreferencesButton = partnerView.findViewById(R.id.partnerSelectSpecialPreferencesButton);
+        TextView partnerPreferencesSummary = partnerView.findViewById(R.id.partnerPreferencesSummary);
 
+        // Dialogul pentru preferințele partenerului
         selectPreferencesButton.setOnClickListener(v -> showSpecialPreferencesDialog(partnerView));
-        removePartnerButton.setOnClickListener(view -> {
-            partnerContainer.removeView(partnerView);
-        });
+
+        // Actualizare și afișare preferințe selectate
+        partnerPreferencesSummary.setOnClickListener(v -> showSpecialPreferencesDialog(partnerView));
+
+        removePartnerButton.setOnClickListener(view -> partnerContainer.removeView(partnerView));
+
         partnerContainer.addView(partnerView);
     }
+
     private void showSpecialPreferencesDialog(View sourceView) {
         String[] items = getResources().getStringArray(R.array.special_preferences);
         boolean[] checkedItems = new boolean[items.length];
@@ -144,8 +155,22 @@ public class StepOneActivity extends AppCompatActivity {
             if (sourceView == null) {
                 userSelectedItems.clear();
                 userSelectedItems.addAll(selectedPreferences);
+
+                if (specialPreferencesSummary != null) {
+                    String summary = selectedPreferences.isEmpty() ? ""
+                            : "Selected: " + String.join(", ", selectedPreferences);
+                    specialPreferencesSummary.setText(summary);
+                }
             } else {
                 partnerPreferencesMap.put(sourceView, new ArrayList<>(selectedPreferences));
+
+                TextView partnerPreferencesSummary = sourceView.findViewById(R.id.partnerPreferencesSummary);
+                if (partnerPreferencesSummary != null) {
+                    String summary = selectedPreferences.isEmpty()
+                            ? "No preferences selected"
+                            : "Selected: " + String.join(", ", selectedPreferences);
+                    partnerPreferencesSummary.setText(summary);
+                }
             }
         });
 
