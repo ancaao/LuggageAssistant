@@ -92,4 +92,8 @@ public class TripConfigurationViewModel extends ViewModel {
     public void setTripConfiguration(TripConfiguration newConfiguration) {
         this.tripConfiguration = newConfiguration;
     }
+
+    public void setSelectedCountry(String country) {
+        tripConfiguration.setCountry(country);
+    }
 }

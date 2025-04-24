@@ -1,5 +1,6 @@
 package com.example.luggageassistant.view.TripConfiguration;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.luggageassistant.R;
+import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,14 +41,13 @@ import java.util.Locale;
 public class StepThreeActivity extends AppCompatActivity {
 
     private Button backButton, nextButton;
-    private Spinner countrySpinner;
-    private EditText cityEditText;
+    private TextInputEditText cityEditText;
     private TripConfigurationViewModel tripConfigurationViewModel;
 
     private final List<String> countryNames = new ArrayList<>();
     private final Map<String, String> countryCodeMap = new HashMap<>();
     private ArrayAdapter<String> countryAdapter;
-    private EditText startDateInput, endDateInput;
+    private TextInputEditText startDateInput, endDateInput;
     private final Calendar startCalendar = Calendar.getInstance();
     private final Calendar endCalendar = Calendar.getInstance();
 
@@ -58,12 +61,23 @@ public class StepThreeActivity extends AppCompatActivity {
 
         backButton = findViewById(R.id.stepThreeBackButton);
         nextButton = findViewById(R.id.stepThreeNextButton);
-        countrySpinner = findViewById(R.id.countrySpinner);
         cityEditText = findViewById(R.id.citySpinner);
         startDateInput = findViewById(R.id.startDateInput);
         endDateInput = findViewById(R.id.endDateInput);
+        MaterialButton countrySelectorButton = findViewById(R.id.countrySelectorButton);
 
         loadCountriesFromJson();
+
+        countrySelectorButton.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(StepThreeActivity.this);
+            builder.setTitle("Select Country");
+            builder.setItems(countryNames.toArray(new String[0]), (dialog, which) -> {
+                String selected = countryNames.get(which);
+                countrySelectorButton.setText(selected);
+                tripConfigurationViewModel.setSelectedCountry(selected);
+            });
+            builder.show();
+        });
 
         startDateInput.setOnClickListener(v -> showDatePicker(startCalendar, startDateInput));
         endDateInput.setOnClickListener(v -> showDatePicker(endCalendar, endDateInput));
@@ -71,15 +85,15 @@ public class StepThreeActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> finish());
 
         nextButton.setOnClickListener(view -> {
-            String selectedCountry = countrySpinner.getSelectedItem().toString();
+            String selectedCountry = tripConfigurationViewModel.getTripConfiguration().getCountry();
             String enteredCity = cityEditText.getText().toString().trim();
             String startDate = startDateInput.getText().toString().trim();
             String endDate = endDateInput.getText().toString().trim();
 
-            if (enteredCity.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                return;
-            }
+//            if (enteredCity.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
+//                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
 
             tripConfigurationViewModel.updateFormStepThree(selectedCountry, enteredCity, startDate, endDate);
 
@@ -106,33 +120,13 @@ public class StepThreeActivity extends AppCompatActivity {
                 countryNames.add(name);
                 countryCodeMap.put(name, code);
             }
-
-            populateCountrySpinner();
-
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error loading countries", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void populateCountrySpinner() {
-        countryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, countryNames);
-        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        countrySpinner.setAdapter(countryAdapter);
-
-        countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCountry = countrySpinner.getSelectedItem().toString();
-                Log.d("COUNTRY_SELECTED", "Selected: " + selectedCountry + " → Code: " + countryCodeMap.get(selectedCountry));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-    }
-
-    private void showDatePicker(final Calendar calendar, final EditText targetField) {
+    private void showDatePicker(final Calendar calendar, final TextInputEditText targetField) {
         Calendar initialCalendar = Calendar.getInstance();
         int year = initialCalendar.get(Calendar.YEAR);
         int month = initialCalendar.get(Calendar.MONTH);
@@ -153,7 +147,7 @@ public class StepThreeActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void updateLabel(EditText editText, Calendar calendar) {
+    private void updateLabel(TextInputEditText editText, Calendar calendar) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         editText.setText(sdf.format(calendar.getTime()));
     }

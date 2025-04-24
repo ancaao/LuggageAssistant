@@ -24,7 +24,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.TravelPartner;
 import com.example.luggageassistant.model.TripConfiguration;
+import com.example.luggageassistant.utils.InputValidator;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,11 +40,8 @@ public class StepOneActivity extends AppCompatActivity {
     private Button addPartnerButton, selectSpecialPreferencesButton, nextButton, cancelButton;
     private List<String> userSelectedItems = new ArrayList<>();
     private TripConfigurationViewModel tripConfigurationViewModel;
-
     private Map<View, List<String>> partnerPreferencesMap = new HashMap<>();
     private TextView specialPreferencesSummary;
-//    private AppCompatEditText partnerPreferencesSummary;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,30 +61,62 @@ public class StepOneActivity extends AppCompatActivity {
         addPartnerButton.setOnClickListener(view -> addPartnerFields());
 
         nextButton.setOnClickListener(view -> {
-            TextView nameInput = findViewById(R.id.nameInput);
-            EditText ageInput = findViewById(R.id.ageInput);
+            TextInputLayout nameLayout = findViewById(R.id.nameInputLayout);
+            TextInputEditText nameInput = findViewById(R.id.nameInput);
+            TextInputLayout ageLayout = findViewById(R.id.ageInputLayout);
+            TextInputEditText ageInput = findViewById(R.id.ageInput);
             RadioGroup genderGroup = findViewById(R.id.genderGroup);
+            TextView genderErrorText = findViewById(R.id.genderErrorText);
+
+            String name = nameInput.getText().toString().trim();
+            String ageText = ageInput.getText().toString().trim();
             int selectedGenderId = genderGroup.getCheckedRadioButtonId();
             RadioButton genderButton = findViewById(selectedGenderId);
-
-            String name = nameInput.getText().toString();
-
-            int age = 0;
-            try {
-                age = Integer.parseInt(ageInput.getText().toString());
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, "Please enter a valid age.", Toast.LENGTH_SHORT).show();
-                return;
-            }
             String gender = (genderButton != null) ? genderButton.getText().toString() : "";
-            List<String> preferences = new ArrayList<>(userSelectedItems);
+
+            boolean validUser = true;
+
+            if (!InputValidator.isNameValid(name)) {
+                nameLayout.setError("Name cannot be empty.");
+                validUser = false;
+            } else {
+                nameLayout.setError(null);
+            }
+
+            if (!InputValidator.isAgeValid(ageText)) {
+                ageLayout.setError("Enter a valid age.");
+                validUser = false;
+            } else {
+                ageLayout.setError(null);
+            }
+
+            if (!InputValidator.isGenderValid(selectedGenderId)) {
+                genderErrorText.setText("Please select a gender.");
+                genderErrorText.setVisibility(View.VISIBLE);
+                validUser = false;
+            } else {
+                genderErrorText.setText("");
+                genderErrorText.setVisibility(View.GONE);
+            }
+
+            // Validează și partenerii — chiar dacă userul e invalid
             List<TravelPartner> partners = collectPartnersData();
+            boolean validPartners = partners != null;
+
+            if (!validUser || !validPartners) {
+                return; // ieșim doar după ce am verificat tot
+            }
+
+            int age = Integer.parseInt(ageText);
+            List<String> preferences = new ArrayList<>(userSelectedItems);
 
             tripConfigurationViewModel.updateFormStepOne(name, age, gender, preferences, partners);
 
             Intent intent = new Intent(this, StepTwoActivity.class);
             startActivity(intent);
         });
+
+
         cancelButton.setOnClickListener(view -> finish());
     }
 
@@ -186,32 +218,60 @@ public class StepOneActivity extends AppCompatActivity {
 
     private List<TravelPartner> collectPartnersData() {
         List<TravelPartner> partners = new ArrayList<>();
+        boolean allValid = true;
 
         for (int i = 0; i < partnerContainer.getChildCount(); i++) {
             View partnerView = partnerContainer.getChildAt(i);
 
-            TextView nameInput = partnerView.findViewById(R.id.partnerNameInput);
-            EditText ageInput = partnerView.findViewById(R.id.partnerAgeInput);
+            TextInputLayout nameLayout = partnerView.findViewById(R.id.partnerNameInputLayout);
+            TextInputEditText nameInput = partnerView.findViewById(R.id.partnerNameInput);
+            TextInputLayout ageLayout = partnerView.findViewById(R.id.partnerAgeInputLayout);
+            TextInputEditText ageInput = partnerView.findViewById(R.id.partnerAgeInput);
             RadioGroup genderGroup = partnerView.findViewById(R.id.partnerGenderGroup);
+            TextView genderErrorText = partnerView.findViewById(R.id.partnerGenderErrorText);
+
+            String name = nameInput.getText().toString().trim();
+            String ageText = ageInput.getText().toString().trim();
             int selectedId = genderGroup.getCheckedRadioButtonId();
             RadioButton genderButton = partnerView.findViewById(selectedId);
-            String gender = genderButton != null ? genderButton.getText().toString() : "";
+            String gender = (genderButton != null) ? genderButton.getText().toString() : "";
 
-            List<String> specialPreferences = getSpecialPreferencesForPartner(partnerView);
+            boolean valid = true;
 
-            String name = nameInput.getText().toString();
-            int age = 0;
-            try {
-                age = Integer.parseInt(ageInput.getText().toString());
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, "Please enter a valid age for all partners", Toast.LENGTH_SHORT).show();
+            if (!InputValidator.isNameValid(name)) {
+                nameLayout.setError("Name cannot be empty.");
+                valid = false;
+            } else {
+                nameLayout.setError(null);
+            }
+
+            if (!InputValidator.isAgeValid(ageText)) {
+                ageLayout.setError("Enter a valid age (1–119).");
+                valid = false;
+            } else {
+                ageLayout.setError(null);
+            }
+
+            if (!InputValidator.isGenderValid(selectedId)) {
+                genderErrorText.setText("Please select a gender.");
+                genderErrorText.setVisibility(View.VISIBLE);
+                valid = false;
+            } else {
+                genderErrorText.setText("");
+                genderErrorText.setVisibility(View.GONE);
+            }
+
+            if (!valid) {
+                allValid = false;
                 continue;
             }
 
+            int age = Integer.parseInt(ageText);
+            List<String> specialPreferences = getSpecialPreferencesForPartner(partnerView);
             TravelPartner partner = new TravelPartner(name, age, gender, specialPreferences);
             partners.add(partner);
         }
 
-        return partners;
+        return allValid ? partners : null;
     }
 }

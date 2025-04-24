@@ -1,5 +1,7 @@
 package com.example.luggageassistant.repository;
 
+import android.util.Log;
+
 import com.example.luggageassistant.model.TripConfiguration;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -21,8 +23,14 @@ public class TripConfigurationRepository {
     }
     public void saveTripConfiguration(TripConfiguration tripConfiguration, OnDataSavedCallback callback) {
         db.collection("tripConfigurations").add(tripConfiguration.toMap())
-                .addOnSuccessListener(documentReference -> callback.onSuccess())
-                .addOnFailureListener(e -> callback.onError(e));
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("FIREBASE", "Trip saved with ID: " + documentReference.getId());
+                    callback.onSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FIREBASE", "Error saving trip", e);
+                    callback.onError(e);
+                });
     }
 
     public TripConfiguration getTripConfiguration() {

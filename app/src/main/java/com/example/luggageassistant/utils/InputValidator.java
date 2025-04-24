@@ -62,4 +62,21 @@ public class InputValidator implements TextWatcher {
 
         return isValid;
     }
+
+    public static boolean isNameValid(String name) {
+        return name != null && !name.trim().isEmpty();
+    }
+
+    public static boolean isAgeValid(String ageText) {
+        try {
+            int age = Integer.parseInt(ageText.trim());
+            return age >= 0 && age <= 120;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean isGenderValid(int selectedGenderId) {
+        return selectedGenderId != -1;
+    }
 }

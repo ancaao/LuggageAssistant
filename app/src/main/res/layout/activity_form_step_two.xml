@@ -10,34 +10,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="32dp">
+        android:paddingBottom="32dp"
+        app:errorEnabled="true" >
 
         <!-- Owner(s) -->
-        <com.google.android.material.textfield.TextInputLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Owner(s)"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
+            android:text="Owner(s)"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp" />
 
-            <TextView
-                android:id="@+id/ownerSelectedText"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:text="Select owner(s)"
-                android:textColor="@color/inputText"
-                android:background="@android:color/transparent"
-                android:focusable="true"
-                android:clickable="true"/>
-        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selectOwnersButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Select owner(s)"
+            android:backgroundTint="@color/surface"
+            android:textColor="@color/inputText"
+            android:iconTint="@color/inputText"
+            android:strokeWidth="1"
+            android:strokeColor="@color/inputBorder"
+            app:cornerRadius="24dp"
+            android:insetTop="8dp"
+            android:insetBottom="8dp"
+            android:insetLeft="12dp"
+            android:insetRight="12dp" />
+        <TextView
+            android:id="@+id/selectOwnersErrorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/error"
+            android:text=""
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:paddingTop="4dp"/>
 
         <!-- Luggage Type -->
         <TextView
@@ -48,27 +57,29 @@
             android:paddingTop="16dp"
             android:textColor="@color/onBackground" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/luggageTypeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Luggage Type"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
-
-            <Spinner
-                android:id="@+id/luggageTypeSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:spinnerMode="dropdown" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:text="Luggage type"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/surface"
+            android:textColor="@color/inputText"
+            app:cornerRadius="24dp"
+            android:iconTint="@color/inputText"
+            android:insetTop="8dp"
+            android:insetBottom="8dp"
+            android:insetLeft="12dp"
+            android:insetRight="12dp" />
+        <TextView
+            android:id="@+id/luggageTypeErrorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/error"
+            android:text=""
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:paddingTop="4dp"/>
 
         <!-- Length -->
         <com.google.android.material.textfield.TextInputLayout
@@ -183,12 +194,19 @@
         <!-- Add luggage button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addLuggageButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_another_luggage"
             android:backgroundTint="@color/primary"
             android:textColor="@color/onPrimary"
-            android:layout_marginVertical="12dp" />
+            android:layout_marginVertical="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_gravity="center_horizontal"
+            app:cornerRadius="24dp" />
+
 
         <!-- Navigation buttons -->
         <LinearLayout

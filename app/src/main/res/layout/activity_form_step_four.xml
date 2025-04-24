@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/background">
 
+    <!-- Travel Purpose -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Travel Purpose"
         android:textColor="@color/onBackground"
         android:paddingTop="16dp"
-        android:textSize="14sp" />
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
-    <TextView
-        android:id="@+id/travelPurposeSelectedText"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/selectTravelPurposeButton"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:paddingHorizontal="12dp"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
         android:text="Select purpose"
+        android:backgroundTint="@color/surface"
         android:textColor="@color/inputText"
-        android:background="@color/surface"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginTop="8dp" />
 
     <!-- Planned Activities -->
     <TextView
@@ -35,20 +32,16 @@
         android:text="Planned Activities"
         android:textColor="@color/onBackground"
         android:paddingTop="16dp"
-        android:textSize="14sp" />
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
-    <TextView
-        android:id="@+id/activitiesSelectedText"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/selectActivitiesButton"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:paddingHorizontal="12dp"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
         android:text="Select activities"
+        android:backgroundTint="@color/surface"
         android:textColor="@color/inputText"
-        android:background="@color/surface"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginTop="8dp" />
 
     <!-- Special Events -->
     <TextView
@@ -57,32 +50,44 @@
         android:text="Special Events"
         android:textColor="@color/onBackground"
         android:paddingTop="16dp"
-        android:textSize="14sp" />
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
-    <TextView
-        android:id="@+id/specialEventsSelectedText"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/selectSpecialEventsButton"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:paddingHorizontal="12dp"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
         android:text="Select events"
+        android:backgroundTint="@color/surface"
         android:textColor="@color/inputText"
-        android:background="@color/surface"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/stepFourBackButton"
-        android:layout_width="wrap_content"
+    <!-- Navigation buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp">
 
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/stepFourBackButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/back"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/surface"
+            android:textColor="@color/onPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submitButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/success"
+            android:textColor="@color/onPrimary" />
+    </LinearLayout>
 </LinearLayout>
-
-

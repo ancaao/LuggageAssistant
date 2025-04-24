@@ -40,13 +40,13 @@ public class StepFourActivity extends AppCompatActivity {
 
         backButton = findViewById(R.id.stepFourBackButton);
         submitButton = findViewById(R.id.submitButton);
-        TextView purposeText = findViewById(R.id.travelPurposeSelectedText);
-        TextView activitiesText = findViewById(R.id.activitiesSelectedText);
-        TextView eventsText = findViewById(R.id.specialEventsSelectedText);
+        Button purposeButton = findViewById(R.id.selectTravelPurposeButton);
+        Button activitiesButton = findViewById(R.id.selectActivitiesButton);
+        Button eventsButton = findViewById(R.id.selectSpecialEventsButton);
 
-        setupTravelPurposeSelection(purposeText);
-        setupPlannedActivitiesSelection(activitiesText);
-        setupSpecialEventsSelection(eventsText);
+        setupTravelPurposeSelection(purposeButton);
+        setupPlannedActivitiesSelection(activitiesButton);
+        setupSpecialEventsSelection(eventsButton);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,12 +83,12 @@ public class StepFourActivity extends AppCompatActivity {
         });
     }
 
-    private void setupTravelPurposeSelection(TextView purposeText) {
+    private void setupTravelPurposeSelection(Button purposeButton) {
         String[] options = {"Leisure", "Business", "Study", "Medical", "Other"};
         boolean[] checkedItems = new boolean[options.length];
         List<String> selected = new ArrayList<>();
 
-        purposeText.setOnClickListener(view -> {
+        purposeButton.setOnClickListener(view -> {
             LinearLayout dialogLayout = new LinearLayout(this);
             dialogLayout.setOrientation(LinearLayout.VERTICAL);
             dialogLayout.setPadding(50, 20, 50, 0);
@@ -120,9 +120,9 @@ public class StepFourActivity extends AppCompatActivity {
                 }
 
                 if (selected.isEmpty()) {
-                    purposeText.setText("Select travel purpose");
+                    purposeButton.setText("Select travel purpose");
                 } else {
-                    purposeText.setText(String.join(", ", selected));
+                    purposeButton.setText(String.join(", ", selected));
                     tripConfigurationViewModel.setTravelPurpose(new ArrayList<>(selected));
                 }
             });
@@ -132,12 +132,12 @@ public class StepFourActivity extends AppCompatActivity {
         });
     }
 
-    private void setupPlannedActivitiesSelection(TextView activitiesText) {
+    private void setupPlannedActivitiesSelection(Button activitiesButton) {
         String[] options = {"Hiking", "Museum visits", "Shopping", "Beach", "Nightlife"};
         boolean[] checkedItems = new boolean[options.length];
         List<String> selected = new ArrayList<>();
 
-        activitiesText.setOnClickListener(view -> {
+        activitiesButton.setOnClickListener(view -> {
             LinearLayout dialogLayout = new LinearLayout(this);
             dialogLayout.setOrientation(LinearLayout.VERTICAL);
             dialogLayout.setPadding(50, 20, 50, 0);
@@ -169,9 +169,9 @@ public class StepFourActivity extends AppCompatActivity {
                 }
 
                 if (selected.isEmpty()) {
-                    activitiesText.setText("Select activities");
+                    activitiesButton.setText("Select activities");
                 } else {
-                    activitiesText.setText(String.join(", ", selected));
+                    activitiesButton.setText(String.join(", ", selected));
                     tripConfigurationViewModel.setPlannedActivities(new ArrayList<>(selected));
                 }
             });
@@ -181,12 +181,12 @@ public class StepFourActivity extends AppCompatActivity {
         });
     }
 
-    private void setupSpecialEventsSelection(TextView eventsText) {
+    private void setupSpecialEventsSelection(Button eventsButton) {
         String[] options = {"Wedding", "Festival", "Conference", "Birthday", "Anniversary"};
         boolean[] checkedItems = new boolean[options.length];
         List<String> selected = new ArrayList<>();
 
-        eventsText.setOnClickListener(view -> {
+        eventsButton.setOnClickListener(view -> {
             LinearLayout dialogLayout = new LinearLayout(this);
             dialogLayout.setOrientation(LinearLayout.VERTICAL);
             dialogLayout.setPadding(50, 20, 50, 0);
@@ -218,9 +218,9 @@ public class StepFourActivity extends AppCompatActivity {
                 }
 
                 if (selected.isEmpty()) {
-                    eventsText.setText("Select events");
+                    eventsButton.setText("Select events");
                 } else {
-                    eventsText.setText(String.join(", ", selected));
+                    eventsButton.setText(String.join(", ", selected));
                     tripConfigurationViewModel.setSpecialEvents(new ArrayList<>(selected));
                 }
             });

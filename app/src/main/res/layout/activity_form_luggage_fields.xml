@@ -1,68 +1,112 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/surface"
+    android:padding="16dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp"
+    android:elevation="2dp"
+    app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="16dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/removePartnerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Remove luggage (-)" />
+            android:text="Remove luggage (-)"
+            android:backgroundTint="@color/error"
+            android:textColor="@color/onPrimary" />
 
         <!-- Owner(s) -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Owner(s)"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface">
+            android:text="Owner(s)"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp" />
 
-            <TextView
-                android:id="@+id/ownerSelectedText"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="12dp"
-                android:text="Select owner(s)"
-                android:textColor="@color/inputText"
-                android:background="@android:color/transparent"
-                android:focusable="true"
-                android:clickable="true" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ownerSelectedText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select owner(s)"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/surface"
+            android:textColor="@color/inputText"
+            app:cornerRadius="24dp"
+            android:strokeWidth="1"
+            android:strokeColor="@color/inputBorder"
+            android:insetTop="8dp"
+            android:insetBottom="8dp"
+            android:insetLeft="12dp"
+            android:insetRight="12dp" />
+        <TextView
+            android:id="@+id/extraLuggageSelectOwnersErrorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/error"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:paddingTop="4dp"/>
+
 
         <!-- Luggage Type -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Luggage Type"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onBackground"
-            android:paddingTop="16dp"
-            android:textSize="14sp" />
+            android:paddingTop="16dp" />
 
-        <Spinner
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/luggageTypeSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/surface"
-            android:padding="28dp" />
+            android:text="Luggage type"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/surface"
+            android:textColor="@color/inputText"
+            app:cornerRadius="24dp"
+            android:strokeWidth="1"
+            android:strokeColor="@color/inputBorder"
+            android:insetTop="8dp"
+            android:insetBottom="8dp"
+            android:insetLeft="12dp"
+            android:insetRight="12dp" />
+        <TextView
+            android:id="@+id/extraLuggageLuggageTypeErrorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/error"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:paddingTop="4dp"/>
 
         <!-- Length -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:hint="Length (cm)"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/inputBorder"
             app:boxBackgroundColor="@color/surface"
-            app:boxStrokeColor="@color/inputBorder">
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lengthInput"
@@ -74,12 +118,17 @@
 
         <!-- Width -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:hint="Width (cm)"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/inputBorder"
             app:boxBackgroundColor="@color/surface"
-            app:boxStrokeColor="@color/inputBorder">
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/widthInput"
@@ -91,12 +140,17 @@
 
         <!-- Height -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:hint="Height (cm)"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/inputBorder"
             app:boxBackgroundColor="@color/surface"
-            app:boxStrokeColor="@color/inputBorder">
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/heightInput"
@@ -108,12 +162,17 @@
 
         <!-- Weight -->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:hint="Weight (kg)"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/inputBorder"
             app:boxBackgroundColor="@color/surface"
-            app:boxStrokeColor="@color/inputBorder">
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/weightInput"
@@ -124,25 +183,29 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Accessories -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Special Accessories"
-            android:textColor="@color/onBackground"
-            android:paddingTop="16dp"
-            android:textSize="14sp" />
-
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/accessoriesSelectedText"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:paddingHorizontal="12dp"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Select accessories"
+            android:backgroundTint="@color/surface"
             android:textColor="@color/inputText"
-            android:background="@color/surface"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginBottom="16dp" />
+            app:cornerRadius="24dp"
+            android:strokeWidth="1"
+            android:strokeColor="@color/inputBorder"
+            android:insetTop="8dp"
+            android:insetBottom="8dp"
+            android:insetLeft="12dp"
+            android:insetRight="12dp" />
+
+        <TextView
+            android:id="@+id/accessoriesSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No accessories selected"
+            android:textColor="@color/onBackground"
+            android:paddingTop="8dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
     </LinearLayout>
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

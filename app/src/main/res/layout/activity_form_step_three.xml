@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -11,102 +10,144 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Country -->
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Country"
-            android:textColor="@color/onBackground"
-            android:layout_marginTop="8dp"/>
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
 
-        <Spinner
-            android:id="@+id/countrySpinner"
-            android:hint="Select country"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/surface"
-            android:padding="24dp" />
-
-        <!-- City -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/inputText"
-            android:layout_marginTop="8dp"/>
-
-        <EditText
-            android:id="@+id/citySpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter city"
-            android:inputType="textCapWords"
-            android:background="@color/inputBorder"
-            android:textColor="@color/inputText"
-            android:padding="16dp"/>
-
-        <!-- Start Date -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Start Date"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/startDateInput"
+            <!-- Country -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:hint="dd/MM/yyyy"
-                android:textColor="@color/inputText"
-                android:focusable="false"
-                android:clickable="true"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Country"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/onBackground" />
 
-        <!-- End Date -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="End Date"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/endDateInput"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/countrySelectorButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:hint="dd/MM/yyyy"
+                android:text="Select Country"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/surface"
                 android:textColor="@color/inputText"
-                android:focusable="false"
-                android:clickable="true"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                app:cornerRadius="24dp"
+                android:strokeWidth="1"
+                android:strokeColor="@color/inputBorder"
+                android:insetTop="8dp"
+                android:insetBottom="8dp"
+                android:insetLeft="12dp"
+                android:insetRight="12dp" />
 
-        <!-- Buttons -->
+            <!-- City -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/onBackground"
+                android:layout_marginTop="16dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter city"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/inputBorder"
+                app:boxBackgroundColor="@color/surface"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/citySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/inputText" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Start Date -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Start Date"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/inputBorder"
+                app:boxBackgroundColor="@color/surface"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/startDateInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:hint="dd/MM/yyyy"
+                    android:textColor="@color/inputText"
+                    android:focusable="false"
+                    android:clickable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- End Date -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="End Date"
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/inputBorder"
+                app:boxBackgroundColor="@color/surface"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/endDateInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:hint="dd/MM/yyyy"
+                    android:textColor="@color/inputText"
+                    android:focusable="false"
+                    android:clickable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!-- Navigation buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="24dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/stepThreeBackButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Back" />
+                android:text="Back"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/surface"
+                android:textColor="@color/onPrimary" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/stepThreeNextButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Next"
-                android:layout_marginStart="12dp"/>
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/success"
+                android:textColor="@color/onPrimary" />
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>
