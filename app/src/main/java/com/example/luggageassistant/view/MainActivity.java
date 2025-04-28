@@ -11,12 +11,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.view.TripConfiguration.StepOneActivity;
 import com.example.luggageassistant.viewmodel.MainViewModel;
+import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private MainViewModel mainViewModel;
+    private TripConfigurationViewModel tripConfigurationViewModel;
     private TextView textView;
     private Button buttonLogout, buttonViewAccount, buttonAddLuggage;
+    private boolean shouldResetTripConfiguration = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mainViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MainViewModel.class);
+        tripConfigurationViewModel = new ViewModelProvider(this).get(TripConfigurationViewModel.class);
 
         textView = findViewById(R.id.user_details);
         buttonLogout = findViewById(R.id.btn_logout);
@@ -54,11 +58,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonAddLuggage.setOnClickListener(view -> {
+            shouldResetTripConfiguration = true; // Marchez că trebuie să resetăm
+            tripConfigurationViewModel.resetTripConfiguration();
             Intent intent = new Intent(MainActivity.this, StepOneActivity.class);
             startActivity(intent);
         });
 
         mainViewModel.checkIfUserIsLoggedIn();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (shouldResetTripConfiguration) {
+            tripConfigurationViewModel.resetTripConfiguration();
+            shouldResetTripConfiguration = false;
+        }
     }
 
     private void redirectToLogin() {

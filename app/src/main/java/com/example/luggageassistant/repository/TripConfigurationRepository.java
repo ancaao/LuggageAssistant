@@ -33,6 +33,10 @@ public class TripConfigurationRepository {
                 });
     }
 
+    public void resetTripConfiguration() {
+        this.tripConfiguration = new TripConfiguration();
+    }
+
     public TripConfiguration getTripConfiguration() {
         return tripConfiguration;
     }

@@ -117,7 +117,10 @@ public class StepOneActivity extends AppCompatActivity {
         });
 
 
-        cancelButton.setOnClickListener(view -> finish());
+        cancelButton.setOnClickListener(view -> {
+            tripConfigurationViewModel.resetTripConfiguration();
+            finish();
+        });
     }
 
     private void displayMessage(String message) {

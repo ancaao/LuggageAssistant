@@ -24,7 +24,7 @@ public class TripConfiguration {
     private String tripEndDate;
 
     // step 4: trip purpose
-    private String travelPurpose;
+    private List<String> travelPurpose;
     private List<String> plannedActivities;
     private List<String> specialEvents;
 
@@ -135,11 +135,11 @@ public class TripConfiguration {
         this.tripEndDate = tripEndDate;
     }
 
-    public String getTravelPurpose() {
+    public List<String> getTravelPurpose() {
         return travelPurpose;
     }
 
-    public void setTravelPurpose(String travelPurpose) {
+    public void setTravelPurpose(List<String> travelPurpose) {
         this.travelPurpose = travelPurpose;
     }
 

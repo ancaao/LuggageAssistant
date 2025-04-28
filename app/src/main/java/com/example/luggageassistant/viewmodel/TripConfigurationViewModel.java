@@ -50,8 +50,13 @@ public class TripConfigurationViewModel extends ViewModel {
         tripConfiguration.setTripEndDate(endDateStr);
     }
 
+    public void resetTripConfiguration() {
+        tripConfigurationRepository.resetTripConfiguration();
+        this.tripConfiguration = tripConfigurationRepository.getTripConfiguration();
+    }
+
     public void setTravelPurpose(List<String> travelPurpose) {
-        tripConfiguration.setTravelPurpose(travelPurpose != null && !travelPurpose.isEmpty() ? travelPurpose.get(0) : null);
+        tripConfiguration.setTravelPurpose(travelPurpose);
     }
 
     public void setPlannedActivities(List<String> activities) {
@@ -61,7 +66,6 @@ public class TripConfigurationViewModel extends ViewModel {
     public void setSpecialEvents(List<String> events) {
         tripConfiguration.setSpecialEvents(events);
     }
-
 
     public List<String> getSelectedPreferences() {
         return selectedPreferences;

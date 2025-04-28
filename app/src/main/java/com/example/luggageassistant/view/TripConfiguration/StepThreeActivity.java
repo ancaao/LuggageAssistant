@@ -3,6 +3,8 @@ package com.example.luggageassistant.view.TripConfiguration;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -56,6 +58,7 @@ public class StepThreeActivity extends AppCompatActivity {
     private TextInputEditText startDateInput, endDateInput;
     private final Calendar startCalendar = Calendar.getInstance();
     private final Calendar endCalendar = Calendar.getInstance();
+    private MaterialButton countrySelectorButton;
 
 
     @Override
@@ -70,7 +73,9 @@ public class StepThreeActivity extends AppCompatActivity {
         cityEditText = findViewById(R.id.citySpinner);
         startDateInput = findViewById(R.id.startDateInput);
         endDateInput = findViewById(R.id.endDateInput);
-        MaterialButton countrySelectorButton = findViewById(R.id.countrySelectorButton);
+        countrySelectorButton = findViewById(R.id.countrySelectorButton);
+
+        populateSavedData();
 
         loadCountriesFromJson();
 
@@ -83,6 +88,19 @@ public class StepThreeActivity extends AppCompatActivity {
                 tripConfigurationViewModel.setSelectedCountry(selected);
             });
             builder.show();
+        });
+
+        cityEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tripConfigurationViewModel.getTripConfiguration().setCity(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
 
         startDateInput.setOnClickListener(v -> showStartDatePicker(startCalendar, startDateInput));
@@ -153,6 +171,8 @@ public class StepThreeActivity extends AppCompatActivity {
         startDatePicker.addOnPositiveButtonClickListener(selection -> {
             startCalendar.setTimeInMillis(selection);
             updateLabel(startDateField, startCalendar);
+
+            tripConfigurationViewModel.getTripConfiguration().setTripStartDate(startDateInput.getText().toString());
         });
 
         startDatePicker.show(getSupportFragmentManager(), "START_DATE_PICKER");
@@ -171,6 +191,8 @@ public class StepThreeActivity extends AppCompatActivity {
         endDatePicker.addOnPositiveButtonClickListener(selection -> {
             endCalendar.setTimeInMillis(selection);
             updateLabel(endDateField, endCalendar);
+
+            tripConfigurationViewModel.getTripConfiguration().setTripEndDate(endDateInput.getText().toString());
         });
 
         endDatePicker.show(getSupportFragmentManager(), "END_DATE_PICKER");
@@ -180,5 +202,42 @@ public class StepThreeActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         editText.setText(sdf.format(calendar.getTime()));
     }
+
+    private void populateSavedData() {
+        TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
+
+        // Setăm country dacă există
+        if (tripConfiguration.getCountry() != null && !tripConfiguration.getCountry().isEmpty()) {
+            countrySelectorButton.setText(tripConfiguration.getCountry());
+        }
+
+        // Setăm city dacă există
+        if (tripConfiguration.getCity() != null && !tripConfiguration.getCity().isEmpty()) {
+            cityEditText.setText(tripConfiguration.getCity());
+        }
+
+        // Setăm start date dacă există
+        if (tripConfiguration.getTripStartDate() != null && !tripConfiguration.getTripStartDate().isEmpty()) {
+            startDateInput.setText(tripConfiguration.getTripStartDate());
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                startCalendar.setTime(sdf.parse(tripConfiguration.getTripStartDate()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Setăm end date dacă există
+        if (tripConfiguration.getTripEndDate() != null && !tripConfiguration.getTripEndDate().isEmpty()) {
+            endDateInput.setText(tripConfiguration.getTripEndDate());
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                endCalendar.setTime(sdf.parse(tripConfiguration.getTripEndDate()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }

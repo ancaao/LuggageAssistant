@@ -44,6 +44,8 @@ public class StepFourActivity extends AppCompatActivity {
         Button activitiesButton = findViewById(R.id.selectActivitiesButton);
         Button eventsButton = findViewById(R.id.selectSpecialEventsButton);
 
+        populateSavedData();
+
         setupTravelPurposeSelection(purposeButton);
         setupPlannedActivitiesSelection(activitiesButton);
         setupSpecialEventsSelection(eventsButton);
@@ -93,6 +95,7 @@ public class StepFourActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 Toast.makeText(StepFourActivity.this, "Trip configuration saved successfully!", Toast.LENGTH_SHORT).show();
+                tripConfigurationViewModel.resetTripConfiguration();
                 startActivity(new Intent(StepFourActivity.this, MainActivity.class));
                 finish();
             }
@@ -103,13 +106,26 @@ public class StepFourActivity extends AppCompatActivity {
             }
         });
     }
-
     private void setupTravelPurposeSelection(Button purposeButton) {
         String[] options = {"Leisure", "Business", "Study", "Medical", "Other"};
-        boolean[] checkedItems = new boolean[options.length];
-        List<String> selected = new ArrayList<>();
 
         purposeButton.setOnClickListener(view -> {
+            TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
+
+            boolean[] checkedItems = new boolean[options.length];
+            List<String> selected = new ArrayList<>();
+
+            // Sincronizăm selected și checkedItems cu ce avem în ViewModel
+            if (tripConfiguration.getTravelPurpose() != null) {
+                selected.addAll(tripConfiguration.getTravelPurpose());
+
+                for (int i = 0; i < options.length; i++) {
+                    if (selected.contains(options[i])) {
+                        checkedItems[i] = true;
+                    }
+                }
+            }
+
             LinearLayout dialogLayout = new LinearLayout(this);
             dialogLayout.setOrientation(LinearLayout.VERTICAL);
             dialogLayout.setPadding(50, 20, 50, 0);
@@ -144,8 +160,9 @@ public class StepFourActivity extends AppCompatActivity {
                     purposeButton.setText("Select travel purpose");
                 } else {
                     purposeButton.setText(String.join(", ", selected));
-                    tripConfigurationViewModel.setTravelPurpose(new ArrayList<>(selected));
                 }
+
+                tripConfigurationViewModel.setTravelPurpose(new ArrayList<>(selected));
             });
 
             builder.setNegativeButton("Cancel", null);
@@ -250,4 +267,24 @@ public class StepFourActivity extends AppCompatActivity {
             builder.create().show();
         });
     }
+    private void populateSavedData() {
+        TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
+
+        Button purposeButton = findViewById(R.id.selectTravelPurposeButton);
+        Button activitiesButton = findViewById(R.id.selectActivitiesButton);
+        Button eventsButton = findViewById(R.id.selectSpecialEventsButton);
+
+        if (tripConfiguration.getTravelPurpose() != null && !tripConfiguration.getTravelPurpose().isEmpty()) {
+            purposeButton.setText(String.join(", ", tripConfiguration.getTravelPurpose()));
+        }
+
+        if (tripConfiguration.getPlannedActivities() != null && !tripConfiguration.getPlannedActivities().isEmpty()) {
+            activitiesButton.setText(String.join(", ", tripConfiguration.getPlannedActivities()));
+        }
+
+        if (tripConfiguration.getSpecialEvents() != null && !tripConfiguration.getSpecialEvents().isEmpty()) {
+            eventsButton.setText(String.join(", ", tripConfiguration.getSpecialEvents()));
+        }
+    }
+
 }

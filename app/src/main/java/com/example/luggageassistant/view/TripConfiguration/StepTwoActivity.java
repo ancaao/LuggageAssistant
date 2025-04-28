@@ -63,6 +63,8 @@ public class StepTwoActivity extends AppCompatActivity {
             }
         }
 
+        populateSavedData();
+
         String[] namesArray = allNames.toArray(new String[0]);
         boolean[] checkedItems = new boolean[namesArray.length];
 
@@ -157,8 +159,24 @@ public class StepTwoActivity extends AppCompatActivity {
 
             if (!isValid) return;
 
-            List<Luggage> luggages = collectLuggageData();
-            tripConfigurationViewModel.updateFormStepTwo(luggages);
+            List<Luggage> luggages = new ArrayList<>();
+
+            // 1. Adaugă manual bagajul principal
+            Button typeButton = findViewById(R.id.luggageTypeButton);
+            Button ownerButton = findViewById(R.id.selectOwnersButton);
+
+            List<String> owners = new ArrayList<>(selectedOwners);
+            String type = typeButton.getText().toString();
+            List<String> accessories = new ArrayList<>(selectedAccessories);
+
+            Luggage mainLuggage = new Luggage(owners, type, 0, 0, 0, 0, accessories);
+            luggages.add(mainLuggage);
+
+            // 2. Adaugă bagajele dinamice
+            luggages.addAll(collectLuggageData());
+
+            // 3. Update corect ViewModel-ul
+            tripConfigurationViewModel.getTripConfiguration().setLuggage(luggages);
 
             Intent intent = new Intent(this, StepThreeActivity.class);
             startActivity(intent);
@@ -209,6 +227,7 @@ public class StepTwoActivity extends AppCompatActivity {
                 } else {
                     summaryTextView.setText(String.join(", ", selectedAccessories));
                 }
+                saveCurrentLuggages();
             });
 
             builder.setNegativeButton("Cancel", null);
@@ -237,6 +256,7 @@ public class StepTwoActivity extends AppCompatActivity {
                 } else {
                     ownerButton.setText(String.join(", ", selectedOwners));
                 }
+                saveCurrentLuggages();
             });
 
             builder.setNegativeButton("Cancel", null);
@@ -252,6 +272,7 @@ public class StepTwoActivity extends AppCompatActivity {
         removeButton.setOnClickListener(v -> {
             luggageContainer.removeView(luggageView);
             luggageViews.remove(luggageView);
+            saveCurrentLuggages();
         });
 
         // Owner(s)
@@ -269,8 +290,28 @@ public class StepTwoActivity extends AppCompatActivity {
         TextView accessoriesSummary = luggageView.findViewById(R.id.accessoriesSummary);
         setupAccessoriesSelection(accessoriesButton, accessoriesSummary);
 
+        EditText lengthInput = luggageView.findViewById(R.id.lengthInput);
+        EditText widthInput = luggageView.findViewById(R.id.widthInput);
+        EditText heightInput = luggageView.findViewById(R.id.heightInput);
+        EditText weightInput = luggageView.findViewById(R.id.weightInput);
+
+        // La fiecare focus lost => salvăm ViewModel
+        lengthInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) saveCurrentLuggages();
+        });
+        widthInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) saveCurrentLuggages();
+        });
+        heightInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) saveCurrentLuggages();
+        });
+        weightInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) saveCurrentLuggages();
+        });
+
         luggageContainer.addView(luggageView);
         luggageViews.add(luggageView);
+        saveCurrentLuggages();
     }
 
     private void setupOwnerSelectionForLuggageButton(Button ownerButton, String[] allNames) {
@@ -297,6 +338,7 @@ public class StepTwoActivity extends AppCompatActivity {
                 } else {
                     ownerButton.setText(String.join(", ", selected));
                 }
+                saveCurrentLuggages();
             });
 
             builder.setNegativeButton("Cancel", null);
@@ -313,6 +355,7 @@ public class StepTwoActivity extends AppCompatActivity {
 
             builder.setItems(luggageTypes, (dialog, which) -> {
                 luggageTypeButton.setText(luggageTypes[which]);
+                saveCurrentLuggages();
             });
 
             builder.show();
@@ -361,5 +404,99 @@ public class StepTwoActivity extends AppCompatActivity {
             return new ArrayList<>();
         }
         return new ArrayList<>(List.of(text.split("\\s*,\\s*")));
+    }
+
+    private void saveCurrentLuggages() {
+        List<Luggage> currentLuggages = new ArrayList<>();
+
+        // 1. Salvăm bagajul principal
+        Button typeButton = findViewById(R.id.luggageTypeButton);
+        Button ownerButton = findViewById(R.id.selectOwnersButton);
+        TextView accessoriesSummary = findViewById(R.id.accessoriesSelectedText);
+
+        List<String> owners = new ArrayList<>(selectedOwners);
+        String type = typeButton.getText().toString();
+        List<String> accessories = new ArrayList<>(selectedAccessories);
+
+        Luggage mainLuggage = new Luggage(owners, type, 0, 0, 0, 0, accessories);
+        currentLuggages.add(mainLuggage);
+
+        // 2. Salvăm bagajele dinamice
+        currentLuggages.addAll(collectLuggageData());
+
+        tripConfigurationViewModel.getTripConfiguration().setLuggage(currentLuggages);
+    }
+
+    private void populateSavedData() {
+        TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
+        List<Luggage> savedLuggages = tripConfiguration.getLuggage();
+
+        // 1. Golim containerele ca să nu duplicăm
+        luggageContainer.removeAllViews();
+        luggageViews.clear();
+
+        if (savedLuggages != null && !savedLuggages.isEmpty()) {
+            // 2. Primul luggage e pentru bagajul principal
+            Luggage mainLuggage = savedLuggages.get(0);
+
+            Button ownerButton = findViewById(R.id.selectOwnersButton);
+            Button typeButton = findViewById(R.id.luggageTypeButton);
+            TextView accessoriesSummary = findViewById(R.id.accessoriesSelectedText);
+
+            if (mainLuggage.getOwners() != null && !mainLuggage.getOwners().isEmpty()) {
+                selectedOwners = new ArrayList<>(mainLuggage.getOwners());
+                ownerButton.setText(String.join(", ", selectedOwners));
+            }
+
+            if (mainLuggage.getLuggageType() != null) {
+                typeButton.setText(mainLuggage.getLuggageType());
+            }
+
+            if (mainLuggage.getSpecialAccessories() != null && !mainLuggage.getSpecialAccessories().isEmpty()) {
+                selectedAccessories.clear();
+                selectedAccessories.addAll(mainLuggage.getSpecialAccessories());
+                accessoriesSummary.setText(String.join(", ", selectedAccessories));
+            }
+
+            // 3. Restul luggage-urilor sunt cele dinamice
+            for (int i = 1; i < savedLuggages.size(); i++) {
+                Luggage luggage = savedLuggages.get(i);
+
+                View luggageView = LayoutInflater.from(this).inflate(R.layout.activity_form_luggage_fields, luggageContainer, false);
+
+                Button extraOwnerButton = luggageView.findViewById(R.id.ownerSelectedText);
+                Button extraTypeButton = luggageView.findViewById(R.id.luggageTypeSpinner);
+                EditText lengthInput = luggageView.findViewById(R.id.lengthInput);
+                EditText widthInput = luggageView.findViewById(R.id.widthInput);
+                EditText heightInput = luggageView.findViewById(R.id.heightInput);
+                EditText weightInput = luggageView.findViewById(R.id.weightInput);
+                TextView accessoriesSummaryExtra = luggageView.findViewById(R.id.accessoriesSummary);
+
+                extraOwnerButton.setText(String.join(", ", luggage.getOwners()));
+                extraTypeButton.setText(luggage.getLuggageType());
+                lengthInput.setText(luggage.getLength() == 0 ? "" : String.valueOf(luggage.getLength()));
+                widthInput.setText(luggage.getWidth() == 0 ? "" : String.valueOf(luggage.getWidth()));
+                heightInput.setText(luggage.getHeight() == 0 ? "" : String.valueOf(luggage.getHeight()));
+                weightInput.setText(luggage.getWeight() == 0 ? "" : String.valueOf(luggage.getWeight()));
+                accessoriesSummaryExtra.setText(luggage.getSpecialAccessories() != null ? String.join(", ", luggage.getSpecialAccessories()) : "No accessories selected");
+
+                // Setăm listener-ele
+                String[] allNamesArray = allNames.toArray(new String[0]);
+                setupOwnerSelectionForLuggageButton(extraOwnerButton, allNamesArray);
+                setupLuggageTypeDropdownForLuggage(extraTypeButton);
+                setupAccessoriesSelection(extraOwnerButton, accessoriesSummaryExtra);
+
+                Button removeButton = luggageView.findViewById(R.id.removePartnerButton);
+                removeButton.setText("Remove luggage");
+                removeButton.setOnClickListener(v -> {
+                    luggageContainer.removeView(luggageView);
+                    luggageViews.remove(luggageView);
+                    saveCurrentLuggages();
+                });
+
+                luggageContainer.addView(luggageView);
+                luggageViews.add(luggageView);
+            }
+        }
     }
 }
