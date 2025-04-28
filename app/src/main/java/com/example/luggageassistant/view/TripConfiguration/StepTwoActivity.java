@@ -119,7 +119,6 @@ public class StepTwoActivity extends AppCompatActivity {
                 TextView typeErrorText = luggageView.findViewById(R.id.extraLuggageLuggageTypeErrorText);
 
                 if (ownersErrorText == null || typeErrorText == null) {
-                    Log.e("VALIDATION", "Error text views not found for a luggageView");
                     Toast.makeText(this, "Eroare la validare bagaj dinamic", Toast.LENGTH_SHORT).show();
                     isValid = false;
                     continue;
@@ -356,6 +355,9 @@ public class StepTwoActivity extends AppCompatActivity {
 
     private List<String> parseListFromText(String text) {
         if (text.equals("Select accessories") || text.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        if (text.equals("Select owner(s)") || text.trim().isEmpty()) {
             return new ArrayList<>();
         }
         return new ArrayList<>(List.of(text.split("\\s*,\\s*")));

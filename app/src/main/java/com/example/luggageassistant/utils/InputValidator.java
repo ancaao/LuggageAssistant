@@ -5,6 +5,10 @@ import android.text.TextWatcher;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import android.content.Context;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.core.content.ContextCompat;
 import com.example.luggageassistant.R;
 
@@ -79,4 +83,43 @@ public class InputValidator implements TextWatcher {
     public static boolean isGenderValid(int selectedGenderId) {
         return selectedGenderId != -1;
     }
+
+    public static boolean isFieldNotEmpty(TextInputLayout layout) {
+        TextInputEditText editText = (TextInputEditText) layout.getEditText();
+        if (editText == null) return false;
+
+        String input = editText.getText() != null ? editText.getText().toString().trim() : "";
+        if (input.isEmpty()) {
+            layout.setError("This field is required");
+            layout.setBoxStrokeColor(ContextCompat.getColor(layout.getContext(), R.color.error));
+            return false;
+        } else {
+            layout.setError(null);
+            layout.setBoxStrokeColor(ContextCompat.getColor(layout.getContext(), R.color.success));
+            return true;
+        }
+    }
+    public static boolean isCountrySelected(Button countryButton, TextView errorTextView) {
+        String country = countryButton.getText().toString().trim();
+        if (country.equals("Select Country")) {
+            errorTextView.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            errorTextView.setVisibility(View.GONE);
+            return true;
+        }
+    }
+
+    public static boolean isButtonSelectionValid(Button button, TextView errorTextView, String defaultText) {
+        String selectedText = button.getText().toString().trim();
+        if (selectedText.equals(defaultText)) {
+            errorTextView.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            errorTextView.setVisibility(View.GONE);
+            return true;
+        }
+    }
+
+
 }

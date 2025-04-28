@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +18,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.TripConfiguration;
+import com.example.luggageassistant.utils.InputValidator;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,27 +85,40 @@ public class StepThreeActivity extends AppCompatActivity {
             builder.show();
         });
 
-        startDateInput.setOnClickListener(v -> showDatePicker(startCalendar, startDateInput));
-        endDateInput.setOnClickListener(v -> showDatePicker(endCalendar, endDateInput));
+        startDateInput.setOnClickListener(v -> showStartDatePicker(startCalendar, startDateInput));
+        endDateInput.setOnClickListener(v -> showEndDatePicker(startCalendar, endCalendar, endDateInput));
 
         backButton.setOnClickListener(v -> finish());
 
         nextButton.setOnClickListener(view -> {
-            String selectedCountry = tripConfigurationViewModel.getTripConfiguration().getCountry();
+            TextInputLayout cityInputLayout = findViewById(R.id.cityInputLayout);
+            TextInputLayout startDateInputLayout = findViewById(R.id.startDateInputLayout);
+            TextInputLayout endDateInputLayout = findViewById(R.id.endDateInputLayout);
+            TextView countryErrorText = findViewById(R.id.countryErrorText);
+
+            boolean isValid = true;
+
+            isValid &= InputValidator.isCountrySelected(countrySelectorButton, countryErrorText);
+            isValid &= InputValidator.isFieldNotEmpty(cityInputLayout);
+            isValid &= InputValidator.isFieldNotEmpty(startDateInputLayout);
+            isValid &= InputValidator.isFieldNotEmpty(endDateInputLayout);
+
+            if (!isValid) {
+                return;
+            }
+
+            // Variabilele cityEditText, startDateInput, endDateInput EXISTĂ deja
+            String selectedCountry = countrySelectorButton.getText().toString();
             String enteredCity = cityEditText.getText().toString().trim();
             String startDate = startDateInput.getText().toString().trim();
             String endDate = endDateInput.getText().toString().trim();
-
-//            if (enteredCity.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
-//                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
 
             tripConfigurationViewModel.updateFormStepThree(selectedCountry, enteredCity, startDate, endDate);
 
             Intent intent = new Intent(this, StepFourActivity.class);
             startActivity(intent);
         });
+
     }
 
     private void loadCountriesFromJson() {
@@ -125,26 +144,36 @@ public class StepThreeActivity extends AppCompatActivity {
             Toast.makeText(this, "Error loading countries", Toast.LENGTH_SHORT).show();
         }
     }
+    private void showStartDatePicker(final Calendar startCalendar, final TextInputEditText startDateField) {
+        MaterialDatePicker<Long> startDatePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Start Date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build();
 
-    private void showDatePicker(final Calendar calendar, final TextInputEditText targetField) {
-        Calendar initialCalendar = Calendar.getInstance();
-        int year = initialCalendar.get(Calendar.YEAR);
-        int month = initialCalendar.get(Calendar.MONTH);
-        int day = initialCalendar.get(Calendar.DAY_OF_MONTH);
+        startDatePicker.addOnPositiveButtonClickListener(selection -> {
+            startCalendar.setTimeInMillis(selection);
+            updateLabel(startDateField, startCalendar);
+        });
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                StepThreeActivity.this,
-//                android.R.style.Theme_Material_Light_Dialog,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    calendar.set(Calendar.YEAR, selectedYear);
-                    calendar.set(Calendar.MONTH, selectedMonth);
-                    calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
-                    updateLabel(targetField, calendar);
-                },
-                year, month, day
-        );
+        startDatePicker.show(getSupportFragmentManager(), "START_DATE_PICKER");
+    }
 
-        datePickerDialog.show();
+    private void showEndDatePicker(final Calendar startCalendar, final Calendar endCalendar, final TextInputEditText endDateField) {
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointForward.from(startCalendar.getTimeInMillis()));
+
+        MaterialDatePicker<Long> endDatePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select End Date")
+                .setSelection(startCalendar.getTimeInMillis()) // EndDate default = StartDate
+                .setCalendarConstraints(constraintsBuilder.build())
+                .build();
+
+        endDatePicker.addOnPositiveButtonClickListener(selection -> {
+            endCalendar.setTimeInMillis(selection);
+            updateLabel(endDateField, endCalendar);
+        });
+
+        endDatePicker.show(getSupportFragmentManager(), "END_DATE_PICKER");
     }
 
     private void updateLabel(TextInputEditText editText, Calendar calendar) {

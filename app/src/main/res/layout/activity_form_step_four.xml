@@ -24,6 +24,16 @@
         android:backgroundTint="@color/surface"
         android:textColor="@color/inputText"
         android:layout_marginTop="8dp" />
+    <TextView
+        android:id="@+id/travelPurposeErrorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/error"
+        android:visibility="gone"
+        android:text="Please select a travel purpose"
+        android:textSize="12sp"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp" />
 
     <!-- Planned Activities -->
     <TextView
@@ -42,6 +52,17 @@
         android:backgroundTint="@color/surface"
         android:textColor="@color/inputText"
         android:layout_marginTop="8dp" />
+    <TextView
+        android:id="@+id/activitiesErrorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/error"
+        android:visibility="gone"
+        android:text="Please select planned activities"
+        android:textSize="12sp"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp" />
+
 
     <!-- Special Events -->
     <TextView

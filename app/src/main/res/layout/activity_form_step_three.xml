@@ -40,6 +40,16 @@
                 android:insetBottom="8dp"
                 android:insetLeft="12dp"
                 android:insetRight="12dp" />
+            <TextView
+                android:id="@+id/countryErrorText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/error"
+                android:visibility="gone"
+                android:text="Please select a country"
+                android:textSize="12sp"
+                android:paddingStart="8dp"
+                android:paddingTop="4dp" />
 
             <!-- City -->
             <TextView
@@ -50,6 +60,7 @@
                 android:layout_marginTop="16dp" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cityInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter city"
@@ -71,6 +82,7 @@
 
             <!-- Start Date -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/startDateInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Start Date"
@@ -96,6 +108,7 @@
 
             <!-- End Date -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/endDateInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="End Date"

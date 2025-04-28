@@ -64,11 +64,32 @@ public class StepFourActivity extends AppCompatActivity {
     }
 
     private void submitForm() {
+        Button purposeButton = findViewById(R.id.selectTravelPurposeButton);
+        Button activitiesButton = findViewById(R.id.selectActivitiesButton);
+
+        TextView travelPurposeErrorText = findViewById(R.id.travelPurposeErrorText);
+        TextView activitiesErrorText = findViewById(R.id.activitiesErrorText);
+
+        boolean isValid = true;
+
+        isValid &= com.example.luggageassistant.utils.InputValidator.isButtonSelectionValid(
+                purposeButton, travelPurposeErrorText, "Select purpose"
+        );
+
+        isValid &= com.example.luggageassistant.utils.InputValidator.isButtonSelectionValid(
+                activitiesButton, activitiesErrorText, "Select activities"
+        );
+
+        if (!isValid) {
+            return;
+        }
+
+        // Daca toate câmpurile sunt valide, continuăm cu salvarea
         TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
 
         Log.d("SubmitForm", "Submitting trip configuration: " + tripConfiguration.toMap().toString());
 
-        TripConfigurationRepository.getInstance().saveTripConfiguration(tripConfigurationViewModel.getTripConfiguration(), new TripConfigurationRepository.OnDataSavedCallback() {
+        TripConfigurationRepository.getInstance().saveTripConfiguration(tripConfiguration, new TripConfigurationRepository.OnDataSavedCallback() {
             @Override
             public void onSuccess() {
                 Toast.makeText(StepFourActivity.this, "Trip configuration saved successfully!", Toast.LENGTH_SHORT).show();
