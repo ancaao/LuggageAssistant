@@ -25,6 +25,7 @@ import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.TravelPartner;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.utils.InputValidator;
+import com.example.luggageassistant.utils.StepperUtils;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -46,6 +47,8 @@ public class StepOneActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_step_one);
+
+        StepperUtils.configureStep(this, 1);
 
         tripConfigurationViewModel = new ViewModelProvider(this).get(TripConfigurationViewModel.class);
         tripConfigurationViewModel.messageLiveData.observe(this, this::displayMessage);

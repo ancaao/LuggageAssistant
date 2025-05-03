@@ -22,6 +22,7 @@ import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.Luggage;
 import com.example.luggageassistant.model.TravelPartner;
 import com.example.luggageassistant.model.TripConfiguration;
+import com.example.luggageassistant.utils.StepperUtils;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class StepTwoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_step_two);
+
+        StepperUtils.configureStep(this, 2);
+
         TextView selectOwnersErrorText = findViewById(R.id.selectOwnersErrorText);
         TextView luggageTypeErrorText = findViewById(R.id.luggageTypeErrorText);
 

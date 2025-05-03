@@ -12,6 +12,8 @@
         android:orientation="vertical"
         android:paddingBottom="32dp">
 
+        <include layout="@layout/custom_view_step_indicator" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameInputLayout"
             android:layout_width="match_parent"

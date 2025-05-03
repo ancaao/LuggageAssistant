@@ -1,0 +1,40 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+  <!-- Punct 1 -->
+  <path
+      android:fillColor="#000000"
+      android:pathData="M3,5a1,1 0 1,0 2,0a1,1 0 1,0 -2,0" />
+
+  <!-- Linie 1 -->
+  <path
+      android:strokeColor="#000000"
+      android:strokeWidth="2"
+      android:pathData="M8,6h13" />
+
+  <!-- Punct 2 -->
+  <path
+      android:fillColor="#000000"
+      android:pathData="M3,11a1,1 0 1,0 2,0a1,1 0 1,0 -2,0" />
+
+  <!-- Linie 2 -->
+  <path
+      android:strokeColor="#000000"
+      android:strokeWidth="2"
+      android:pathData="M8,12h13" />
+
+  <!-- Punct 3 -->
+  <path
+      android:fillColor="#000000"
+      android:pathData="M3,17a1,1 0 1,0 2,0a1,1 0 1,0 -2,0" />
+
+  <!-- Linie 3 -->
+  <path
+      android:strokeColor="#000000"
+      android:strokeWidth="2"
+      android:pathData="M8,18h13" />
+
+</vector>

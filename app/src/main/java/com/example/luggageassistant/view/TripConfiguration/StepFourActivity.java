@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,8 +18,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.TripConfigurationRepository;
-import com.example.luggageassistant.utils.MultiSelectDialog;
-import com.example.luggageassistant.view.MainActivity;
+import com.example.luggageassistant.utils.StepperUtils;
+import com.example.luggageassistant.view.HomeFragment;
+import com.example.luggageassistant.view.MainNavigationActivity;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 
 import java.util.ArrayList;
@@ -35,6 +34,8 @@ public class StepFourActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_step_four);
+
+        StepperUtils.configureStep(this, 4);
 
         tripConfigurationViewModel = new ViewModelProvider(this).get(TripConfigurationViewModel.class);
 
@@ -96,7 +97,7 @@ public class StepFourActivity extends AppCompatActivity {
             public void onSuccess() {
                 Toast.makeText(StepFourActivity.this, "Trip configuration saved successfully!", Toast.LENGTH_SHORT).show();
                 tripConfigurationViewModel.resetTripConfiguration();
-                startActivity(new Intent(StepFourActivity.this, MainActivity.class));
+                startActivity(new Intent(StepFourActivity.this, MainNavigationActivity.class));
                 finish();
             }
 

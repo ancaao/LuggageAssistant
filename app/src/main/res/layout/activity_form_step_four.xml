@@ -1,114 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:padding="16dp">
 
-    <!-- Travel Purpose -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Travel Purpose"
-        android:textColor="@color/onBackground"
-        android:paddingTop="16dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/selectTravelPurposeButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select purpose"
-        android:backgroundTint="@color/surface"
-        android:textColor="@color/inputText"
-        android:layout_marginTop="8dp" />
-    <TextView
-        android:id="@+id/travelPurposeErrorText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/error"
-        android:visibility="gone"
-        android:text="Please select a travel purpose"
-        android:textSize="12sp"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp" />
-
-    <!-- Planned Activities -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Planned Activities"
-        android:textColor="@color/onBackground"
-        android:paddingTop="16dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/selectActivitiesButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select activities"
-        android:backgroundTint="@color/surface"
-        android:textColor="@color/inputText"
-        android:layout_marginTop="8dp" />
-    <TextView
-        android:id="@+id/activitiesErrorText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/error"
-        android:visibility="gone"
-        android:text="Please select planned activities"
-        android:textSize="12sp"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp" />
-
-
-    <!-- Special Events -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Special Events"
-        android:textColor="@color/onBackground"
-        android:paddingTop="16dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/selectSpecialEventsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select events"
-        android:backgroundTint="@color/surface"
-        android:textColor="@color/inputText"
-        android:layout_marginTop="8dp" />
-
-    <!-- Navigation buttons -->
+    <!-- Singurul copil permis: un LinearLayout care conține tot -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp">
+        android:orientation="vertical">
+
+        <!-- Stepper -->
+        <include layout="@layout/custom_view_step_indicator" />
+
+        <!-- Travel Purpose -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Travel Purpose"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/stepFourBackButton"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/selectTravelPurposeButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/back"
-            android:layout_marginEnd="8dp"
+            android:text="Select purpose"
             android:backgroundTint="@color/surface"
-            android:textColor="@color/onPrimary" />
+            android:textColor="@color/inputText"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/travelPurposeErrorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/error"
+            android:visibility="gone"
+            android:text="Please select a travel purpose"
+            android:textSize="12sp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp" />
+
+        <!-- Planned Activities -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Planned Activities"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/submitButton"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/selectActivitiesButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@color/success"
-            android:textColor="@color/onPrimary" />
+            android:text="Select activities"
+            android:backgroundTint="@color/surface"
+            android:textColor="@color/inputText"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/activitiesErrorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/error"
+            android:visibility="gone"
+            android:text="Please select planned activities"
+            android:textSize="12sp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp" />
+
+        <!-- Special Events -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Special Events"
+            android:textColor="@color/onBackground"
+            android:paddingTop="16dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selectSpecialEventsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select events"
+            android:backgroundTint="@color/surface"
+            android:textColor="@color/inputText"
+            android:layout_marginTop="8dp" />
+
+        <!-- Navigation buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/stepFourBackButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/back"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/surface"
+                android:textColor="@color/onPrimary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/success"
+                android:textColor="@color/onPrimary" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

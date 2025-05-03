@@ -13,6 +13,8 @@
         android:paddingBottom="32dp"
         app:errorEnabled="true" >
 
+        <include layout="@layout/custom_view_step_indicator" />
+
         <!-- Owner(s) -->
         <TextView
             android:layout_width="match_parent"

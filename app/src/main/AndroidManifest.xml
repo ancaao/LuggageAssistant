@@ -24,7 +24,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -44,15 +43,18 @@
             android:name=".view.TripConfiguration.StepFourActivity"
             android:exported="true">
         </activity>
-        <activity
-            android:name=".view.AccountActivity"
-            android:exported="true">
-        </activity>
+<!--        <activity-->
+<!--            android:name=".view.AccountActivity"-->
+<!--            android:exported="true">-->
+<!--        </activity>-->
 
+<!--        <activity-->
+<!--            android:name=".view.MainActivity"-->
+<!--            android:exported="true">-->
+<!--        </activity>-->
         <activity
-            android:name=".view.MainActivity"
-            android:exported="true">
-        </activity>
+            android:name=".view.MainNavigationActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

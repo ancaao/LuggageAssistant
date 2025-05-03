@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     private void navigateToMain() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainNavigationActivity.class);
         startActivity(intent);
         finish();
     }
@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getIsLoginSuccessful().observe(this, isSuccess -> {
             if (isSuccess) {
                 Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainNavigationActivity.class));
                 finish();
             }
         });
