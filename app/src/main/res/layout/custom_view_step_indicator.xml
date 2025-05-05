@@ -28,9 +28,9 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="1 of 4"
+            android:textColor="@color/onBackground"
             android:textSize="8sp"
-            android:textStyle="bold"
-            android:textColor="@color/onBackground" />
+            android:textStyle="bold" />
     </FrameLayout>
 
 

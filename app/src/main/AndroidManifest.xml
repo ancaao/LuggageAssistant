@@ -53,6 +53,10 @@
 <!--            android:exported="true">-->
 <!--        </activity>-->
         <activity
+            android:name=".view.PackingListActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".view.MainNavigationActivity"
             android:exported="true" />
     </application>

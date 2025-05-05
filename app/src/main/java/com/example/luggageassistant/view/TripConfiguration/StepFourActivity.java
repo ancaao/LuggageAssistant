@@ -21,7 +21,9 @@ import com.example.luggageassistant.repository.TripConfigurationRepository;
 import com.example.luggageassistant.utils.StepperUtils;
 import com.example.luggageassistant.view.HomeFragment;
 import com.example.luggageassistant.view.MainNavigationActivity;
+import com.example.luggageassistant.view.PackingListActivity;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,9 +98,14 @@ public class StepFourActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 Toast.makeText(StepFourActivity.this, "Trip configuration saved successfully!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(StepFourActivity.this, PackingListActivity.class);
+                intent.putExtra("trip_config", new Gson().toJson(tripConfiguration));
+                startActivity(intent);
+
+                // Acum poți reseta configurația, după ce ecranul a fost lansat
                 tripConfigurationViewModel.resetTripConfiguration();
-                startActivity(new Intent(StepFourActivity.this, MainNavigationActivity.class));
                 finish();
+
             }
 
             @Override
