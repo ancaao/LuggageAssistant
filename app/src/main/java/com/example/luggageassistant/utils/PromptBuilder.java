@@ -11,11 +11,17 @@ public class PromptBuilder {
             JSONObject jsonObject = new JSONObject(trip.toMap());
 
             // Construcția promptului complet pentru GPT
-            return "Generate a detailed list of what a luggage should contain for a person or more traveling according to this trip configuration:" + jsonObject.toString(2);
+            return "Generate a detailed JSON list of what a luggage should contain for a person or more traveling according to the trip configuration below." +
+                    "The format or your response should look like" +
+                    "{\n" +
+                    "  \"Clothing\": [ { \"item\": \"pantaloni\", \"quantity\": 2 }, ... ],\n" +
+                    "  \"Toiletries\": [ ... ]\n" +
+                    "}\n\n" +
+                    jsonObject.toString(2);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "Eroare la construirea promptului";
+            return "Error building the prompt.";
         }
     }
 }

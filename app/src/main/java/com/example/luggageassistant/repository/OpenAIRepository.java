@@ -53,15 +53,11 @@ public class OpenAIRepository {
 
     public void viewPrompt (String promptJson) {
         List<Message> messages = new ArrayList<>();
-        messages.add(new Message("user", "Te rog oferă o listă detaliată de obiecte pentru bagaj în funcție de aceste informații: \n" + promptJson));
-
-        Log.d("GPT_PROMPT", "Trimitem promptul către GPT:\n" + promptJson);
+        messages.add(new Message("user", promptJson));
     }
     public void generatePackingList(String promptJson, OnPackingListReceived callback) {
         List<Message> messages = new ArrayList<>();
-        messages.add(new Message("user", "Te rog oferă o listă detaliată de obiecte pentru bagaj în funcție de aceste informații: \n" + promptJson));
-
-        Log.d("GPT_PROMPT", "Trimitem promptul către GPT:\n" + promptJson);
+        messages.add(new Message("user", promptJson));
 
         ChatRequest request = new ChatRequest("gpt-4-turbo", messages, 0.7);
 
@@ -73,15 +69,15 @@ public class OpenAIRepository {
                     saveResultToFirestore(promptJson, result);
                     callback.onSuccess(result);
                 } else {
-                    Log.e("OpenAI", "Eroare: " + response.code());
-                    callback.onError("Eroare GPT: " + response.code());
+                    Log.e("OpenAI", "Error: " + response.code());
+                    callback.onError("GPT error: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ChatResponse> call, @NonNull Throwable t) {
-                Log.e("OpenAI", "Eroare rețea: " + t.getMessage());
-                callback.onError("Eroare rețea: " + t.getMessage());
+                Log.e("OpenAI", "Network error: " + t.getMessage());
+                callback.onError("Network error: " + t.getMessage());
             }
         });
     }
@@ -96,8 +92,8 @@ public class OpenAIRepository {
         data.put("timestamp", new Timestamp(new Date()));
 
         db.collection("ai_recommendations").add(data)
-                .addOnSuccessListener(doc -> Log.d("Firestore", "Salvat cu succes"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Eroare salvare", e));
+                .addOnSuccessListener(doc -> Log.d("Firestore", "Saved to Firestore"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error saving to Firestore", e));
     }
 
     // Interfață callback simplă
