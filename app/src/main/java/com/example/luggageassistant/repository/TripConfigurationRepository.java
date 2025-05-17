@@ -21,10 +21,14 @@ public class TripConfigurationRepository {
         }
         return instance;
     }
-    public void saveTripConfiguration(TripConfiguration tripConfiguration, OnDataSavedCallback callback) {
-        db.collection("tripConfigurations").add(tripConfiguration.toMap())
-                .addOnSuccessListener(documentReference -> {
-                    Log.d("FIREBASE", "Trip saved with ID: " + documentReference.getId());
+    public void saveTripConfiguration(String userId, String tripId, TripConfiguration tripConfiguration, OnDataSavedCallback callback) {
+        db.collection("users")
+                .document(userId)
+                .collection("trips")
+                .document(tripId)
+                .set(tripConfiguration.toMap()) // ✅ salvăm direct aici, fără subcolecție
+                .addOnSuccessListener(unused -> {
+                    Log.d("FIREBASE", "Trip saved directly under trips/" + tripId);
                     callback.onSuccess();
                 })
                 .addOnFailureListener(e -> {
@@ -32,6 +36,7 @@ public class TripConfigurationRepository {
                     callback.onError(e);
                 });
     }
+
 
     public void resetTripConfiguration() {
         this.tripConfiguration = new TripConfiguration();

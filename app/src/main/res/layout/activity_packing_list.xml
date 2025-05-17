@@ -1,20 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/packingListLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:padding="16dp">
+    android:padding="0dp">
 
-    <TextView
-        android:id="@+id/statusText"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/error"
-        android:textSize="14sp"
-        android:padding="4dp"
-        android:visibility="gone" />
+        android:background="?attr/colorSurface"
+        app:tabIndicatorColor="@color/linkColor"
+        app:tabTextColor="@color/onBackground"
+        app:tabSelectedTextColor="@color/linkColor"
+        app:tabIndicatorHeight="4dp"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="4dp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:overScrollMode="never" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save selected items to your packing list"
+        android:textAllCaps="false"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="16dp"
+        android:visibility="gone"
+        android:backgroundTint="@color/linkColor"
+        android:textColor="@android:color/white"/>
 
     <ProgressBar
         android:id="@+id/loadingIndicator"
@@ -22,15 +48,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
         android:visibility="gone"
-        android:indeterminate="true"
-        android:layout_marginTop="12dp" />
+        android:indeterminate="true" />
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/packingRecyclerView"
+    <TextView
+        android:id="@+id/statusText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:padding="8dp"/>
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:visibility="gone" />
+
 </LinearLayout>
+
+

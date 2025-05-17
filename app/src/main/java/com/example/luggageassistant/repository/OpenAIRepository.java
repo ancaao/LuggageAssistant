@@ -33,6 +33,7 @@ public class OpenAIRepository {
     private static final String API_KEY = "Bearer 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"; // 🛑 pune cheia reală aici
 
     private final OpenAIApi api;
+    private String tripId;
 
     public OpenAIRepository() {
         OkHttpClient client = new OkHttpClient.Builder()
@@ -55,7 +56,7 @@ public class OpenAIRepository {
         List<Message> messages = new ArrayList<>();
         messages.add(new Message("user", promptJson));
     }
-    public void generatePackingList(String promptJson, OnPackingListReceived callback) {
+    public void generatePackingList(String promptJson, String tripId, OnPackingListReceived callback) {
         List<Message> messages = new ArrayList<>();
         messages.add(new Message("user", promptJson));
 
@@ -66,7 +67,8 @@ public class OpenAIRepository {
             public void onResponse(@NonNull Call<ChatResponse> call, @NonNull Response<ChatResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String result = response.body().choices.get(0).message.content;
-                    saveResultToFirestore(promptJson, result);
+                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    saveResultToFirestore(promptJson, result, userId, tripId);
                     callback.onSuccess(result);
                 } else {
                     Log.e("OpenAI", "Error: " + response.code());
@@ -82,23 +84,30 @@ public class OpenAIRepository {
         });
     }
 
-    private void saveResultToFirestore(String prompt, String result) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private void saveResultToFirestore(String prompt, String result, String userId, String tripId) {
         Map<String, Object> data = new HashMap<>();
-        data.put("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
         data.put("prompt", prompt);
         data.put("response", result);
         data.put("timestamp", new Timestamp(new Date()));
 
-        db.collection("ai_recommendations").add(data)
-                .addOnSuccessListener(doc -> Log.d("Firestore", "Saved to Firestore"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error saving to Firestore", e));
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .collection("trips")
+                .document(tripId)
+                .collection("ai_recommendations")
+                .add(data)
+                .addOnSuccessListener(doc -> Log.d("Firestore", "Saved recommendation"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error saving", e));
     }
 
     // Interfață callback simplă
     public interface OnPackingListReceived {
         void onSuccess(String response);
         void onError(String error);
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
     }
 }

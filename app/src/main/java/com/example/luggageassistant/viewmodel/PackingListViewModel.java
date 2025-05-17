@@ -23,8 +23,8 @@ public class PackingListViewModel extends ViewModel {
     public void viewPromptforTest (String prompt) {
         openAIRepository.viewPrompt(prompt);
     }
-    public void requestPackingList(String jsonPrompt) {
-        openAIRepository.generatePackingList(jsonPrompt, new OpenAIRepository.OnPackingListReceived() {
+    public void requestPackingList(String jsonPrompt, String tripId) {
+        openAIRepository.generatePackingList(jsonPrompt, tripId, new OpenAIRepository.OnPackingListReceived() {
             @Override
             public void onSuccess(String response) {
                 packingListLiveData.postValue(response);
@@ -36,4 +36,5 @@ public class PackingListViewModel extends ViewModel {
             }
         });
     }
+
 }

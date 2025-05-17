@@ -15,6 +15,12 @@ public class MainNavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation);
 
+        String target = getIntent().getStringExtra("navigate_to");
+        if ("home".equals(target)) {
+            BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+            bottomNav.setSelectedItemId(R.id.nav_home);
+        }
+
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment selectedFragment;

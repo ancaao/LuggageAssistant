@@ -1,6 +1,8 @@
 package com.example.luggageassistant.model;
 
-public class PackingItem {
+import java.io.Serializable;
+
+public class PackingItem implements Serializable {
     private String category;
     private String item;
     private int quantity;

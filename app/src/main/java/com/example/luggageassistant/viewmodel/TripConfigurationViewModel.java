@@ -17,6 +17,9 @@ public class TripConfigurationViewModel extends ViewModel {
     private TripConfigurationRepository tripConfigurationRepository;
     public MutableLiveData<String> messageLiveData = new MutableLiveData<>();
     private List<String> selectedPreferences = new ArrayList<>();
+    private String userId;
+    private String tripId;
+
 
     public TripConfigurationViewModel() {
         tripConfigurationRepository = TripConfigurationRepository.getInstance();
@@ -72,20 +75,6 @@ public class TripConfigurationViewModel extends ViewModel {
         this.selectedPreferences.addAll(preferences);
     }
 
-    public void saveTripConfiguration() {
-        tripConfigurationRepository.saveTripConfiguration(tripConfiguration, new TripConfigurationRepository.OnDataSavedCallback() {
-            @Override
-            public void onSuccess() {
-                messageLiveData.postValue("Data saved successfully!");
-            }
-
-            @Override
-            public void onError(Exception e) {
-                messageLiveData.postValue("Error saving data: " + e.getMessage());
-            }
-        });
-    }
-
     public TripConfiguration getTripConfiguration() {
         return tripConfiguration;
     }
@@ -95,5 +84,13 @@ public class TripConfigurationViewModel extends ViewModel {
 
     public void setSelectedCountry(String country) {
         tripConfiguration.setCountry(country);
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
     }
 }

@@ -19,14 +19,15 @@ import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.TripConfigurationRepository;
 import com.example.luggageassistant.utils.StepperUtils;
-import com.example.luggageassistant.view.HomeFragment;
-import com.example.luggageassistant.view.MainNavigationActivity;
 import com.example.luggageassistant.view.PackingListActivity;
+import com.example.luggageassistant.view.PackingListFragment;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class StepFourActivity extends AppCompatActivity {
     private Button backButton, submitButton;
@@ -88,24 +89,25 @@ public class StepFourActivity extends AppCompatActivity {
         if (!isValid) {
             return;
         }
-
-        // Daca toate câmpurile sunt valide, continuăm cu salvarea
         TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
-
         Log.d("SubmitForm", "Submitting trip configuration: " + tripConfiguration.toMap().toString());
 
-        TripConfigurationRepository.getInstance().saveTripConfiguration(tripConfiguration, new TripConfigurationRepository.OnDataSavedCallback() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String tripId = UUID.randomUUID().toString();
+
+        TripConfigurationRepository.getInstance().saveTripConfiguration(userId, tripId, tripConfiguration, new TripConfigurationRepository.OnDataSavedCallback() {
             @Override
             public void onSuccess() {
                 Toast.makeText(StepFourActivity.this, "Trip configuration saved successfully!", Toast.LENGTH_SHORT).show();
+
+                // Trimitem config-ul și tripId-ul către PackingListActivity
                 Intent intent = new Intent(StepFourActivity.this, PackingListActivity.class);
                 intent.putExtra("trip_config", new Gson().toJson(tripConfiguration));
+                intent.putExtra("trip_id", tripId); // adăugăm tripId-ul pentru salvări viitoare (packing list, recomandări, etc.)
                 startActivity(intent);
 
-                // Acum poți reseta configurația, după ce ecranul a fost lansat
                 tripConfigurationViewModel.resetTripConfiguration();
                 finish();
-
             }
 
             @Override
