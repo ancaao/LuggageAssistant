@@ -7,6 +7,9 @@ public class PackingItem implements Serializable {
     private String item;
     private int quantity;
     private boolean checked;
+    private String personName;
+
+    public PackingItem() {}
 
     public PackingItem(String category, String item, int quantity) {
         this.category = category;
@@ -33,5 +36,13 @@ public class PackingItem implements Serializable {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 }

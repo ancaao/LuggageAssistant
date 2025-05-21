@@ -11,7 +11,7 @@ public class PromptBuilder {
             JSONObject jsonObject = new JSONObject(trip.toMap());
 
             // Construcția promptului complet pentru GPT
-            return "Generate a very detailed JSON list of what a luggage should contain for a person or more " +
+            return "Generate a very detailed JSON list of everything a luggage could contain for a person or more " +
                     "traveling according to the trip configuration below." +
                     "Don't assume they share their personal items." +
                     "Include categories toiletries, clothing, medication, documents, electronics, " +

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TripConfiguration {
+    private String tripId;
+    private boolean pinned = false;
     // step 1: personal information
     private String name;
     private int age;
@@ -32,6 +34,7 @@ public class TripConfiguration {
     }
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
+        result.put("pinned", pinned);
         result.put("name", name);
         result.put("age", age);
         result.put("gender", gender);
@@ -57,6 +60,22 @@ public class TripConfiguration {
 
     }
 
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
+    }
+
+    public boolean isPinned() {
+        return pinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        this.pinned = pinned;
+    }
+
     public String getName() {
         return name;
     }
@@ -66,7 +85,6 @@ public class TripConfiguration {
     public int getAge() {
         return age;
     }
-
     public void setAge(int age) {
         this.age = age;
     }

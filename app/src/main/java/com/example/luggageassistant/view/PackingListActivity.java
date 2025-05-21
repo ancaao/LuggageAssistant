@@ -20,6 +20,7 @@ import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.PackingListRepository;
 import com.example.luggageassistant.utils.PackingListParser;
 import com.example.luggageassistant.utils.PromptBuilder;
+import com.example.luggageassistant.utils.Triple;
 import com.example.luggageassistant.view.adapter.PackingPagerAdapter;
 import com.example.luggageassistant.viewmodel.PackingListViewModel;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
@@ -28,6 +29,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -125,26 +127,60 @@ public class PackingListActivity extends AppCompatActivity {
         });
 
         // 🔽 Salvăm doar la apăsarea pe buton
+
         saveButton.setOnClickListener(v -> {
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+            List<Triple<String, String, PackingItem>> itemsToSave = new ArrayList<>(); // personName, category, item
+
             for (PersonPackingList person : personLists) {
                 String personName = person.getPersonName();
+
                 for (Map.Entry<String, List<PackingItem>> entry : person.getCategorizedItems().entrySet()) {
+                    Log.d("SAVE_PROCESS", "Verific persoana: " + personName);
+
                     for (PackingItem item : entry.getValue()) {
+                        Log.d("SAVE_PROCESS", "  ↳ Item: " + item.getItem() + " | checked = " + item.isChecked());
                         if (item.isChecked()) {
-                            PackingListRepository.getInstance().savePackingItem(userId, tripId, personName, item);
+                            itemsToSave.add(new Triple<>(userId, personName, item));
                         }
                     }
                 }
             }
 
-            Toast.makeText(this, "Packing list saved!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(PackingListActivity.this, MainNavigationActivity.class);
-            intent.putExtra("navigate_to", "home");
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+            if (itemsToSave.isEmpty()) {
+                Toast.makeText(this, "No items selected.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            final int totalItems = itemsToSave.size();
+            final int[] savedCount = {0};
+
+            Log.d("SAVE_PROCESS", "TOTAL items to save: " + itemsToSave.size());
+            for (Triple<String, String, PackingItem> triple : itemsToSave) {
+                Log.d("SAVE_PROCESS", "→ Ready to save: " + triple.getThird().getItem() + " for " + triple.getSecond());
+                String personName = triple.getSecond();
+                PackingItem item = triple.getThird();
+
+                item.setPersonName(personName);
+
+                PackingListRepository.getInstance()
+                        .saveFinalPackingItem(userId, tripId, personName, item, () -> {
+                    savedCount[0]++;
+                    if (savedCount[0] == totalItems) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Packing list saved!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(PackingListActivity.this, MainNavigationActivity.class);
+                            intent.putExtra("navigate_to", "final_list");
+                            intent.putExtra("trip_id", tripId);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        });
+                    }
+                });
+            }
         });
+
     }
 }
