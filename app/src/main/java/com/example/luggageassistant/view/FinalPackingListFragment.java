@@ -53,8 +53,6 @@ public class FinalPackingListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.d("FinalPackingList", "onViewCreated called");
-
         viewModel = new ViewModelProvider(this).get(FinalListViewModel.class);
 
         tripId = requireContext()
@@ -63,9 +61,6 @@ public class FinalPackingListFragment extends Fragment {
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        Log.d("FinalPackingList", "Received tripId: " + tripId);
-        Log.d("FinalPackingList", "UserId: " + userId);
-
         if (tripId != null && !tripId.isEmpty()) {
             viewModel.loadItems(userId, tripId);
         } else {
@@ -73,13 +68,11 @@ public class FinalPackingListFragment extends Fragment {
         }
 
         viewModel.getItems().observe(getViewLifecycleOwner(), items -> {
-            Log.d("FinalPackingList", "Loaded " + items.size() + " items");
             displayItems(items);
         });
 
         viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), error -> {
             Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
-            Log.e("FinalPackingList", "Error: " + error);
         });
     }
 
@@ -101,6 +94,21 @@ public class FinalPackingListFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
                 tab.setText(pagerAdapter.getPersonName(position))
         ).attach();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        tripId = requireContext()
+                .getSharedPreferences("app_prefs", getContext().MODE_PRIVATE)
+                .getString("current_trip_id", null);
+
+        if (tripId != null && !tripId.isEmpty()) {
+            viewModel.loadItems(userId, tripId); // 🔁 Reîncarcă lista din Firebase
+        } else {
+            Toast.makeText(getContext(), "Missing trip ID", Toast.LENGTH_LONG).show();
+        }
     }
 
 }

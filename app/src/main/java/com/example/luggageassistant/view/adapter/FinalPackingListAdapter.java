@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.example.luggageassistant.repository.PackingListRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +29,27 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
     private static final int TYPE_ITEM = 1;
 
     private final List<Object> displayList = new ArrayList<>();
+    private boolean deleteMode = false;
+    private OnDeleteClickListener deleteClickListener;
 
     public FinalPackingListAdapter(Map<String, List<PackingItem>> categorizedItems) {
         for (Map.Entry<String, List<PackingItem>> entry : categorizedItems.entrySet()) {
             displayList.add(entry.getKey()); // categoria
             displayList.addAll(entry.getValue()); // itemele din acea categorie
         }
+    }
+
+    public interface OnDeleteClickListener {
+        void onDeleteClick(PackingItem item);
+    }
+
+    public void setDeleteMode(boolean deleteMode) {
+        this.deleteMode = deleteMode;
+        notifyDataSetChanged();
+    }
+
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
+        this.deleteClickListener = listener;
     }
 
     @Override
@@ -57,14 +74,24 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CategoryViewHolder) {
             ((CategoryViewHolder) holder).bind((String) displayList.get(position));
-        } else {
-            ((ItemViewHolder) holder).bind((PackingItem) displayList.get(position));
+        } else if (holder instanceof ItemViewHolder) {
+            ((ItemViewHolder) holder).bind((PackingItem) displayList.get(position), deleteMode, deleteClickListener);
         }
     }
+
 
     @Override
     public int getItemCount() {
         return displayList.size();
+    }
+
+    public void updateData(Map<String, List<PackingItem>> newData) {
+        displayList.clear();
+        for (Map.Entry<String, List<PackingItem>> entry : newData.entrySet()) {
+            displayList.add(entry.getKey());
+            displayList.addAll(entry.getValue());
+        }
+        notifyDataSetChanged();
     }
 
     static class CategoryViewHolder extends RecyclerView.ViewHolder {
@@ -82,16 +109,42 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
         private final CheckBox itemCheckBox;
+        private final ImageView deleteIcon;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             itemCheckBox = itemView.findViewById(R.id.itemCheckBox);
+            deleteIcon = itemView.findViewById(R.id.deleteIcon);
         }
 
-        public void bind(PackingItem item) {
-            itemCheckBox.setText(item.getItem());
+        public void bind(PackingItem item, boolean deleteMode, OnDeleteClickListener listener) {
+            itemView.setTranslationX(0f);
+            itemView.setAlpha(1f);
+
+            if (item.getQuantity() > 1) {
+                itemCheckBox.setText(item.getItem() + " - " + item.getQuantity());
+            } else {
+                itemCheckBox.setText(item.getItem());
+            }
+
             itemCheckBox.setChecked(item.isChecked());
             updateStyle(item.isChecked());
+
+            deleteIcon.setVisibility(deleteMode ? View.VISIBLE : View.GONE);
+            deleteIcon.setOnClickListener(v -> {
+                if (listener != null) {
+                    // Animatie vizuala inainte de stergere
+                    itemView.animate()
+                            .translationX(-itemView.getWidth())
+                            .alpha(0f)
+                            .setDuration(300)
+                            .withEndAction(() -> {
+                                listener.onDeleteClick(item);
+                            })
+                            .start();
+                }
+            });
+
 
             itemCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 item.setChecked(isChecked);
@@ -113,7 +166,6 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
             });
         }
 
-
         void updateStyle(boolean isChecked) {
             if (isChecked) {
                 itemCheckBox.setPaintFlags(itemCheckBox.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -121,5 +173,34 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 itemCheckBox.setPaintFlags(itemCheckBox.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             }
         }
+    }
+    public void removeItem(PackingItem item) {
+        displayList.remove(item);
+        notifyDataSetChanged(); // sau notifyItemRemoved() cu poziție corectă
+    }
+
+    public void restoreItem(PackingItem item) {
+        // Adaugă înapoi în listă și recategorizează dacă e nevoie
+        // Cel mai simplu:
+        // Reîncarcă tot (poți optimiza dacă vrei)
+        List<PackingItem> singleItemList = new ArrayList<>();
+        for (Object obj : displayList) {
+            if (obj instanceof PackingItem) {
+                singleItemList.add((PackingItem) obj);
+            }
+        }
+        singleItemList.add(item);
+        updateData(categorizeItems(singleItemList));
+    }
+    public static Map<String, List<PackingItem>> categorizeItems(List<PackingItem> items) {
+        Map<String, List<PackingItem>> categorized = new LinkedHashMap<>();
+        for (PackingItem item : items) {
+            String category = item.getCategory();
+            if (!categorized.containsKey(category)) {
+                categorized.put(category, new ArrayList<>());
+            }
+            categorized.get(category).add(item);
+        }
+        return categorized;
     }
 }

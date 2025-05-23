@@ -38,4 +38,12 @@ public class FinalListViewModel extends ViewModel {
             }
         });
     }
+
+    public void addItem(String userId, String tripId, String personName, PackingItem item) {
+        repository.saveFinalPackingItem(userId, tripId, personName, item, () -> {
+            // După salvare, reîncarcă lista
+            loadItems(userId, tripId);
+        });
+    }
+
 }

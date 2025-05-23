@@ -4,26 +4,21 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.TravelPartner;
-import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.utils.InputValidator;
 import com.example.luggageassistant.utils.StepperUtils;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
@@ -31,7 +26,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

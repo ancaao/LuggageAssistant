@@ -4,14 +4,11 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +47,8 @@ public class StepTwoActivity extends AppCompatActivity {
 
         tripConfigurationViewModel = new ViewModelProvider(this).get(TripConfigurationViewModel.class);
 
-        Button luggageTypeButton = findViewById(R.id.luggageTypeButton);        backButton = findViewById(R.id.stepTwoBackButton);
+        Button luggageTypeButton = findViewById(R.id.luggageTypeButton);
+        backButton = findViewById(R.id.stepTwoBackButton);
         nextButton = findViewById(R.id.stepTwoNextButton);
         selectOwnersButton = findViewById(R.id.selectOwnersButton);
         luggageContainer = findViewById(R.id.luggageContainer);

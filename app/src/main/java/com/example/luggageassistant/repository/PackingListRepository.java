@@ -3,7 +3,6 @@ package com.example.luggageassistant.repository;
 import android.util.Log;
 
 import com.example.luggageassistant.model.PackingItem;
-import com.example.luggageassistant.model.TripConfiguration;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -234,50 +233,23 @@ public class PackingListRepository {
                 );
     }
 
-    public void getAllTripConfigurations(String userId, OnTripConfigurationsLoadedListener listener) {
-        db.collection("users")
-                .document(userId)
-                .collection("trips")
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    List<TripConfiguration> tripList = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : snapshot) {
-                        TripConfiguration config = doc.toObject(TripConfiguration.class);
-                        // Salvează și tripId-ul dacă vrei (se obține cu doc.getId())
-                        config.setTripId(doc.getId()); // adaugă un field `tripId` în model
-                        tripList.add(config);
-                    }
-                    listener.onTripsLoaded(tripList);
-                })
-                .addOnFailureListener(listener::onError);
-    }
+    public void deleteFinalPackingItem(String userId, String tripId, String personName, PackingItem item, Runnable onSuccess) {
+        String itemId = item.getItem().replaceAll("\\s+", "_") + "_" + item.getCategory();
 
-    public void deleteTripConfiguration(String userId, String tripId, Runnable onSuccess) {
         db.collection("users")
                 .document(userId)
                 .collection("trips")
                 .document(tripId)
+                .collection("finalLists")
+                .document(personName)
+                .collection("items")
+                .document(itemId)
                 .delete()
                 .addOnSuccessListener(unused -> {
-                    Log.d("TRIP_DELETE", "Trip " + tripId + " deleted.");
+                    Log.d("FIREBASE", "Item deleted: " + item.getItem());
                     onSuccess.run();
                 })
-                .addOnFailureListener(e -> Log.e("TRIP_DELETE", "Error deleting trip", e));
-    }
-
-    public void updateTripPinned(String userId, String tripId, boolean pinned, Runnable onSuccess) {
-        db.collection("users")
-                .document(userId)
-                .collection("trips")
-                .document(tripId)
-                .update("pinned", pinned)
-                .addOnSuccessListener(unused -> {
-                    Log.d("PIN_TRIP", "Trip " + tripId + " updated with pinned=" + pinned);
-                    onSuccess.run();
-                })
-                .addOnFailureListener(e ->
-                        Log.e("PIN_TRIP", "Failed to update pinned state for trip " + tripId, e)
-                );
+                .addOnFailureListener(e -> Log.e("FIREBASE", "Failed to delete item", e));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.luggageassistant.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -38,10 +39,13 @@ public class MainNavigationActivity extends AppCompatActivity {
                 selectedFragment = new HomeFragment();
             } else if (id == R.id.nav_account) {
                 selectedFragment = new AccountFragment();
-            } else if (id == R.id.nav_list) {
-                selectedFragment = new TripCardListFragment ();
-//            } else if (id == R.id.nav_add) {
-//                selectedFragment = new StepOneActivity();
+            }else if (id == R.id.nav_list) {
+                selectedFragment = new TripCardListFragment();
+            } else if (id == R.id.nav_add) {
+                // Deschide o activitate nouă în loc de fragment
+                Intent intent = new Intent(this, StepOneActivity.class);
+                startActivity(intent);
+                return false; // Nu selecta "+" ca tab activ
             } else {
                 return false;
             }
@@ -57,11 +61,23 @@ public class MainNavigationActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Fragment defaultFragment;
 
-            if ("list".equals(target)) {
-                defaultFragment = new TripCardListFragment();
+            if ("final_list".equals(target)) {
                 bottomNav.setSelectedItemId(R.id.nav_list);
-            } else if ("final_list".equals(target)) {
-                defaultFragment = new FinalPackingListFragment();
+
+                // Mai întâi încarcă TripCardListFragment fără să-l adaugi în back stack
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new TripCardListFragment())
+                        .commit();
+
+                // Apoi încarcă FinalPackingListFragment și îl adaugi în back stack
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new FinalPackingListFragment())
+                        .addToBackStack(null)
+                        .commit();
+
+                return;
+            } else if ("list".equals(target)) {
+                defaultFragment = new TripCardListFragment();
                 bottomNav.setSelectedItemId(R.id.nav_list);
             } else {
                 defaultFragment = new HomeFragment();
@@ -71,6 +87,7 @@ public class MainNavigationActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, defaultFragment)
                     .commit();
+
         }
     }
 }

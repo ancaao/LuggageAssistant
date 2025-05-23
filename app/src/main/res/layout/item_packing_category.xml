@@ -3,7 +3,10 @@
     android:id="@+id/categoryTitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
     android:textSize="18sp"
     android:textStyle="bold"
     android:textColor="@color/onBackground" />

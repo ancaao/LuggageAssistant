@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 public class PackingListFragment extends Fragment {
-
     private static final String ARG_PERSON = "person_data";
     private PersonPackingList personData;
 

@@ -20,7 +20,6 @@ import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.TripConfigurationRepository;
 import com.example.luggageassistant.utils.StepperUtils;
 import com.example.luggageassistant.view.PackingListActivity;
-import com.example.luggageassistant.view.PackingListFragment;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;

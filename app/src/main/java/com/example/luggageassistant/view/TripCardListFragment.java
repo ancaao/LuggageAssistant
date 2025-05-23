@@ -26,6 +26,7 @@ import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.OnTripConfigurationsLoadedListener;
 import com.example.luggageassistant.repository.PackingListRepository;
+import com.example.luggageassistant.repository.TripConfigurationRepository;
 import com.example.luggageassistant.utils.SwipeController;
 import com.example.luggageassistant.view.adapter.TripCardAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +43,7 @@ public class TripCardListFragment extends Fragment {
     private RecyclerView recyclerView;
     private TripCardAdapter adapter;
     private final List<TripConfiguration> tripList = new ArrayList<>();
-    private PackingListRepository repository;
+    private TripConfigurationRepository repository;
     private EditText searchEditText;
     private ProgressBar loadingSpinner;
 
@@ -60,7 +61,7 @@ public class TripCardListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.tripRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        repository = PackingListRepository.getInstance();
+        repository = TripConfigurationRepository.getInstance();
         searchEditText = view.findViewById(R.id.searchEditText);
         loadingSpinner = view.findViewById(R.id.loadingSpinner);
 

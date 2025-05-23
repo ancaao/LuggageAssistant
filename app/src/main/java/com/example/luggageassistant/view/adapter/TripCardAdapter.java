@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.PackingListRepository;
+import com.example.luggageassistant.repository.TripConfigurationRepository;
 import com.example.luggageassistant.view.TripCardListFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -160,7 +161,7 @@ public class TripCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         trip.setPinned(newPinnedState);
 
                         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        PackingListRepository.getInstance().updateTripPinned(userId, trip.getTripId(), newPinnedState, () -> {
+                        TripConfigurationRepository.getInstance().updateTripPinned(userId, trip.getTripId(), newPinnedState, () -> {
                             Log.d("TripCardAdapter", "Pinned updated for trip " + trip.getTripId());
                             // Actualizează lista după ce pin-ul s-a salvat
                             ((TripCardListFragment) ((FragmentActivity) itemView.getContext())
