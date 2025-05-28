@@ -3,6 +3,8 @@ package com.example.luggageassistant.view.TripConfiguration;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -99,22 +101,46 @@ public class StepFourActivity extends AppCompatActivity {
             public void onSuccess() {
                 Toast.makeText(StepFourActivity.this, "Trip configuration saved successfully!", Toast.LENGTH_SHORT).show();
 
-                // Trimitem config-ul și tripId-ul către PackingListActivity
                 Intent intent = new Intent(StepFourActivity.this, PackingListActivity.class);
                 intent.putExtra("trip_config", new Gson().toJson(tripConfiguration));
-                intent.putExtra("trip_id", tripId); // adăugăm tripId-ul pentru salvări viitoare (packing list, recomandări, etc.)
+                intent.putExtra("trip_id", tripId);
                 startActivity(intent);
 
-                tripConfigurationViewModel.resetTripConfiguration();
-                finish();
+                // ⚠️ Mutăm finish() aici într-un `postDelayed`
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    tripConfigurationViewModel.resetTripConfiguration();
+                    finish();
+                }, 300); // 300ms delay ca să se finalizeze tranzacția
             }
 
             @Override
             public void onError(Exception e) {
+                Log.e("SAVE_ERROR", "Firebase save failed", e);
                 Toast.makeText(StepFourActivity.this, "Error saving trip configuration: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    private void populateSavedData() {
+        TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
+
+        Button purposeButton = findViewById(R.id.selectTravelPurposeButton);
+        Button activitiesButton = findViewById(R.id.selectActivitiesButton);
+        Button eventsButton = findViewById(R.id.selectSpecialEventsButton);
+
+        if (tripConfiguration.getTravelPurpose() != null && !tripConfiguration.getTravelPurpose().isEmpty()) {
+            purposeButton.setText(String.join(", ", tripConfiguration.getTravelPurpose()));
+        }
+
+        if (tripConfiguration.getPlannedActivities() != null && !tripConfiguration.getPlannedActivities().isEmpty()) {
+            activitiesButton.setText(String.join(", ", tripConfiguration.getPlannedActivities()));
+        }
+
+        if (tripConfiguration.getSpecialEvents() != null && !tripConfiguration.getSpecialEvents().isEmpty()) {
+            eventsButton.setText(String.join(", ", tripConfiguration.getSpecialEvents()));
+        }
+    }
+
     private void setupTravelPurposeSelection(Button purposeButton) {
         String[] options = {"Leisure", "Business", "Study", "Medical", "Other"};
 
@@ -275,25 +301,6 @@ public class StepFourActivity extends AppCompatActivity {
             builder.setNegativeButton("Cancel", null);
             builder.create().show();
         });
-    }
-    private void populateSavedData() {
-        TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
-
-        Button purposeButton = findViewById(R.id.selectTravelPurposeButton);
-        Button activitiesButton = findViewById(R.id.selectActivitiesButton);
-        Button eventsButton = findViewById(R.id.selectSpecialEventsButton);
-
-        if (tripConfiguration.getTravelPurpose() != null && !tripConfiguration.getTravelPurpose().isEmpty()) {
-            purposeButton.setText(String.join(", ", tripConfiguration.getTravelPurpose()));
-        }
-
-        if (tripConfiguration.getPlannedActivities() != null && !tripConfiguration.getPlannedActivities().isEmpty()) {
-            activitiesButton.setText(String.join(", ", tripConfiguration.getPlannedActivities()));
-        }
-
-        if (tripConfiguration.getSpecialEvents() != null && !tripConfiguration.getSpecialEvents().isEmpty()) {
-            eventsButton.setText(String.join(", ", tripConfiguration.getSpecialEvents()));
-        }
     }
 
 }

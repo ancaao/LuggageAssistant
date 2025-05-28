@@ -9,6 +9,7 @@ import com.example.luggageassistant.model.ChatRequest;
 import com.example.luggageassistant.model.ChatResponse;
 import com.example.luggageassistant.model.Message;
 import com.example.luggageassistant.repository.remote.OpenAIApi;
+import static com.example.luggageassistant.constants.Constants.*;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class OpenAIRepository {
 
     private static final String BASE_URL = "https://api.openai.com/";
-    private static final String API_KEY = "Bearer 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"; // 🛑 pune cheia reală aici
+    private static final String API_KEY = OPENAI_API_KEY;
 
     private final OpenAIApi api;
     private String tripId;

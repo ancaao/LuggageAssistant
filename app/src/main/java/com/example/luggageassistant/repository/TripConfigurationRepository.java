@@ -29,18 +29,26 @@ public class TripConfigurationRepository {
     }
 
     public void saveTripConfiguration(String userId, String tripId, TripConfiguration tripConfiguration, OnDataSavedCallback callback) {
-        db.collection("users")
-                .document(userId)
-                .collection("trips")
-                .document(tripId)
-                .set(tripConfiguration.toMap())
-                .addOnSuccessListener(unused -> {
-                    Log.d("FIREBASE", "Trip saved directly under trips/" + tripId);
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(callback::onError);
+        try {
+            Map<String, Object> map = tripConfiguration.toMap();
+            db.collection("users")
+                    .document(userId)
+                    .collection("trips")
+                    .document(tripId)
+                    .set(map)
+                    .addOnSuccessListener(unused -> {
+                        Log.d("FIREBASE", "Trip saved directly under trips/" + tripId);
+                        callback.onSuccess();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("SAVE_ERROR", "Failed to save trip", e); // ⬅️ debug
+                        callback.onError(e);
+                    });
+        } catch (Exception e) {
+            Log.e("SAVE_ERROR", "Exception in saveTripConfiguration", e); // ⬅️ debug
+            callback.onError(e);
+        }
     }
-
     public void getAllTripConfigurations(String userId, OnTripConfigurationsLoadedListener listener) {
         db.collection("users")
                 .document(userId)

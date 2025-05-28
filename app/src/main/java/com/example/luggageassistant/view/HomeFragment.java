@@ -8,46 +8,68 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.luggageassistant.R;
+import com.example.luggageassistant.model.Destination;
+import com.example.luggageassistant.model.TripConfiguration;
+import com.example.luggageassistant.model.WeatherForecastResponse;
+import com.example.luggageassistant.model.OneCallResponse;
+import com.example.luggageassistant.repository.OnTripConfigurationsLoadedListener;
+import com.example.luggageassistant.repository.TripConfigurationRepository;
 import com.example.luggageassistant.view.TripConfiguration.StepOneActivity;
+import com.example.luggageassistant.view.adapter.HomeCombinedAdapter;
+import com.example.luggageassistant.view.adapter.HomeSectionAdapter;
+import com.example.luggageassistant.view.adapter.HomeTripCardAdapter;
 import com.example.luggageassistant.viewmodel.MainViewModel;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
+import com.example.luggageassistant.viewmodel.WeatherViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
     private MainViewModel mainViewModel;
     private TripConfigurationViewModel tripConfigurationViewModel;
     private TextView textView;
-    private Button buttonLogout, buttonViewAccount, buttonAddLuggage;
-
     private boolean shouldResetTripConfiguration = false;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mainViewModel = new ViewModelProvider(
-                requireActivity(),
-                new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())
-        ).get(MainViewModel.class);
-
+        mainViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())).get(MainViewModel.class);
         tripConfigurationViewModel = new ViewModelProvider(requireActivity()).get(TripConfigurationViewModel.class);
 
         textView = view.findViewById(R.id.user_details);
-        buttonLogout = view.findViewById(R.id.btn_logout);
-        buttonViewAccount = view.findViewById(R.id.btn_view_account);
-        buttonAddLuggage = view.findViewById(R.id.btn_add_luggage);
 
         mainViewModel.getUserEmail().observe(getViewLifecycleOwner(), email -> {
             if (email == null) {
@@ -57,45 +79,209 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mainViewModel.getLogoutStatus().observe(getViewLifecycleOwner(), isLoggedOut -> {
-            if (isLoggedOut) {
-                redirectToLogin();
+        mainViewModel.checkIfUserIsLoggedIn();
+
+        WeatherViewModel viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+
+        // ✅ Testare 1: Prognoză pe 16 zile în București
+        viewModel.load16DayForecast("Bucharest");
+
+        // ✅ Testare 2: Prognoză aproximativă pentru 1 noiembrie în București
+        // București = lat: 44.4268, lon: 26.1025
+        viewModel.loadApproximateForecast(44.4268, 26.1025, "2026-10-26");
+
+        // ✅ Observă rezultatele:
+        viewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastList -> {
+            for (WeatherForecastResponse.ForecastDay day : forecastList) {
+                Log.d("FORECAST_16_DAYS", "Max: " + day.temp.max + ", Condiție: " + day.weather.get(0).description);
             }
         });
 
-        buttonLogout.setOnClickListener(v -> mainViewModel.logoutUser());
-
-        buttonViewAccount.setOnClickListener(v -> {
-            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_navigation);
-            bottomNav.setSelectedItemId(R.id.nav_account);
+        viewModel.getLongTermForecastJson().observe(getViewLifecycleOwner(), json -> {
+            Log.d("APPROX_FORECAST", "JSON: " + json);
         });
 
-        buttonAddLuggage.setOnClickListener(v -> {
-            shouldResetTripConfiguration = true;
-            tripConfigurationViewModel.resetTripConfiguration();
-            Intent intent = new Intent(requireActivity(), StepOneActivity.class);
-            startActivity(intent);
+        viewModel.loadCoordinates("Bucharest", "RO");
+
+        viewModel.getCoordinatesResult().observe(getViewLifecycleOwner(), coords -> {
+            Log.d("GEO_RESULT", "Coordonate: " + coords);
         });
 
-        mainViewModel.checkIfUserIsLoggedIn();
+
+        viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), error -> {
+            Log.e("METEO_ERROR", "Eroare: " + error);
+        });
+
+//        Button importCitiesButton = view.findViewById(R.id.importCitiesButton);
+//        importCitiesButton.setOnClickListener(v -> importFirst100CitiesToFirestore());
+
+
+        RecyclerView recyclerView = view.findViewById(R.id.home_combined_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        TripConfigurationRepository.getInstance().getAllTripConfigurations(userId, new OnTripConfigurationsLoadedListener() {
+            @Override
+            public void onTripsLoaded(List<TripConfiguration> trips) {
+                List<HomeCombinedAdapter.TripSection> sections = new ArrayList<>();
+
+                List<TripConfiguration> pinned = new ArrayList<>();
+                List<TripConfiguration> upcoming = new ArrayList<>();
+                List<TripConfiguration> past = new ArrayList<>();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                Date today = new Date();
+
+                for (TripConfiguration trip : trips) {
+                    Date startDate = getFirstTripStartDate(trip);
+                    if (startDate == null) continue;
+
+                    if (trip.isPinned()) {
+                        pinned.add(trip);
+                    } else if (!startDate.before(today)) {
+                        upcoming.add(trip);
+                    } else {
+                        past.add(trip);
+                    }
+                }
+
+                Comparator<TripConfiguration> dateComparator = Comparator.comparing(
+                        trip -> {
+                            List<Destination> destinations = trip.getDestinations();
+                            if (destinations != null && !destinations.isEmpty()) {
+                                String dateStr = destinations.get(0).getTripStartDate();
+                                if (dateStr != null && !dateStr.isEmpty()) {
+                                    try {
+                                        return sdf.parse(dateStr);
+                                    } catch (java.text.ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                            return null;
+                        },
+                        Comparator.nullsLast(Date::compareTo)
+                );
+
+                pinned.sort(dateComparator);
+                upcoming.sort(dateComparator);
+                past.sort(dateComparator.reversed());
+
+                if (!pinned.isEmpty())
+                    sections.add(new HomeCombinedAdapter.TripSection("Pinned Trips", "pinned", pinned.subList(0, Math.min(3, pinned.size()))));
+                if (!upcoming.isEmpty())
+                    sections.add(new HomeCombinedAdapter.TripSection("Upcoming Trips", "upcoming", upcoming.subList(0, Math.min(3, upcoming.size()))));
+                if (!past.isEmpty())
+                    sections.add(new HomeCombinedAdapter.TripSection("Past Trips", "past", past.subList(0, Math.min(3, past.size()))));
+
+                recyclerView.setAdapter(new HomeCombinedAdapter(sections, sectionType -> {
+                    TripCardListFragment fragment = TripCardListFragment.newInstance(sectionType);
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                }));
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Toast.makeText(getContext(), "Error loading trips", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (shouldResetTripConfiguration) {
-            Log.d("HomeFragment", "Resetting Trip Configuration");
-            tripConfigurationViewModel.resetTripConfiguration();
-            shouldResetTripConfiguration = false;
+    @Nullable
+    private Date getFirstTripStartDate(TripConfiguration trip) {
+        List<Destination> destinations = trip.getDestinations();
+        if (destinations != null && !destinations.isEmpty()) {
+            String dateStr = destinations.get(0).getTripStartDate();
+            if (dateStr != null && !dateStr.isEmpty()) {
+                try {
+                    return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(dateStr);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+        return null;
     }
 
+    private Date parseDate(String dateStr, SimpleDateFormat sdf) {
+        try {
+            return sdf.parse(dateStr);
+        } catch (Exception e) {
+            return new Date(Long.MAX_VALUE);
+        }
+    }
 
     private void redirectToLogin() {
         Intent intent = new Intent(requireActivity(), LoginActivity.class);
         startActivity(intent);
         requireActivity().finish();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (shouldResetTripConfiguration) {
+            tripConfigurationViewModel.resetTripConfiguration();
+            shouldResetTripConfiguration = false;
+        }
+    }
+
+//    private void importFirst100CitiesToFirestore() {
+//        try {
+//            InputStream is = requireContext().getAssets().open("cities.json");
+//            int size = is.available();
+//            byte[] buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//
+//            String json = new String(buffer, StandardCharsets.UTF_8);
+//            JSONArray jsonArray = new JSONArray(json);
+//            Log.d("FIREBASE_city", "Total cities: " + jsonArray.length());
+//
+//            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//            WriteBatch batch = db.batch();
+//
+//            for (int i = 18000; i < 20000 && i < jsonArray.length(); i++) { // rulata pana la 20k
+//                JSONObject cityObj = jsonArray.getJSONObject(i);
+//
+//                String cityName = cityObj.getString("city");
+//                String cityAscii = cityObj.getString("city_ascii");
+//                String country = cityObj.getString("country");
+//                String iso2 = cityObj.getString("iso2");
+//                String lat = cityObj.getString("lat");
+//                String lng = cityObj.getString("lng");
+//
+//                Map<String, Object> cityData = new HashMap<>();
+//                cityData.put("city", cityName);
+//                cityData.put("city_ascii", cityAscii);
+//                cityData.put("country", country);
+//                cityData.put("iso2", iso2);
+//                cityData.put("lat", lat);
+//                cityData.put("lng", lng);
+//
+//                DocumentReference docRef = db.collection("cities").document(); // Firestore generează ID automat
+//                batch.set(docRef, cityData);
+//                Thread.sleep(20);
+//                if (i % 500 == 0) {
+//                    Log.d("FIREBASE_city", "Successfully imported 100 cities");
+//                }
+//            }
+//
+//            batch.commit()
+//                    .addOnSuccessListener(unused -> Log.d("FIREBASE_city", "Successfully imported 100 cities"))
+//                    .addOnFailureListener(e -> Log.e("FIREBASE_city", "Error importing cities", e));
+//
+//        } catch (IOException | JSONException e) {
+//            Log.e("FIREBASE_city", "Error loading JSON or writing to Firestore", e);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
 }

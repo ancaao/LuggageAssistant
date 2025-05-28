@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.luggageassistant.R;
+import com.example.luggageassistant.model.Destination;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.PackingListRepository;
 import com.example.luggageassistant.repository.TripConfigurationRepository;
@@ -113,16 +114,33 @@ public class TripCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tripTitle = itemView.findViewById(R.id.titleText);
             tripDate = itemView.findViewById(R.id.dateText);
         }
-
         public void bind(TripConfiguration trip) {
-            tripTitle.setText(trip.getCountry() + " - " + trip.getCity());
-            tripDate.setText(trip.getTripStartDate() + " - " + trip.getTripEndDate());
+            // Extrage prima destinație
+            Destination firstDest = null;
+            if (trip.getDestinations() != null && !trip.getDestinations().isEmpty()) {
+                firstDest = trip.getDestinations().get(0);
+            }
+
+            String city = "-";
+            String country = "-";
+            String startDateStr = "-";
+            String endDateStr = "-";
+
+            if (firstDest != null) {
+                city = firstDest.getCity() != null ? firstDest.getCity() : "-";
+                country = firstDest.getCountry() != null ? firstDest.getCountry() : "-";
+                startDateStr = firstDest.getTripStartDate() != null ? firstDest.getTripStartDate() : "-";
+                endDateStr = firstDest.getTripEndDate() != null ? firstDest.getTripEndDate() : "-";
+            }
+
+            tripTitle.setText(country + " - " + city);
+            tripDate.setText(startDateStr + " - " + endDateStr);
 
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                Date startDate = sdf.parse(trip.getTripStartDate());
+                Date startDate = sdf.parse(startDateStr);
                 Date today = new Date();
-                boolean isUpcoming = !startDate.before(today);
+                boolean isUpcoming = startDate != null && !startDate.before(today);
 
                 Context context = itemView.getContext();
 
@@ -163,7 +181,6 @@ public class TripCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         TripConfigurationRepository.getInstance().updateTripPinned(userId, trip.getTripId(), newPinnedState, () -> {
                             Log.d("TripCardAdapter", "Pinned updated for trip " + trip.getTripId());
-                            // Actualizează lista după ce pin-ul s-a salvat
                             ((TripCardListFragment) ((FragmentActivity) itemView.getContext())
                                     .getSupportFragmentManager()
                                     .findFragmentById(R.id.fragment_container)).refreshTrips();

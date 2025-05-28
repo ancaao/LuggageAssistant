@@ -7,6 +7,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -85,7 +86,7 @@ public class InputValidator implements TextWatcher {
     }
 
     public static boolean isFieldNotEmpty(TextInputLayout layout) {
-        TextInputEditText editText = (TextInputEditText) layout.getEditText();
+         EditText editText = (EditText) layout.getEditText();
         if (editText == null) return false;
 
         String input = editText.getText() != null ? editText.getText().toString().trim() : "";

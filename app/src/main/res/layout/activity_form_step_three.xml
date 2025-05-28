@@ -65,7 +65,6 @@
                 android:id="@+id/cityInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter city"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="@color/inputBorder"
                 app:boxBackgroundColor="@color/surface"
@@ -74,12 +73,16 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/citySpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:textColor="@color/inputText" />
+                    android:hint="City"
+                    android:inputType="text"
+                    android:minHeight="56dp"
+                    android:paddingVertical="16dp"
+                    android:textColor="@color/onBackground"/>
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Start Date -->
@@ -135,6 +138,20 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/destinationContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addDestinationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Destination"
+            android:layout_marginTop="16dp" />
 
         <!-- Navigation buttons -->
         <LinearLayout

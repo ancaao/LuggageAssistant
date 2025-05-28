@@ -20,10 +20,7 @@ public class TripConfiguration {
     private List<Luggage> luggages;
 
     // step 3: trip details
-    private String country;
-    private String city;
-    private String tripStartDate;
-    private String tripEndDate;
+    private List<Destination> destinations;
 
     // step 4: trip purpose
     private List<String> travelPurpose;
@@ -40,10 +37,7 @@ public class TripConfiguration {
         result.put("gender", gender);
         result.put("specialPreferences", specialPreferences);
         result.put("luggages", luggages != null ? luggages.stream().map(Luggage::toMap).collect(Collectors.toList()) : null);
-        result.put("country", country);
-        result.put("city", city);
-        result.put("tripStartDate", tripStartDate);
-        result.put("tripEndDate", tripEndDate);
+        result.put("destinations", destinations != null ? destinations.stream().map(Destination::toMap).collect(Collectors.toList()) : null);
         result.put("travelPurpose", travelPurpose);
         result.put("plannedActivities", plannedActivities);
         result.put("specialEvents", specialEvents);
@@ -121,36 +115,14 @@ public class TripConfiguration {
         this.luggages = luggage;
     }
 
-    public String getCity() {
-        return city;
+    public List<Destination> getDestinations() {
+        return destinations;
     }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setDestinations(List<Destination> destination) {
+        this.destinations = destination;
     }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getTripStartDate() {
-        return tripStartDate;
-    }
-
-    public void setTripStartDate(String tripStartDate) {
-        this.tripStartDate = tripStartDate;
-    }
-
-    public String getTripEndDate() {
-        return tripEndDate;
-    }
-
-    public void setTripEndDate(String tripEndDate) {
-        this.tripEndDate = tripEndDate;
+    public Destination getFirstDestination() {
+        return (destinations != null && !destinations.isEmpty()) ? destinations.get(0) : null;
     }
 
     public List<String> getTravelPurpose() {

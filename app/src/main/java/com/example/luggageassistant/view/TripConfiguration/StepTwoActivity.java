@@ -269,7 +269,7 @@ public class StepTwoActivity extends AppCompatActivity {
     private void addLuggageFields() {
         View luggageView = LayoutInflater.from(this).inflate(R.layout.activity_form_luggage_fields, luggageContainer, false);
 
-        Button removeButton = luggageView.findViewById(R.id.removePartnerButton);
+        Button removeButton = luggageView.findViewById(R.id.removeLuggageButton);
         removeButton.setText("Remove luggage (-)");
         removeButton.setOnClickListener(v -> {
             luggageContainer.removeView(luggageView);

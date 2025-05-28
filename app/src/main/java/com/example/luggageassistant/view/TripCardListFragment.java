@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.luggageassistant.R;
+import com.example.luggageassistant.model.Destination;
 import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.repository.OnTripConfigurationsLoadedListener;
 import com.example.luggageassistant.repository.PackingListRepository;
@@ -59,6 +60,7 @@ public class TripCardListFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.tripRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         repository = TripConfigurationRepository.getInstance();
@@ -66,6 +68,8 @@ public class TripCardListFragment extends Fragment {
         loadingSpinner = view.findViewById(R.id.loadingSpinner);
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        String section = getArguments() != null ? getArguments().getString("section_type") : null;
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -111,11 +115,19 @@ public class TripCardListFragment extends Fragment {
         repository.getAllTripConfigurations(userId, new OnTripConfigurationsLoadedListener() {
             @Override
             public void onTripsLoaded(List<TripConfiguration> trips) {
+
                 loadingSpinner.setVisibility(View.GONE);
                 tripList.clear();
                 fullTripList.clear();
                 fullTripList.addAll(trips);
                 sortAndDisplayTrips();
+
+                if (section != null) {
+                    int scrollPosition = findSectionStartIndex(section);
+                    if (scrollPosition != -1) {
+                        recyclerView.scrollToPosition(scrollPosition);
+                    }
+                }
             }
 
             @Override
@@ -134,15 +146,25 @@ public class TripCardListFragment extends Fragment {
             tripList.addAll(fullTripList);
         } else {
             for (TripConfiguration trip : fullTripList) {
-                if (trip.getCountry().toLowerCase().contains(query.toLowerCase())
-                        || trip.getCity().toLowerCase().contains(query.toLowerCase())
-                        || trip.getTripStartDate().toLowerCase().contains(query.toLowerCase())
-                        || trip.getTripEndDate().toLowerCase().contains(query.toLowerCase())) {
+                Destination firstDest = trip.getFirstDestination();
+                if (firstDest == null) continue;
+
+                String city = firstDest.getCity() != null ? firstDest.getCity().toLowerCase() : "";
+                String country = firstDest.getCountry() != null ? firstDest.getCountry().toLowerCase() : "";
+                String startDate = firstDest.getTripStartDate() != null ? firstDest.getTripStartDate().toLowerCase() : "";
+                String endDate = firstDest.getTripEndDate() != null ? firstDest.getTripEndDate().toLowerCase() : "";
+
+                if (city.contains(query.toLowerCase())
+                        || country.contains(query.toLowerCase())
+                        || startDate.contains(query.toLowerCase())
+                        || endDate.contains(query.toLowerCase())) {
                     tripList.add(trip);
                 }
             }
         }
-        adapter.notifyDataSetChanged();
+
+        List<Object> filteredList = new ArrayList<>(tripList);
+        adapter.setData(filteredList); // sau notifyDataSetChanged() dacă nu folosești setData()
     }
 
     private void sortAndDisplayTrips() {
@@ -153,12 +175,16 @@ public class TripCardListFragment extends Fragment {
         Date today = new Date();
 
         for (TripConfiguration trip : fullTripList) {
+            Destination firstDest = trip.getFirstDestination();
+            if (firstDest == null || firstDest.getTripStartDate() == null) continue;
+
             if (trip.isPinned()) {
                 pinnedTrips.add(trip);
                 continue;
             }
+
             try {
-                Date startDate = sdf.parse(trip.getTripStartDate());
+                Date startDate = sdf.parse(firstDest.getTripStartDate());
                 if (!startDate.before(today)) {
                     futureTrips.add(trip);
                 } else {
@@ -169,22 +195,25 @@ public class TripCardListFragment extends Fragment {
             }
         }
 
+
         // Sortează fiecare secțiune dacă vrei
         futureTrips.sort(Comparator.comparing(trip -> {
             try {
-                return sdf.parse(trip.getTripStartDate());
-            } catch (java.text.ParseException e) {
+                return sdf.parse(trip.getFirstDestination().getTripStartDate());
+            } catch (java.text.ParseException | NullPointerException e) {
                 return new Date(Long.MAX_VALUE);
             }
         }));
 
         pastTrips.sort((a, b) -> {
             try {
-                return sdf.parse(b.getTripStartDate()).compareTo(sdf.parse(a.getTripStartDate()));
-            } catch (java.text.ParseException e) {
+                return sdf.parse(b.getFirstDestination().getTripStartDate())
+                        .compareTo(sdf.parse(a.getFirstDestination().getTripStartDate()));
+            } catch (java.text.ParseException | NullPointerException e) {
                 return 0;
             }
         });
+
 
 
         // Construiește lista finală
@@ -211,4 +240,20 @@ public class TripCardListFragment extends Fragment {
         sortAndDisplayTrips();
     }
 
+    public static TripCardListFragment newInstance(String sectionType) {
+        TripCardListFragment fragment = new TripCardListFragment();
+        Bundle args = new Bundle();
+        args.putString("section_type", sectionType);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    private int findSectionStartIndex(String sectionType) {
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            Object item = adapter.getItemAt(i); // adaptează în funcție de implementarea ta
+            if (item instanceof String && ((String) item).toLowerCase().contains(sectionType)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
