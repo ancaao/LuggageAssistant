@@ -26,6 +26,7 @@ import com.example.luggageassistant.model.TripConfiguration;
 import com.example.luggageassistant.utils.InputValidator;
 import com.example.luggageassistant.utils.StepperUtils;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
+import com.example.luggageassistant.utils.DateValidatorInclusive;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -43,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +67,9 @@ public class StepThreeActivity extends AppCompatActivity {
     private final Calendar startCalendar = Calendar.getInstance();
     private final Calendar endCalendar = Calendar.getInstance();
     private MaterialButton countrySelectorButton;
+    private TextView countryErrorText;
+    private TextInputLayout cityInputLayout;
+    private TextInputLayout startDateInputLayout, endDateInputLayout;
     private LinearLayout container;
     private MaterialButton addButton;
 
@@ -83,7 +88,13 @@ public class StepThreeActivity extends AppCompatActivity {
         cityEditText = findViewById(R.id.citySpinner);
         startDateInput = findViewById(R.id.startDateInput);
         endDateInput = findViewById(R.id.endDateInput);
+
         countrySelectorButton = findViewById(R.id.countrySelectorButton);
+        countryErrorText = findViewById(R.id.countryErrorText);
+        cityInputLayout = findViewById(R.id.cityInputLayout);
+        startDateInputLayout = findViewById(R.id.startDateInputLayout);
+        endDateInputLayout = findViewById(R.id.endDateInputLayout);
+
         container = findViewById(R.id.destinationContainer);
         addButton = findViewById(R.id.addDestinationButton);
 
@@ -109,38 +120,27 @@ public class StepThreeActivity extends AppCompatActivity {
         endDateInput.setOnClickListener(v -> showEndDatePicker(startCalendar, endCalendar, endDateInput));
 
         addButton.setOnClickListener(v -> {
-            addDestinationView(container, null);
+            // obține ultima dată de final din ultima destinație adăugată
+            String lastEndDate = null;
+            if (container.getChildCount() > 0) {
+                View lastView = container.getChildAt(container.getChildCount() - 1);
+                TextInputEditText lastEndInput = lastView.findViewById(R.id.dynamicEndDateInput);
+                lastEndDate = lastEndInput.getText().toString().trim();
+            } else {
+                lastEndDate = endDateInput.getText().toString().trim(); // fallback la prima destinație
+            }
+
+            addDestinationView(container, null, lastEndDate);
         });
 
         backButton.setOnClickListener(v -> finish());
 
         nextButton.setOnClickListener(view -> {
-            TextInputLayout cityInputLayout = findViewById(R.id.cityInputLayout);
-            TextInputLayout startDateInputLayout = findViewById(R.id.startDateInputLayout);
-            TextInputLayout endDateInputLayout = findViewById(R.id.endDateInputLayout);
-            TextView countryErrorText = findViewById(R.id.countryErrorText);
+            if (!validateAllFields()) return;
 
-            boolean isValid = true;
+            tripConfigurationViewModel.clearDestinations();
 
-            isValid &= InputValidator.isCountrySelected(countrySelectorButton, countryErrorText);
-            isValid &= InputValidator.isFieldNotEmpty(cityInputLayout);
-            isValid &= InputValidator.isFieldNotEmpty(startDateInputLayout);
-            isValid &= InputValidator.isFieldNotEmpty(endDateInputLayout);
-
-            // ✅ Verificăm că orașul a fost selectat din listă
-            ArrayAdapter<String> cityAdapter = (ArrayAdapter<String>) cityEditText.getAdapter();
-            if (cityAdapter == null || cityAdapter.getPosition(cityEditText.getText().toString()) < 0) {
-                cityInputLayout.setError("Please select a valid city from the list");
-                isValid = false;
-            } else {
-                cityInputLayout.setError(null); // Curățăm eroarea dacă e valid
-            }
-
-            if (!isValid) return;
-
-            tripConfigurationViewModel.getDestinations().getValue().clear();
-
-            // ✅ Salvăm prima destinație (statică)
+            // Salvăm prima destinație
             Destination first = new Destination(
                     countrySelectorButton.getText().toString(),
                     cityEditText.getText().toString().trim(),
@@ -149,27 +149,24 @@ public class StepThreeActivity extends AppCompatActivity {
             );
             tripConfigurationViewModel.addDestination(first);
 
-            // ✅ Salvăm destinațiile dinamice
+            // Salvăm destinațiile dinamice
             for (int i = 0; i < container.getChildCount(); i++) {
                 View child = container.getChildAt(i);
-                MaterialButton countryBtn = child.findViewById(R.id.countrySelectorButton);
-                AutoCompleteTextView city = child.findViewById(R.id.citySpinner);
-                TextInputEditText start = child.findViewById(R.id.startDateInput);
-                TextInputEditText end = child.findViewById(R.id.endDateInput);
+                MaterialButton countryBtn = child.findViewById(R.id.dynamicCountrySelectorButton);
+                AutoCompleteTextView city = child.findViewById(R.id.dynamicCitySpinner);
+                TextInputEditText start = child.findViewById(R.id.dynamicStartDateInput);
+                TextInputEditText end = child.findViewById(R.id.dynamicEndDateInput);
 
-                if (countryBtn != null && city != null && start != null && end != null) {
-                    Destination destination = new Destination(
-                            countryBtn.getText().toString(),
-                            city.getText().toString().trim(),
-                            start.getText().toString().trim(),
-                            end.getText().toString().trim()
-                    );
-                    tripConfigurationViewModel.addDestination(destination);
-                }
+                Destination destination = new Destination(
+                        countryBtn.getText().toString(),
+                        city.getText().toString().trim(),
+                        start.getText().toString().trim(),
+                        end.getText().toString().trim()
+                );
+                tripConfigurationViewModel.addDestination(destination);
             }
 
-            Intent intent = new Intent(this, StepFourActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, StepFourActivity.class));
         });
 
     }
@@ -220,16 +217,20 @@ public class StepThreeActivity extends AppCompatActivity {
     }
 
     private void showStartDatePicker(final Calendar startCalendar, final TextInputEditText startDateField) {
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointForward.from(MaterialDatePicker.todayInUtcMilliseconds()));
+
+
         MaterialDatePicker<Long> startDatePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select Start Date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setCalendarConstraints(constraintsBuilder.build())
                 .build();
 
         startDatePicker.addOnPositiveButtonClickListener(selection -> {
             startCalendar.setTimeInMillis(selection);
             updateLabel(startDateField, startCalendar);
 
-//            tripConfigurationViewModel.getTripConfiguration().setTripStartDate(startDateInput.getText().toString());
         });
 
         startDatePicker.show(getSupportFragmentManager(), "START_DATE_PICKER");
@@ -237,7 +238,7 @@ public class StepThreeActivity extends AppCompatActivity {
 
     private void showEndDatePicker(final Calendar startCalendar, final Calendar endCalendar, final TextInputEditText endDateField) {
         CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
-                .setValidator(DateValidatorPointForward.from(startCalendar.getTimeInMillis()));
+                .setValidator(new DateValidatorInclusive(startCalendar.getTimeInMillis()));
 
         MaterialDatePicker<Long> endDatePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select End Date")
@@ -249,19 +250,18 @@ public class StepThreeActivity extends AppCompatActivity {
             endCalendar.setTimeInMillis(selection);
             updateLabel(endDateField, endCalendar);
 
-//            tripConfigurationViewModel.getTripConfiguration().setTripEndDate(endDateInput.getText().toString());
         });
 
         endDatePicker.show(getSupportFragmentManager(), "END_DATE_PICKER");
     }
 
-    private void addDestinationView(LinearLayout container, @Nullable Destination existing) {
+    private void addDestinationView(LinearLayout container, @Nullable Destination existing, @Nullable String previousEndDateString) {
         View destinationView = LayoutInflater.from(this).inflate(R.layout.activity_form_destination_fields, container, false);
 
         MaterialButton countryBtn = destinationView.findViewById(R.id.dynamicCountrySelectorButton);
         AutoCompleteTextView citySpinner = destinationView.findViewById(R.id.dynamicCitySpinner);
-        TextInputEditText startInput = destinationView.findViewById(R.id.startDateInput);
-        TextInputEditText endInput = destinationView.findViewById(R.id.endDateInput);
+        TextInputEditText startInput = destinationView.findViewById(R.id.dynamicStartDateInput);
+        TextInputEditText endInput = destinationView.findViewById(R.id.dynamicEndDateInput);
         MaterialButton deleteBtn = destinationView.findViewById(R.id.removeDestinationButton);
 
         Calendar localStartCalendar = Calendar.getInstance();
@@ -278,7 +278,27 @@ public class StepThreeActivity extends AppCompatActivity {
             builder.show();
         });
 
-        startInput.setOnClickListener(v -> showStartDatePicker(localStartCalendar, startInput));
+        startInput.setOnClickListener(v -> {
+            if (previousEndDateString != null && !previousEndDateString.isEmpty()) {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    Date prevEndDate = sdf.parse(previousEndDateString);
+
+                    // setează calendarul la ziua următoare
+                    Calendar minStartCalendar = Calendar.getInstance();
+                    minStartCalendar.setTime(prevEndDate);
+                    minStartCalendar.add(Calendar.DATE, 1);
+
+                    showStartDatePickerWithMinDate(localStartCalendar, startInput, minStartCalendar);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                    showStartDatePicker(localStartCalendar, startInput); // fallback
+                }
+            } else {
+                showStartDatePicker(localStartCalendar, startInput); // fallback
+            }
+        });
+
         endInput.setOnClickListener(v -> showEndDatePicker(localStartCalendar, localEndCalendar, endInput));
 
         deleteBtn.setOnClickListener(v -> container.removeView(destinationView));
@@ -304,6 +324,24 @@ public class StepThreeActivity extends AppCompatActivity {
         container.addView(destinationView);
     }
 
+    private void showStartDatePickerWithMinDate(Calendar calendarToSet, TextInputEditText field, Calendar minDate) {
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointForward.from(minDate.getTimeInMillis()));
+
+        MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Start Date")
+                .setSelection(minDate.getTimeInMillis())
+                .setCalendarConstraints(constraintsBuilder.build())
+                .build();
+
+        picker.addOnPositiveButtonClickListener(selection -> {
+            calendarToSet.setTimeInMillis(selection);
+            updateLabel(field, calendarToSet);
+        });
+
+        picker.show(getSupportFragmentManager(), "START_DATE_DYNAMIC_PICKER");
+    }
+
     private void loadCitiesForDynamicCountry(String selectedCountry, AutoCompleteTextView cityField) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("cities")
@@ -319,7 +357,6 @@ public class StepThreeActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Log.e("FIREBASE", "Failed to load cities", e));
     }
-
 
     private void updateLabel(TextInputEditText editText, Calendar calendar) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -369,9 +406,68 @@ public class StepThreeActivity extends AppCompatActivity {
         // Afișăm și celelalte destinații (dacă sunt)
         if (savedDestinations != null && savedDestinations.size() > 1) {
             for (int i = 1; i < savedDestinations.size(); i++) {
-                addDestinationView(container, savedDestinations.get(i));
+                String previousEndDate = savedDestinations.get(i - 1).getTripEndDate();
+                addDestinationView(container, savedDestinations.get(i), previousEndDate);
+
             }
         }
     }
+    private boolean validateAllFields() {
+        boolean isValid = true;
 
+        // Validare pentru prima destinație
+        isValid &= InputValidator.isCountrySelected(countrySelectorButton, countryErrorText);
+        isValid &= InputValidator.isFieldNotEmpty(cityInputLayout);
+        isValid &= InputValidator.isFieldNotEmpty(startDateInputLayout);
+        isValid &= InputValidator.isFieldNotEmpty(endDateInputLayout);
+
+        isValid &= InputValidator.isEndDateAfterOrEqual(
+                startDateInput.getText().toString(),
+                endDateInput.getText().toString(),
+                endDateInput,
+                this
+        );
+
+        String previousEndDate = endDateInput.getText().toString();
+
+        // Validare pentru destinațiile dinamice
+        for (int i = 0; i < container.getChildCount(); i++) {
+            View child = container.getChildAt(i);
+
+            MaterialButton countryBtn = child.findViewById(R.id.dynamicCountrySelectorButton);
+            TextView countryErrorText = child.findViewById(R.id.dynamicCountryErrorText);
+            AutoCompleteTextView city = child.findViewById(R.id.dynamicCitySpinner);
+            TextInputLayout cityLayout = child.findViewById(R.id.dynamicCityInputLayout);
+            TextInputEditText start = child.findViewById(R.id.dynamicStartDateInput);
+            TextInputEditText end = child.findViewById(R.id.dynamicEndDateInput);
+            TextInputLayout startLayout = child.findViewById(R.id.dynamicStartDateInputLayout);
+            TextInputLayout endLayout = child.findViewById(R.id.dynamicEndDateInputLayout);
+
+            isValid &= InputValidator.isButtonSelectionValid(countryBtn, countryErrorText, "Select Country");
+            isValid &= InputValidator.isFieldNotEmpty(cityLayout);
+            isValid &= InputValidator.isFieldNotEmpty(startLayout);
+            isValid &= InputValidator.isFieldNotEmpty(endLayout);
+
+            ArrayAdapter<String> adapter = (ArrayAdapter<String>) city.getAdapter();
+            if (adapter == null || adapter.getPosition(city.getText().toString()) < 0) {
+                cityLayout.setError("Please select a valid city");
+                isValid = false;
+            } else {
+                cityLayout.setError(null);
+            }
+
+
+//            isValid &= InputValidator.isStartDateAfterPreviousEnd(
+//                    start.getText().toString(), previousEndDate, start, this
+//            );
+
+            isValid &= InputValidator.isEndDateAfterOrEqual(
+                    start.getText().toString(), end.getText().toString(), end, this
+            );
+
+            previousEndDate = end.getText().toString(); // actualizăm pentru următoarea iterație
+        }
+
+        return isValid;
+    }
 }

@@ -31,21 +31,22 @@ public class TripConfigurationRepository {
     public void saveTripConfiguration(String userId, String tripId, TripConfiguration tripConfiguration, OnDataSavedCallback callback) {
         try {
             Map<String, Object> map = tripConfiguration.toMap();
+            Log.d("DESTINATIONS_DEBUG", "Saving trip with destinations: " + (tripConfiguration.getDestinations() != null ? tripConfiguration.getDestinations().size() : "null"));
             db.collection("users")
                     .document(userId)
                     .collection("trips")
                     .document(tripId)
                     .set(map)
                     .addOnSuccessListener(unused -> {
-                        Log.d("FIREBASE", "Trip saved directly under trips/" + tripId);
+                        Log.d("DESTINATIONS_DEBUG", "Trip saved directly under trips/" + tripId);
                         callback.onSuccess();
                     })
                     .addOnFailureListener(e -> {
-                        Log.e("SAVE_ERROR", "Failed to save trip", e); // ⬅️ debug
+                        Log.e("DESTINATIONS_DEBUG", "Failed to save trip", e); // ⬅️ debug
                         callback.onError(e);
                     });
         } catch (Exception e) {
-            Log.e("SAVE_ERROR", "Exception in saveTripConfiguration", e); // ⬅️ debug
+            Log.e("DESTINATIONS_DEBUG", "Exception in saveTripConfiguration", e); // ⬅️ debug
             callback.onError(e);
         }
     }

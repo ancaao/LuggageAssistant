@@ -18,7 +18,7 @@
 <!--        android:id="@+id/importCitiesButton"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
-<!--        android:text="Import First 100 Cities"-->
+<!--        android:text="Import Cities"-->
 <!--        android:layout_marginTop="24dp"/>-->
 
     <androidx.recyclerview.widget.RecyclerView

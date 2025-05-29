@@ -1,5 +1,6 @@
 package com.example.luggageassistant.utils;
 
+import android.net.ParseException;
 import android.text.Editable;
 import android.text.TextWatcher;
 import com.google.android.material.textfield.TextInputEditText;
@@ -12,6 +13,10 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import com.example.luggageassistant.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class InputValidator implements TextWatcher {
     private final TextInputLayout layout;
@@ -92,11 +97,11 @@ public class InputValidator implements TextWatcher {
         String input = editText.getText() != null ? editText.getText().toString().trim() : "";
         if (input.isEmpty()) {
             layout.setError("This field is required");
-            layout.setBoxStrokeColor(ContextCompat.getColor(layout.getContext(), R.color.error));
+//            layout.setBoxStrokeColor(ContextCompat.getColor(layout.getContext(), R.color.error));
             return false;
         } else {
             layout.setError(null);
-            layout.setBoxStrokeColor(ContextCompat.getColor(layout.getContext(), R.color.success));
+//            layout.setBoxStrokeColor(ContextCompat.getColor(layout.getContext(), R.color.success));
             return true;
         }
     }
@@ -121,6 +126,42 @@ public class InputValidator implements TextWatcher {
             return true;
         }
     }
-
-
+    public static boolean isEndDateAfterOrEqual(String startDateStr, String endDateStr, TextInputEditText endDateField, Context context) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        try {
+            Date start = sdf.parse(startDateStr);
+            Date end = sdf.parse(endDateStr);
+            if (start != null && end != null && end.before(start)) {
+                endDateField.setError("End date must be after or equal to start date");
+//                endDateField.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.error));
+                return false;
+            } else {
+                endDateField.setError(null);
+//                endDateField.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.success));
+                return true;
+            }
+        } catch (java.text.ParseException e) {
+            endDateField.setError("Invalid date format");
+            return false;
+        }
+    }
+//    public static boolean isStartDateAfterPreviousEnd(String currentStartDateStr, String previousEndDateStr, TextInputEditText startDateField, Context context) {
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+//        try {
+//            Date prevEnd = sdf.parse(previousEndDateStr);
+//            Date currStart = sdf.parse(currentStartDateStr);
+//            if (currStart != null && prevEnd != null && !currStart.after(prevEnd)) {
+//                startDateField.setError("Start date must be after previous destination's end date");
+////                startDateField.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.error));
+//                return false;
+//            } else {
+//                startDateField.setError(null);
+////                startDateField.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.success));
+//                return true;
+//            }
+//        } catch (java.text.ParseException e) {
+//            startDateField.setError("Invalid date format");
+//            return false;
+//        }
+//    }
 }

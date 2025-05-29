@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
         });
 
 //        Button importCitiesButton = view.findViewById(R.id.importCitiesButton);
-//        importCitiesButton.setOnClickListener(v -> importFirst100CitiesToFirestore());
+//        importCitiesButton.setOnClickListener(v -> importCitiesToFirestore());
 
 
         RecyclerView recyclerView = view.findViewById(R.id.home_combined_recycler);
@@ -232,9 +232,9 @@ public class HomeFragment extends Fragment {
         }
     }
 
-//    private void importFirst100CitiesToFirestore() {
+//    private void importCitiesToFirestore() {
 //        try {
-//            InputStream is = requireContext().getAssets().open("cities.json");
+//            InputStream is = requireContext().getAssets().open("cities_part1.json");
 //            int size = is.available();
 //            byte[] buffer = new byte[size];
 //            is.read(buffer);
@@ -247,7 +247,7 @@ public class HomeFragment extends Fragment {
 //            FirebaseFirestore db = FirebaseFirestore.getInstance();
 //            WriteBatch batch = db.batch();
 //
-//            for (int i = 18000; i < 20000 && i < jsonArray.length(); i++) { // rulata pana la 20k
+//            for (int i = 0; i < jsonArray.length(); i++) {
 //                JSONObject cityObj = jsonArray.getJSONObject(i);
 //
 //                String cityName = cityObj.getString("city");
@@ -268,19 +268,21 @@ public class HomeFragment extends Fragment {
 //                DocumentReference docRef = db.collection("cities").document(); // Firestore generează ID automat
 //                batch.set(docRef, cityData);
 //                Thread.sleep(20);
-//                if (i % 500 == 0) {
-//                    Log.d("FIREBASE_city", "Successfully imported 100 cities");
+//                if ((i + 1) % 100 == 0 || i == jsonArray.length() - 1) {
+//                    int current = i + 1;
+//                    Log.d("FIREBASE_city", "Imported cities: " + current);
+//                    batch.commit()
+//                            .addOnSuccessListener(unused -> Log.d("FIREBASE_city", "Batch of cities committed."))
+//                            .addOnFailureListener(e -> Log.e("FIREBASE_city", "Batch commit failed", e));
+//                    batch = db.batch(); // pornim un nou batch
 //                }
 //            }
-//
-//            batch.commit()
-//                    .addOnSuccessListener(unused -> Log.d("FIREBASE_city", "Successfully imported 100 cities"))
-//                    .addOnFailureListener(e -> Log.e("FIREBASE_city", "Error importing cities", e));
 //
 //        } catch (IOException | JSONException e) {
 //            Log.e("FIREBASE_city", "Error loading JSON or writing to Firestore", e);
 //        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
+//            Thread.currentThread().interrupt();
+//            Log.e("FIREBASE_city", "Thread sleep interrupted", e);
 //        }
 //    }
 

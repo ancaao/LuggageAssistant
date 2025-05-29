@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/error"
                 android:visibility="gone"
-                android:text="Please select a country"
+                android:text="This field is required"
                 android:textSize="12sp"
                 android:paddingStart="8dp"
                 android:paddingTop="4dp" />

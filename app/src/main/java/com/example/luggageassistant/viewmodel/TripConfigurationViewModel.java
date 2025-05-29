@@ -19,8 +19,6 @@ public class TripConfigurationViewModel extends ViewModel {
     private TripConfigurationRepository tripConfigurationRepository;
     public MutableLiveData<String> messageLiveData = new MutableLiveData<>();
     private List<String> selectedPreferences = new ArrayList<>();
-    private final MutableLiveData<List<Destination>> destinations = new MutableLiveData<>(new ArrayList<>());
-
     private String userId;
     private String tripId;
     private final MutableLiveData<List<String>> cachedCities = new MutableLiveData<>();
@@ -28,6 +26,7 @@ public class TripConfigurationViewModel extends ViewModel {
     public TripConfigurationViewModel() {
         tripConfigurationRepository = TripConfigurationRepository.getInstance();
         tripConfiguration = tripConfigurationRepository.getTripConfiguration();
+
     }
 
     public void setCachedCities(List<String> cities) {
@@ -53,10 +52,9 @@ public class TripConfigurationViewModel extends ViewModel {
         current.addAll(luggages);
         tripConfiguration.setLuggage(current);
     }
-
     public void updateFormStepThree(String country, String city, String startDateStr, String endDateStr) {
         Destination destination = new Destination(country, city, startDateStr, endDateStr);
-        List<Destination> current = destinations.getValue();
+        List<Destination> current = tripConfiguration.getDestinations();
         if (current == null) current = new ArrayList<>();
 
         if (current.isEmpty()) {
@@ -65,12 +63,10 @@ public class TripConfigurationViewModel extends ViewModel {
             current.set(0, destination); // înlocuiește prima
         }
 
-        destinations.setValue(current);
-        tripConfiguration.setDestinations(current); // salvează și în config
+        tripConfiguration.setDestinations(current);
     }
-
     public void setSelectedCountry(String country) {
-        List<Destination> current = destinations.getValue();
+        List<Destination> current = tripConfiguration.getDestinations();
         if (current == null || current.isEmpty()) {
             Destination newDestination = new Destination();
             newDestination.setCountry(country);
@@ -79,28 +75,25 @@ public class TripConfigurationViewModel extends ViewModel {
         } else {
             current.get(0).setCountry(country);
         }
-        destinations.setValue(current);
         tripConfiguration.setDestinations(current);
     }
-
-
-    public LiveData<List<Destination>> getDestinations() {
-        return destinations;
-    }
-
     public void addDestination(Destination destination) {
-        List<Destination> current = new ArrayList<>(destinations.getValue());
+        List<Destination> current = tripConfiguration.getDestinations();
+        if (current == null) current = new ArrayList<>();
         current.add(destination);
-        destinations.setValue(current);
+        tripConfiguration.setDestinations(current);
     }
-
+    public void clearDestinations() {
+        tripConfiguration.setDestinations(new ArrayList<>());
+    }
     public void removeDestination(int index) {
-        List<Destination> current = new ArrayList<>(destinations.getValue());
-        if (index >= 0 && index < current.size()) {
+        List<Destination> current = tripConfiguration.getDestinations();
+        if (current != null && index >= 0 && index < current.size()) {
             current.remove(index);
-            destinations.setValue(current);
+            tripConfiguration.setDestinations(current);
         }
     }
+
 
     public void resetTripConfiguration() {
         tripConfigurationRepository.resetTripConfiguration();
@@ -129,7 +122,6 @@ public class TripConfigurationViewModel extends ViewModel {
     }
 
     public TripConfiguration getTripConfiguration() {
-        tripConfiguration.setDestinations(destinations.getValue());
         return tripConfiguration;
     }
 

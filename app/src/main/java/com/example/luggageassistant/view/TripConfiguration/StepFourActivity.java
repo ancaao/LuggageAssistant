@@ -91,6 +91,7 @@ public class StepFourActivity extends AppCompatActivity {
             return;
         }
         TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
+        Log.d("DESTINATIONS_DEBUG", "Final destinations to save in step4: " + tripConfiguration.getDestinations());
         Log.d("SubmitForm", "Submitting trip configuration: " + tripConfiguration.toMap().toString());
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();

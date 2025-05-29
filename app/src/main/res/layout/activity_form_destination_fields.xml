@@ -50,12 +50,12 @@
             android:insetLeft="12dp"
             android:insetRight="12dp" />
         <TextView
-            android:id="@+id/countryErrorText"
+            android:id="@+id/dynamicCountryErrorText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/error"
             android:visibility="gone"
-            android:text="Please select a country"
+            android:text="This field is required"
             android:textSize="12sp"
             android:paddingStart="8dp"
             android:paddingTop="4dp" />
@@ -69,7 +69,7 @@
             android:layout_marginTop="16dp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/cityInputLayout"
+            android:id="@+id/dynamicCityInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundMode="outline"
@@ -94,7 +94,7 @@
 
         <!-- Start Date -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/startDateInputLayout"
+            android:id="@+id/dynamicStartDateInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Start Date"
@@ -108,7 +108,7 @@
             app:boxCornerRadiusBottomEnd="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/startDateInput"
+                android:id="@+id/dynamicStartDateInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="date"
@@ -120,7 +120,7 @@
 
         <!-- End Date -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/endDateInputLayout"
+            android:id="@+id/dynamicEndDateInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="End Date"
@@ -134,7 +134,7 @@
             app:boxCornerRadiusBottomEnd="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/endDateInput"
+                android:id="@+id/dynamicEndDateInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="date"
