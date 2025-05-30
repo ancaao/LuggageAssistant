@@ -45,15 +45,6 @@ public class TripConfiguration {
         return result;
     }
 
-    public void updateFromStepOne(String name, int age, String gender, List<String> preferences, List<TravelPartner> partners) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.specialPreferences = preferences;
-        this.partners = partners;
-
-    }
-
     public String getTripId() {
         return tripId;
     }

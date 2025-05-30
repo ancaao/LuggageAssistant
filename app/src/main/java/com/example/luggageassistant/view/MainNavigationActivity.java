@@ -1,6 +1,7 @@
 package com.example.luggageassistant.view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -16,6 +17,19 @@ public class MainNavigationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Verificăm dacă e prima lansare
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        boolean isFirstLaunch = prefs.getBoolean("isFirstLaunch", true);
+
+        if (isFirstLaunch) {
+            // Lansăm activitatea cu animația și ieșim
+            startActivity(new Intent(this, IntroAnimationActivity.class));
+            prefs.edit().putBoolean("isFirstLaunch", false).apply();
+            finish(); // Închide activitatea curentă, ca să nu se vadă în fundal
+            return;
+        }
+
         setContentView(R.layout.activity_main_navigation);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);

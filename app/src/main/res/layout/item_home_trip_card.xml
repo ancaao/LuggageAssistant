@@ -1,61 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="8dp"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="150dp"
-    android:layout_height="180dp"
-    android:background="@drawable/bg_trip_card"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:gravity="center_horizontal">
+    app:cardElevation="8dp"
+    app:cardCornerRadius="16dp"
+    app:rippleColor="?attr/colorControlHighlight"
+    android:clickable="true"
+    android:focusable="true"
+    app:strokeWidth="0dp"
+    android:minHeight="200dp"
+    app:cardBackgroundColor="@color/surface">
 
     <LinearLayout
-        android:id="@+id/city_country_container"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_city_country_container"
-        android:padding="8dp"
-        android:layout_marginBottom="6dp">
+        android:padding="12dp"
+        android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/tv_city"
+        <LinearLayout
+            android:id="@+id/city_country_container"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="City"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:background="@drawable/bg_city_country_container"
+            android:padding="8dp"
+            android:layout_marginBottom="6dp">
 
-        <TextView
-            android:id="@+id/tv_country"
+            <TextView
+                android:id="@+id/tv_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="City"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textColor="@color/onPrimary" />
+
+            <TextView
+                android:id="@+id/tv_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Country"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textColor="@color/onPrimary" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Country"
-            android:textAlignment="center"
-            android:textSize="16sp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:id="@+id/icon_purpose"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_luggage"
+                app:tint="@color/onSurface"
+                android:contentDescription="Purpose" />
+
+            <TextView
+                android:id="@+id/tv_purpose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Purpose"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="14sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textColor="@color/onSurface" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:id="@+id/icon_persons"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_boy"
+                app:tint="@color/onSurface"
+                android:contentDescription="Persons" />
+
+            <TextView
+                android:id="@+id/tv_persons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Persons"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="14sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textColor="@color/onSurface" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:id="@+id/icon_start_date"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_flight_takeoff"
+                app:tint="@color/onSurface"
+                android:contentDescription="Start Date" />
+
+            <TextView
+                android:id="@+id/tv_start_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Start Date"
+                android:textSize="13sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="13sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textColor="@color/onSurface" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="2dp">
+
+            <ImageView
+                android:id="@+id/icon_end_date"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_flight_land"
+                app:tint="@color/onSurface"
+                android:contentDescription="End Date" />
+
+            <TextView
+                android:id="@+id/tv_end_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="End Date"
+                android:textSize="13sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="13sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textColor="@color/onSurface" />
+        </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_purpose"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Purpose"
-        android:textAlignment="center"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/tv_persons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Persons"
-        android:textAlignment="center"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/tv_dates"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start - End"
-        android:textAlignment="center"
-        android:textSize="13sp" />
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

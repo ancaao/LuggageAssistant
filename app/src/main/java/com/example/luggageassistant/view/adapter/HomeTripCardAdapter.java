@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.Destination;
 import com.example.luggageassistant.model.TripConfiguration;
+import com.example.luggageassistant.utils.GetAllTripData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,29 +41,15 @@ public class HomeTripCardAdapter extends RecyclerView.Adapter<HomeTripCardAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TripConfiguration trip = trips.get(position);
 
-        // Folosește prima destinație dacă există
-        Destination firstDest = null;
-        if (trip.getDestinations() != null && !trip.getDestinations().isEmpty()) {
-            firstDest = trip.getDestinations().get(0);
-        }
+        List<Destination> destinations = trip.getDestinations() != null ? trip.getDestinations() : new ArrayList<>();
 
-        if (firstDest != null) {
-            holder.city.setText(firstDest.getCity() != null ? firstDest.getCity() : "-");
-            holder.country.setText(firstDest.getCountry() != null ? firstDest.getCountry() : "-");
+        holder.city.setText(GetAllTripData.getAllCities(destinations));
+        holder.country.setText(GetAllTripData.getAllCountries(destinations));
+        holder.startDate.setText(GetAllTripData.getEarliestStartDate(destinations));
+        holder.endDate.setText(GetAllTripData.getLatestEndDate(destinations));
 
-            String start = firstDest.getTripStartDate() != null ? firstDest.getTripStartDate() : "-";
-            String end = firstDest.getTripEndDate() != null ? firstDest.getTripEndDate() : "-";
-            holder.dates.setText(start + " - " + end);
-        } else {
-            holder.city.setText("-");
-            holder.country.setText("-");
-            holder.dates.setText("-");
-        }
-
-        // Afișează scopul călătoriei
         holder.purpose.setText(TextUtils.join(", ", trip.getTravelPurpose()));
 
-        // Load persons from finalLists
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore.getInstance()
                 .collection("users")
@@ -80,21 +67,24 @@ public class HomeTripCardAdapter extends RecyclerView.Adapter<HomeTripCardAdapte
                 });
     }
 
+
     @Override
     public int getItemCount() {
         return trips.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView city, country, dates, purpose, persons;
+        TextView city, country, startDate, endDate, purpose, persons;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             city = itemView.findViewById(R.id.tv_city);
             country = itemView.findViewById(R.id.tv_country);
-            dates = itemView.findViewById(R.id.tv_dates);
+            startDate = itemView.findViewById(R.id.tv_start_date);
+            endDate = itemView.findViewById(R.id.tv_end_date);
             purpose = itemView.findViewById(R.id.tv_purpose);
             persons = itemView.findViewById(R.id.tv_persons);
         }
+
     }
 }

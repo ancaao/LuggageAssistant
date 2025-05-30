@@ -1,6 +1,7 @@
  <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.LuggageAssistant" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.LuggageAssistant" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
         <!-- Culori principale -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/onPrimary</item>

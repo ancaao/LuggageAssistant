@@ -1,7 +1,11 @@
 package com.example.luggageassistant.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.Destination;
 import com.example.luggageassistant.model.TripConfiguration;
@@ -26,7 +31,6 @@ import com.example.luggageassistant.repository.OnTripConfigurationsLoadedListene
 import com.example.luggageassistant.repository.TripConfigurationRepository;
 import com.example.luggageassistant.view.TripConfiguration.StepOneActivity;
 import com.example.luggageassistant.view.adapter.HomeCombinedAdapter;
-import com.example.luggageassistant.view.adapter.HomeSectionAdapter;
 import com.example.luggageassistant.view.adapter.HomeTripCardAdapter;
 import com.example.luggageassistant.viewmodel.MainViewModel;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
@@ -71,50 +75,51 @@ public class HomeFragment extends Fragment {
 
         textView = view.findViewById(R.id.user_details);
 
-        mainViewModel.getUserEmail().observe(getViewLifecycleOwner(), email -> {
-            if (email == null) {
+        mainViewModel.loadUserData();
+
+        mainViewModel.getUserData().observe(getViewLifecycleOwner(), user -> {
+            if (user == null) {
                 redirectToLogin();
             } else {
-                textView.setText("Hello " + email);
+                textView.setText("Hello, " + user.getFirstName() + "!");
             }
         });
 
         mainViewModel.checkIfUserIsLoggedIn();
 
-        WeatherViewModel viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+//        WeatherViewModel viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
         // ✅ Testare 1: Prognoză pe 16 zile în București
-        viewModel.load16DayForecast("Bucharest");
+//        viewModel.load16DayForecast("Bucharest");
 
         // ✅ Testare 2: Prognoză aproximativă pentru 1 noiembrie în București
         // București = lat: 44.4268, lon: 26.1025
-        viewModel.loadApproximateForecast(44.4268, 26.1025, "2026-10-26");
+//        viewModel.loadApproximateForecast(44.4268, 26.1025, "2026-10-26");
 
         // ✅ Observă rezultatele:
-        viewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastList -> {
-            for (WeatherForecastResponse.ForecastDay day : forecastList) {
-                Log.d("FORECAST_16_DAYS", "Max: " + day.temp.max + ", Condiție: " + day.weather.get(0).description);
-            }
-        });
+//        viewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastList -> {
+//            for (WeatherForecastResponse.ForecastDay day : forecastList) {
+//                Log.d("FORECAST_16_DAYS", "Max: " + day.temp.max + ", Condiție: " + day.weather.get(0).description);
+//            }
+//        });
 
-        viewModel.getLongTermForecastJson().observe(getViewLifecycleOwner(), json -> {
-            Log.d("APPROX_FORECAST", "JSON: " + json);
-        });
-
-        viewModel.loadCoordinates("Bucharest", "RO");
-
-        viewModel.getCoordinatesResult().observe(getViewLifecycleOwner(), coords -> {
-            Log.d("GEO_RESULT", "Coordonate: " + coords);
-        });
-
-
-        viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), error -> {
-            Log.e("METEO_ERROR", "Eroare: " + error);
-        });
+//        viewModel.getLongTermForecastJson().observe(getViewLifecycleOwner(), json -> {
+//            Log.d("APPROX_FORECAST", "JSON: " + json);
+//        });
+//
+//        viewModel.loadCoordinates("Bucharest", "RO");
+//
+//        viewModel.getCoordinatesResult().observe(getViewLifecycleOwner(), coords -> {
+//            Log.d("GEO_RESULT", "Coordonate: " + coords);
+//        });
+//
+//
+//        viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), error -> {
+//            Log.e("METEO_ERROR", "Eroare: " + error);
+//        });
 
 //        Button importCitiesButton = view.findViewById(R.id.importCitiesButton);
 //        importCitiesButton.setOnClickListener(v -> importCitiesToFirestore());
-
 
         RecyclerView recyclerView = view.findViewById(R.id.home_combined_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -209,14 +214,6 @@ public class HomeFragment extends Fragment {
         return null;
     }
 
-    private Date parseDate(String dateStr, SimpleDateFormat sdf) {
-        try {
-            return sdf.parse(dateStr);
-        } catch (Exception e) {
-            return new Date(Long.MAX_VALUE);
-        }
-    }
-
     private void redirectToLogin() {
         Intent intent = new Intent(requireActivity(), LoginActivity.class);
         startActivity(intent);
@@ -231,7 +228,7 @@ public class HomeFragment extends Fragment {
             shouldResetTripConfiguration = false;
         }
     }
-
+//
 //    private void importCitiesToFirestore() {
 //        try {
 //            InputStream is = requireContext().getAssets().open("cities_part1.json");

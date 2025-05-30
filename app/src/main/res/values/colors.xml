@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#121212</color>
-    <color name="surface">#1E1E1E</color>
-    <color name="primary">#505050</color>
-    <color name="onPrimary">#FFFFFF</color>
-    <color name="onBackground">#E0E0E0</color>
-    <color name="inputBorder">#505050</color>
-    <color name="inputText">#FFFFFF</color>
-    <color name="linkColor">#90CAF9</color>
-    <color name="error">#EF5350</color>
-    <color name="success">#66BB6A</color>
+    <!-- Backgrounds -->
+    <color name="background">#EFE7D9</color>
+    <color name="surface">#F9F5EB</color>
+
+    <!-- Primary, Secondary, Tertiary -->
+    <color name="primary">#304875</color>
+    <color name="secondary">#4A678A</color> <!-- #A39BCF -->
+    <color name="tertiary">#C97178</color>
+
+    <!-- Text Colors -->
+    <color name="onPrimary">#EFE7D9</color>
+    <color name="onSecondary">#F9F5EB</color>
+    <color name="onTertiary">#F9F5EB</color>
+    <color name="onBackground">#304875</color>
+    <color name="onSurface">#4A678A</color>
+
+    <!-- States -->
+    <color name="error">#A62D2D</color>
+    <color name="success">#438C51</color>
+
+    <!-- Optional -->
+    <color name="inputBorder">#304875</color>
+    <color name="inputText">#304875</color>
+    <color name="linkColor">#4A678A</color>
 </resources>

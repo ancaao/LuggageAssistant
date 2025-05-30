@@ -5,6 +5,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.graphics.Typeface;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.Destination;
 import com.example.luggageassistant.model.TripConfiguration;
+import com.example.luggageassistant.utils.GetAllTripData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -71,28 +73,22 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
             TripConfiguration trip = trips.get(position);
             TripViewHolder vh = (TripViewHolder) holder;
 
-            Destination firstDest = null;
-            if (trip.getDestinations() != null && !trip.getDestinations().isEmpty()) {
-                firstDest = trip.getDestinations().get(0);
-            }
+            List<Destination> destinations = trip.getDestinations();
 
-            String city = "-";
-            String country = "-";
-            String startDate = "-";
-            String endDate = "-";
-
-            if (firstDest != null) {
-                city = firstDest.getCity() != null ? firstDest.getCity() : "-";
-                country = firstDest.getCountry() != null ? firstDest.getCountry() : "-";
-                startDate = firstDest.getTripStartDate() != null ? firstDest.getTripStartDate() : "-";
-                endDate = firstDest.getTripEndDate() != null ? firstDest.getTripEndDate() : "-";
-            }
+            // ✅ înlocuiește logica veche cu metode din TripUtils
+            String city = GetAllTripData.getAllCities(destinations);
+            String country = GetAllTripData.getAllCountries(destinations);
+            String startDate = GetAllTripData.getEarliestStartDate(destinations);
+            String endDate = GetAllTripData.getLatestEndDate(destinations);
 
             vh.city.setText(city);
             vh.country.setText(country);
-            vh.dates.setText(startDate + " - " + endDate);
+            vh.startDate.setText(startDate);
+            vh.endDate.setText(endDate);
+
             vh.purpose.setText(TextUtils.join(", ", trip.getTravelPurpose()));
 
+            // ✅ păstrăm afișarea personelor din Firebase
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             FirebaseFirestore.getInstance()
                     .collection("users")
@@ -108,6 +104,7 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
                         }
                         vh.persons.setText(TextUtils.join(", ", names));
                     });
+
         } else {
             SeeAllViewHolder vh = (SeeAllViewHolder) holder;
 
@@ -123,18 +120,20 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
             vh.persons.setTypeface(null, Typeface.BOLD);
             vh.persons.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            // ascunde celelalte texte
             vh.country.setText("");
-            vh.dates.setVisibility(View.GONE);
+            vh.startDate.setText("");
+            vh.endDate.setText("");
             vh.city.setText("");
 
-            // elimină fundalul de la container city-country
             vh.cityCountryContainer.setBackground(null);
             vh.cityCountryContainer.setPadding(0, 0, 0, 0);
 
-            // click
-            vh.itemView.setOnClickListener(v -> listener.onSeeAllClick(sectionType));
+            vh.iconPurpose.setVisibility(View.GONE);
+            vh.iconPersons.setVisibility(View.GONE);
+            vh.iconStartDate.setVisibility(View.GONE);
+            vh.iconEndDate.setVisibility(View.GONE);
 
+            vh.itemView.setOnClickListener(v -> listener.onSeeAllClick(sectionType));
         }
     }
 
@@ -144,14 +143,15 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     static class TripViewHolder extends RecyclerView.ViewHolder {
-        TextView city, country, dates, purpose, persons;
+        TextView city, country, startDate, endDate, purpose, persons;
         LinearLayout cityCountryContainer;
 
         public TripViewHolder(@NonNull View itemView) {
             super(itemView);
             city = itemView.findViewById(R.id.tv_city);
             country = itemView.findViewById(R.id.tv_country);
-            dates = itemView.findViewById(R.id.tv_dates);
+            startDate = itemView.findViewById(R.id.tv_start_date);
+            endDate = itemView.findViewById(R.id.tv_end_date);
             purpose = itemView.findViewById(R.id.tv_purpose);
             persons = itemView.findViewById(R.id.tv_persons);
             cityCountryContainer = itemView.findViewById(R.id.city_country_container);
@@ -160,17 +160,23 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     static class SeeAllViewHolder extends RecyclerView.ViewHolder {
-        TextView city, country, dates, purpose, persons;
+        TextView city, country, startDate, endDate, purpose, persons;
         LinearLayout cityCountryContainer;
-
+        ImageView iconPurpose, iconPersons, iconStartDate, iconEndDate;
         public SeeAllViewHolder(@NonNull View itemView) {
             super(itemView);
             city = itemView.findViewById(R.id.tv_city);
             country = itemView.findViewById(R.id.tv_country);
-            dates = itemView.findViewById(R.id.tv_dates);
+            startDate = itemView.findViewById(R.id.tv_start_date);
+            endDate = itemView.findViewById(R.id.tv_end_date);
             purpose = itemView.findViewById(R.id.tv_purpose);
             persons = itemView.findViewById(R.id.tv_persons);
             cityCountryContainer = itemView.findViewById(R.id.city_country_container);
+
+            iconPurpose = itemView.findViewById(R.id.icon_purpose);
+            iconPersons = itemView.findViewById(R.id.icon_persons);
+            iconStartDate = itemView.findViewById(R.id.icon_start_date);
+            iconEndDate = itemView.findViewById(R.id.icon_end_date);
         }
     }
 }

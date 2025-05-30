@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,24 @@ public class HomeCombinedAdapter extends RecyclerView.Adapter<HomeCombinedAdapte
         TripSection section = sections.get(position);
         holder.title.setText(section.getTitle());
 
+        holder.title.setText(section.getTitle());
+
+        switch (section.getType()) {
+            case "pinned":
+                holder.icon.setImageResource(R.drawable.ic_pin);
+                break;
+            case "upcoming":
+                holder.icon.setImageResource(R.drawable.ic_hourglass_top);
+                break;
+            case "past":
+                holder.icon.setImageResource(R.drawable.ic_hourglass_bottom);
+                break;
+            default:
+                holder.icon.setImageResource(R.drawable.ic_remove); // fallback
+                break;
+        }
+
+
         TripCardHorizontalAdapter adapter = new TripCardHorizontalAdapter(section.getTrips(), section.getType(), listener);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerView.setAdapter(adapter);
@@ -60,10 +79,12 @@ public class HomeCombinedAdapter extends RecyclerView.Adapter<HomeCombinedAdapte
     public static class SectionViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         RecyclerView recyclerView;
+        ImageView icon;
 
         public SectionViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.section_title);
+            icon = itemView.findViewById(R.id.section_icon);
             recyclerView = itemView.findViewById(R.id.section_recycler);
         }
     }

@@ -50,6 +50,10 @@
         <activity
             android:name=".view.MainNavigationActivity"
             android:exported="true" />
+        <activity android:name=".view.IntroAnimationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
     </application>
 
 </manifest>
