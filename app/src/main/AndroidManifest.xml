@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LuggageAssistant"
         tools:targetApi="31">
-<!--        android:theme="@style/Theme.LuggageAssistant"-->
         <activity
             android:name=".view.RegisterActivity"
             android:theme="@style/Theme.LuggageAssistant"
@@ -22,10 +21,6 @@
             android:name=".view.LoginActivity"
             android:theme="@style/Theme.LuggageAssistant"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".view.TripConfiguration.StepOneActivity"
@@ -49,11 +44,12 @@
         </activity>
         <activity
             android:name=".view.MainNavigationActivity"
-            android:exported="true" />
-        <activity android:name=".view.IntroAnimationActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

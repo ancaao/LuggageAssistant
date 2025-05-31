@@ -30,7 +30,7 @@ public class GetAllTripData {
         return buildLimitedString(countries, 21);
     }
 
-    private static String buildLimitedString(Set<String> items, int maxLength) {
+    public static String buildLimitedString(Set<String> items, int maxLength) {
         StringBuilder result = new StringBuilder();
         int countIncluded = 0;
         int totalLength = 0;

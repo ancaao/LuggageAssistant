@@ -78,9 +78,7 @@ public class HomeFragment extends Fragment {
         mainViewModel.loadUserData();
 
         mainViewModel.getUserData().observe(getViewLifecycleOwner(), user -> {
-            if (user == null) {
-                redirectToLogin();
-            } else {
+            if (user != null) {
                 textView.setText("Hello, " + user.getFirstName() + "!");
             }
         });
@@ -212,12 +210,6 @@ public class HomeFragment extends Fragment {
             }
         }
         return null;
-    }
-
-    private void redirectToLogin() {
-        Intent intent = new Intent(requireActivity(), LoginActivity.class);
-        startActivity(intent);
-        requireActivity().finish();
     }
 
     @Override

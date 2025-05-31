@@ -1,7 +1,6 @@
 package com.example.luggageassistant.view;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -11,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.view.TripConfiguration.StepOneActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainNavigationActivity extends AppCompatActivity {
 
@@ -18,15 +19,14 @@ public class MainNavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Verificăm dacă e prima lansare
-        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        boolean isFirstLaunch = prefs.getBoolean("isFirstLaunch", true);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (isFirstLaunch) {
-            // Lansăm activitatea cu animația și ieșim
-            startActivity(new Intent(this, IntroAnimationActivity.class));
-            prefs.edit().putBoolean("isFirstLaunch", false).apply();
-            finish(); // Închide activitatea curentă, ca să nu se vadă în fundal
+        if (currentUser == null) {
+            // Utilizatorul NU e logat → mergem la LoginActivity
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // evită back la acest ecran
+            startActivity(intent);
+            finish();
             return;
         }
 
@@ -59,7 +59,9 @@ public class MainNavigationActivity extends AppCompatActivity {
                 // Deschide o activitate nouă în loc de fragment
                 Intent intent = new Intent(this, StepOneActivity.class);
                 startActivity(intent);
-                return false; // Nu selecta "+" ca tab activ
+                return false;
+            } else if (id == R.id.nav_calendar) {
+                selectedFragment = new CalendarFragment();
             } else {
                 return false;
             }

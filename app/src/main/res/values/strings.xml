@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LuggageAssistant</string>
+    <string name="app_name">Luggage Assistant</string>
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
