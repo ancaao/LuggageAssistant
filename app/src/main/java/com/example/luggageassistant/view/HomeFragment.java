@@ -220,59 +220,59 @@ public class HomeFragment extends Fragment {
             shouldResetTripConfiguration = false;
         }
     }
-//
-//    private void importCitiesToFirestore() {
-//        try {
-//            InputStream is = requireContext().getAssets().open("cities_part1.json");
-//            int size = is.available();
-//            byte[] buffer = new byte[size];
-//            is.read(buffer);
-//            is.close();
-//
-//            String json = new String(buffer, StandardCharsets.UTF_8);
-//            JSONArray jsonArray = new JSONArray(json);
-//            Log.d("FIREBASE_city", "Total cities: " + jsonArray.length());
-//
-//            FirebaseFirestore db = FirebaseFirestore.getInstance();
-//            WriteBatch batch = db.batch();
-//
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//                JSONObject cityObj = jsonArray.getJSONObject(i);
-//
-//                String cityName = cityObj.getString("city");
-//                String cityAscii = cityObj.getString("city_ascii");
-//                String country = cityObj.getString("country");
-//                String iso2 = cityObj.getString("iso2");
-//                String lat = cityObj.getString("lat");
-//                String lng = cityObj.getString("lng");
-//
-//                Map<String, Object> cityData = new HashMap<>();
-//                cityData.put("city", cityName);
-//                cityData.put("city_ascii", cityAscii);
-//                cityData.put("country", country);
-//                cityData.put("iso2", iso2);
-//                cityData.put("lat", lat);
-//                cityData.put("lng", lng);
-//
-//                DocumentReference docRef = db.collection("cities").document(); // Firestore generează ID automat
-//                batch.set(docRef, cityData);
-//                Thread.sleep(20);
-//                if ((i + 1) % 100 == 0 || i == jsonArray.length() - 1) {
-//                    int current = i + 1;
-//                    Log.d("FIREBASE_city", "Imported cities: " + current);
-//                    batch.commit()
-//                            .addOnSuccessListener(unused -> Log.d("FIREBASE_city", "Batch of cities committed."))
-//                            .addOnFailureListener(e -> Log.e("FIREBASE_city", "Batch commit failed", e));
-//                    batch = db.batch(); // pornim un nou batch
-//                }
-//            }
-//
-//        } catch (IOException | JSONException e) {
-//            Log.e("FIREBASE_city", "Error loading JSON or writing to Firestore", e);
-//        } catch (InterruptedException e) {
-//            Thread.currentThread().interrupt();
-//            Log.e("FIREBASE_city", "Thread sleep interrupted", e);
-//        }
-//    }
+
+    private void importCitiesToFirestore() {
+        try {
+            InputStream is = requireContext().getAssets().open("cities_part1.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            String json = new String(buffer, StandardCharsets.UTF_8);
+            JSONArray jsonArray = new JSONArray(json);
+            Log.d("FIREBASE_city", "Total cities: " + jsonArray.length());
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            WriteBatch batch = db.batch();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject cityObj = jsonArray.getJSONObject(i);
+
+                String cityName = cityObj.getString("city");
+                String cityAscii = cityObj.getString("city_ascii");
+                String country = cityObj.getString("country");
+                String iso2 = cityObj.getString("iso2");
+                String lat = cityObj.getString("lat");
+                String lng = cityObj.getString("lng");
+
+                Map<String, Object> cityData = new HashMap<>();
+                cityData.put("city", cityName);
+                cityData.put("city_ascii", cityAscii);
+                cityData.put("country", country);
+                cityData.put("iso2", iso2);
+                cityData.put("lat", lat);
+                cityData.put("lng", lng);
+
+                DocumentReference docRef = db.collection("cities").document(); // Firestore generează ID automat
+                batch.set(docRef, cityData);
+                Thread.sleep(20);
+                if ((i + 1) % 100 == 0 || i == jsonArray.length() - 1) {
+                    int current = i + 1;
+                    Log.d("FIREBASE_city", "Imported cities: " + current);
+                    batch.commit()
+                            .addOnSuccessListener(unused -> Log.d("FIREBASE_city", "Batch of cities committed."))
+                            .addOnFailureListener(e -> Log.e("FIREBASE_city", "Batch commit failed", e));
+                    batch = db.batch(); // pornim un nou batch
+                }
+            }
+
+        } catch (IOException | JSONException e) {
+            Log.e("FIREBASE_city", "Error loading JSON or writing to Firestore", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Log.e("FIREBASE_city", "Thread sleep interrupted", e);
+        }
+    }
 
 }

@@ -1,9 +1,10 @@
 package com.example.luggageassistant.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-public class Luggage {
+public class Luggage implements Serializable {
     private List<String> owners;
     private String luggageType;
     private int length;

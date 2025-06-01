@@ -1,9 +1,10 @@
 package com.example.luggageassistant.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Destination {
+public class Destination implements Serializable {
     private String country;
     private String city;
     private String tripStartDate;

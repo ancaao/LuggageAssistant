@@ -1,0 +1,42 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    app:cardElevation="4dp"
+    android:strokeWidth="1"
+    android:strokeColor="?attr/colorPrimary"
+    android:backgroundTint="?attr/colorSurface"
+    android:radius="16dp"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+        <LinearLayout
+            android:id="@+id/locationContainer"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPackingList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="View Packing List"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            android:textColor="@color/onSecondary"
+            android:backgroundTint="@color/secondary" />
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
+

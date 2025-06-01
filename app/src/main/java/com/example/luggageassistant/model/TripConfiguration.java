@@ -1,12 +1,13 @@
 package com.example.luggageassistant.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TripConfiguration {
+public class TripConfiguration implements Serializable {
     private String tripId;
     private boolean pinned = false;
     // step 1: personal information

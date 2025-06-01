@@ -1,5 +1,7 @@
 package com.example.luggageassistant.utils;
 
+import android.annotation.SuppressLint;
+
 import com.example.luggageassistant.model.Destination;
 
 import java.time.LocalDate;
@@ -55,7 +57,7 @@ public class GetAllTripData {
         return result.length() > 0 ? result.toString() : "-";
     }
 
-
+    @SuppressLint("NewApi")
     public static String getEarliestStartDate(List<Destination> destinations) {
         if (destinations == null) return "-";
         LocalDate minDate = null;
@@ -68,6 +70,7 @@ public class GetAllTripData {
         return minDate != null ? minDate.format(formatter) : "-";
     }
 
+    @SuppressLint("NewApi")
     public static String getLatestEndDate(List<Destination> destinations) {
         if (destinations == null) return "-";
         LocalDate maxDate = null;

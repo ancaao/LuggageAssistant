@@ -109,4 +109,9 @@ public class TripConfigurationRepository {
         void onSuccess();
         void onError(Exception e);
     }
+
+//    public interface OnTripConfigurationsLoadedListener {
+//        void onTripsLoaded(List<TripConfiguration> trips);
+//        void onError(Exception e);
+//    }
 }

@@ -31,7 +31,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
 dependencies {
 
     implementation(libs.appcompat)
@@ -44,7 +43,6 @@ dependencies {
     implementation("com.airbnb.android:lottie:6.4.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.52")
-//    implementation("com.kizitonwose.calendar:view:2.3.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("org.json:json:20210307")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
