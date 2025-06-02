@@ -73,6 +73,44 @@ public class InputValidator implements TextWatcher {
         return isValid;
     }
 
+    public static boolean validateAccountField(Context context, TextInputLayout layout, TextInputEditText editText) {
+        if (editText == null || layout == null) return false;
+
+        String input = editText.getText() != null ? editText.getText().toString().trim() : "";
+        boolean isValid = false;
+
+        if (input.isEmpty()) {
+            layout.setError("This field is required!");
+        } else if (editText.getId() == R.id.editTextEmail) {
+            isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches();
+            layout.setError(isValid ? null : "Invalid email address!");
+        } else if (editText.getId() == R.id.editTextPhone) {
+            String cleanedPhoneNumber = input.replaceAll("[^0-9]", "");
+            if (!input.matches("[0-9\\+\\- ]*")) {
+                layout.setError("Phone number must contain only digits, '+', '-', or spaces!");
+            } else if (cleanedPhoneNumber.length() < 9 || cleanedPhoneNumber.length() > 16) {
+                layout.setError("Phone number must have between 9 and 16 digits!");
+            } else {
+                isValid = true;
+                layout.setError(null);
+            }
+        } else if (editText.getId() == R.id.editTextFirstName || editText.getId() == R.id.editTextLastName) {
+            isValid = InputValidator.isNameValid(input);
+            layout.setError(isValid ? null : "This field cannot be empty!");
+        } else {
+            // fallback pentru alte câmpuri
+            isValid = true;
+            layout.setError(null);
+        }
+
+        int color = isValid ? ContextCompat.getColor(context, R.color.success)
+                : ContextCompat.getColor(context, R.color.error);
+        layout.setBoxStrokeColor(color);
+
+        return isValid;
+    }
+
+
     public static boolean isNameValid(String name) {
         return name != null && !name.trim().isEmpty();
     }
@@ -145,23 +183,5 @@ public class InputValidator implements TextWatcher {
             return false;
         }
     }
-//    public static boolean isStartDateAfterPreviousEnd(String currentStartDateStr, String previousEndDateStr, TextInputEditText startDateField, Context context) {
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-//        try {
-//            Date prevEnd = sdf.parse(previousEndDateStr);
-//            Date currStart = sdf.parse(currentStartDateStr);
-//            if (currStart != null && prevEnd != null && !currStart.after(prevEnd)) {
-//                startDateField.setError("Start date must be after previous destination's end date");
-////                startDateField.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.error));
-//                return false;
-//            } else {
-//                startDateField.setError(null);
-////                startDateField.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.success));
-//                return true;
-//            }
-//        } catch (java.text.ParseException e) {
-//            startDateField.setError("Invalid date format");
-//            return false;
-//        }
-//    }
+
 }

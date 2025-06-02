@@ -86,7 +86,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>
                 holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.secondary));
                 holder.dayOfMonth.setTextColor(ContextCompat.getColor(context, R.color.onPrimary));
             } else {
-                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.background));
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.surface));
             }
         }
     }

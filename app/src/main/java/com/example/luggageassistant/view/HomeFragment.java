@@ -223,7 +223,7 @@ public class HomeFragment extends Fragment {
 
     private void importCitiesToFirestore() {
         try {
-            InputStream is = requireContext().getAssets().open("cities_part1.json");
+            InputStream is = requireContext().getAssets().open("cities_part2.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

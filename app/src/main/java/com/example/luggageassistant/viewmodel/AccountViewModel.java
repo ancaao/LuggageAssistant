@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.luggageassistant.model.User;
 import com.example.luggageassistant.repository.AccountRepository;
+import com.example.luggageassistant.view.AccountFragment.Callback;
 
 public class AccountViewModel extends ViewModel {
 
@@ -21,9 +22,20 @@ public class AccountViewModel extends ViewModel {
         accountRepository.getUserData(user -> userLiveData.postValue(user));
     }
 
+    public void updateField(String field, String value) {
+        accountRepository.updateUserField(field, value);
+    }
+
     public void logoutUser() {
         accountRepository.logout();
         logoutStatus.postValue(true);
+    }
+
+    public void deleteUser(String password, Callback callback) {
+        accountRepository.deleteAccount(password, callback);
+    }
+    public void sendResetPasswordEmail(String email, Callback callback) {
+        accountRepository.sendPasswordResetEmail(email, callback);
     }
 
     public LiveData<User> getUserLiveData() {
