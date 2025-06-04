@@ -35,7 +35,5 @@ public interface WeatherApi {
             @Query("limit") int limit,
             @Query("appid") String apiKey
     );
-
-
 }
 

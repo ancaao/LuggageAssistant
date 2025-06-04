@@ -88,7 +88,7 @@ public class WeatherRepository {
                         if (response.isSuccessful() && response.body() != null) {
                             try {
                                 String json = response.body().string();
-                                Log.d("LONG_FORECAST", json);
+                                Log.d("API_RAW_JSON", "Forecast JSON for " + date + ": " + json);
                                 callback.onSuccess(json);
                             } catch (IOException e) {
                                 callback.onError("Parse error");

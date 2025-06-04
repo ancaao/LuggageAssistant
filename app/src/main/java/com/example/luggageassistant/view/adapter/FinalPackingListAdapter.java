@@ -127,8 +127,27 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 itemCheckBox.setText(item.getItem());
             }
 
-            itemCheckBox.setChecked(item.isChecked());
+            itemCheckBox.setOnCheckedChangeListener(null); // 🔥 dezactivezi temporar ascultătorul
+            itemCheckBox.setChecked(item.isChecked());     // ✅ setezi starea reală
             updateStyle(item.isChecked());
+
+            itemCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                item.setChecked(isChecked);
+                updateStyle(isChecked);
+
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                Context context = itemCheckBox.getContext();
+                String tripId = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                        .getString("current_trip_id", null);
+
+                if (tripId != null && item.getPersonName() != null) {
+                    PackingListRepository.getInstance()
+                            .updateFinalItemChecked(userId, tripId, item.getPersonName(), item, isChecked);
+                } else {
+                    Log.e("CHECKBOX_UPDATE", "Trip ID sau personName este null");
+                }
+            });
 
             deleteIcon.setVisibility(deleteMode ? View.VISIBLE : View.GONE);
             deleteIcon.setOnClickListener(v -> {

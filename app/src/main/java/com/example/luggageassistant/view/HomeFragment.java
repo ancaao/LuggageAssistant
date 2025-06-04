@@ -1,62 +1,47 @@
 package com.example.luggageassistant.view;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.Destination;
+import com.example.luggageassistant.model.PackingItem;
 import com.example.luggageassistant.model.TripConfiguration;
-import com.example.luggageassistant.model.WeatherForecastResponse;
-import com.example.luggageassistant.model.OneCallResponse;
+import com.example.luggageassistant.repository.OnItemsLoadedListener;
 import com.example.luggageassistant.repository.OnTripConfigurationsLoadedListener;
+import com.example.luggageassistant.repository.PackingListRepository;
 import com.example.luggageassistant.repository.TripConfigurationRepository;
-import com.example.luggageassistant.view.TripConfiguration.StepOneActivity;
+import com.example.luggageassistant.utils.GetAllTripData;
+import com.example.luggageassistant.utils.WeatherCacheHelper;
+import com.example.luggageassistant.utils.WeatherCardHelper;
 import com.example.luggageassistant.view.adapter.HomeCombinedAdapter;
-import com.example.luggageassistant.view.adapter.HomeTripCardAdapter;
 import com.example.luggageassistant.viewmodel.MainViewModel;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 import com.example.luggageassistant.viewmodel.WeatherViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
@@ -64,6 +49,11 @@ public class HomeFragment extends Fragment {
     private TripConfigurationViewModel tripConfigurationViewModel;
     private TextView textView;
     private boolean shouldResetTripConfiguration = false;
+    private List<TripConfiguration> upcomingTrips = new ArrayList<>();
+    private CardView weatherCard;
+    private TextView weatherTemperature, weatherCardTitle;
+    private boolean shortTermDone = false;
+    private boolean longTermDone = false;
 
     @Nullable
     @Override
@@ -85,39 +75,62 @@ public class HomeFragment extends Fragment {
 
         mainViewModel.checkIfUserIsLoggedIn();
 
-//        WeatherViewModel viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
-        // ✅ Testare 1: Prognoză pe 16 zile în București
-//        viewModel.load16DayForecast("Bucharest");
+        weatherCard = view.findViewById(R.id.weather_card);
+        weatherCardTitle = view.findViewById(R.id.weather_card_title);
+        weatherTemperature = view.findViewById(R.id.weather_temperature);
 
-        // ✅ Testare 2: Prognoză aproximativă pentru 1 noiembrie în București
-        // București = lat: 44.4268, lon: 26.1025
-//        viewModel.loadApproximateForecast(44.4268, 26.1025, "2026-10-26");
 
-        // ✅ Observă rezultatele:
-//        viewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastList -> {
-//            for (WeatherForecastResponse.ForecastDay day : forecastList) {
-//                Log.d("FORECAST_16_DAYS", "Max: " + day.temp.max + ", Condiție: " + day.weather.get(0).description);
-//            }
-//        });
+        WeatherViewModel viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
-//        viewModel.getLongTermForecastJson().observe(getViewLifecycleOwner(), json -> {
-//            Log.d("APPROX_FORECAST", "JSON: " + json);
-//        });
-//
-//        viewModel.loadCoordinates("Bucharest", "RO");
-//
-//        viewModel.getCoordinatesResult().observe(getViewLifecycleOwner(), coords -> {
-//            Log.d("GEO_RESULT", "Coordonate: " + coords);
-//        });
-//
-//
-//        viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), error -> {
-//            Log.e("METEO_ERROR", "Eroare: " + error);
-//        });
+        // Forecast pe 16 zile
+        viewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastList -> {
+            if (upcomingTrips.isEmpty()) return;
+            TripConfiguration trip = upcomingTrips.get(0);
+            WeatherCardHelper.processForecastList(
+                    forecastList,
+                    trip,
+                    weatherCard,
+                    weatherCardTitle,
+                    weatherTemperature
+            );
+            shortTermDone = true;
+            maybeShowWeatherCard();
+        });
 
-//        Button importCitiesButton = view.findViewById(R.id.importCitiesButton);
-//        importCitiesButton.setOnClickListener(v -> importCitiesToFirestore());
+        // Coordonate pentru forecast pe termen lung
+        viewModel.getCoordinatesResult().observe(getViewLifecycleOwner(), pair -> {
+            if (pair == null) return;
+            String coordStr = pair.first;
+            Destination destination = pair.second;
+
+            WeatherCardHelper.handleCoordinatesResult(
+                    coordStr,
+                    destination,
+                    viewModel
+            );
+        });
+
+        // Forecast estimativ
+        viewModel.getLongTermForecastJson().observe(getViewLifecycleOwner(), json -> {
+            if (upcomingTrips.isEmpty()) return;
+            TripConfiguration trip = upcomingTrips.get(0);
+
+            if (json != null && json.contains("|")) {
+                String[] parts = json.split("\\|", 2);
+                String date = parts[0];
+                String body = parts[1];
+                WeatherCardHelper.processLongTermJson(
+                        body,
+                        trip,
+                        weatherCard,
+                        weatherCardTitle,
+                        weatherTemperature,
+                        date);
+            }
+            longTermDone = true;
+            maybeShowWeatherCard();
+        });
 
         RecyclerView recyclerView = view.findViewById(R.id.home_combined_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -128,48 +141,88 @@ public class HomeFragment extends Fragment {
             public void onTripsLoaded(List<TripConfiguration> trips) {
                 List<HomeCombinedAdapter.TripSection> sections = new ArrayList<>();
 
-                List<TripConfiguration> pinned = new ArrayList<>();
-                List<TripConfiguration> upcoming = new ArrayList<>();
-                List<TripConfiguration> past = new ArrayList<>();
+                // ✅ Obține listele de pinned/upcoming/past direct din utils
+                GetAllTripData.CategorizedTrips categorized = GetAllTripData.categorizeTrips(trips);
+                List<TripConfiguration> pinned = categorized.pinned;
+                List<TripConfiguration> upcoming = categorized.upcoming;
+                List<TripConfiguration> past = categorized.past;
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                Date today = new Date();
+                if (!upcoming.isEmpty()) {
+                    // Verificăm dacă fragmentul este încă atașat
+                    if (!isAdded()) return;
+                    // ✅ Salvează în fieldul HomeFragment
+                    HomeFragment.this.upcomingTrips = upcoming;
 
-                for (TripConfiguration trip : trips) {
-                    Date startDate = getFirstTripStartDate(trip);
-                    if (startDate == null) continue;
+                    LinearProgressIndicator progressBar = view.findViewById(R.id.packing_progress_bar);
+                    TextView progressText = view.findViewById(R.id.packing_progress_text);
+                    progressText.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
 
-                    if (trip.isPinned()) {
-                        pinned.add(trip);
-                    } else if (!startDate.before(today)) {
-                        upcoming.add(trip);
-                    } else {
-                        past.add(trip);
-                    }
-                }
+                    TripConfiguration nextTrip = upcoming.get(0);
+                    String tripId = nextTrip.getTripId();
 
-                Comparator<TripConfiguration> dateComparator = Comparator.comparing(
-                        trip -> {
-                            List<Destination> destinations = trip.getDestinations();
-                            if (destinations != null && !destinations.isEmpty()) {
-                                String dateStr = destinations.get(0).getTripStartDate();
-                                if (dateStr != null && !dateStr.isEmpty()) {
-                                    try {
-                                        return sdf.parse(dateStr);
-                                    } catch (java.text.ParseException e) {
-                                        e.printStackTrace();
-                                    }
+                    PackingListRepository.getInstance().getFinalPackingItems(userId, tripId, new OnItemsLoadedListener() {
+                        @Override
+                        public void onItemsLoaded(List<PackingItem> items) {
+                            if (items.isEmpty()) {
+                                progressBar.setProgress(0);
+                                return;
+                            }
+
+                            int checkedCount = 0;
+                            for (PackingItem item : items) {
+                                if (item.isChecked()) {
+                                    checkedCount++;
                                 }
                             }
-                            return null;
-                        },
-                        Comparator.nullsLast(Date::compareTo)
-                );
 
-                pinned.sort(dateComparator);
-                upcoming.sort(dateComparator);
-                past.sort(dateComparator.reversed());
+                            int percent = (int) ((checkedCount * 100.0f) / items.size());
+                            ValueAnimator animator = ValueAnimator.ofInt(0, percent);
+                            animator.setDuration(500); // 0.5 secunde
+                            animator.addUpdateListener(animation -> {
+                                int animatedValue = (int) animation.getAnimatedValue();
+                                progressBar.setProgress(animatedValue);
+                            });
+                            progressText.setText("Packing completed: " + percent + "%");
+                            animator.start();
+                        }
 
+                        @Override
+                        public void onError(Exception e) {
+                            Log.e("HomeFragment", "Error loading packing items", e);
+                        }
+                    });
+
+                    // ✅ VERIFICĂ DACĂ AVEM CACHE PENTRU AZI
+                    if (WeatherCacheHelper.isCachedForToday(requireContext())) {
+                        float minTemp = WeatherCacheHelper.getMinTemp(requireContext());
+                        float maxTemp = WeatherCacheHelper.getMaxTemp(requireContext());
+                        List<String> cities = WeatherCacheHelper.getCities(requireContext());
+
+                        WeatherCardHelper.displayCachedForecast(
+                                weatherCard,
+                                weatherCardTitle,
+                                weatherTemperature,
+                                cities,
+                                minTemp,
+                                maxTemp
+                        );
+                    } else {
+                        // ✅ APELĂM LOGICA DE FORECAST DOAR DACĂ NU AVEM CACHE
+                        view.post(() -> WeatherCardHelper.processAndDisplayAggregatedWeather(
+                                weatherCard,
+                                weatherCardTitle,
+                                weatherTemperature,
+                                upcomingTrips.get(0),
+                                viewModel,
+                                getViewLifecycleOwner()
+                        ));
+                    }
+                }else {
+                    weatherCard.setVisibility(View.GONE);
+                }
+
+                // ✅ Creează secțiunile de carduri
                 if (!pinned.isEmpty())
                     sections.add(new HomeCombinedAdapter.TripSection("Pinned Trips", "pinned", pinned.subList(0, Math.min(3, pinned.size()))));
                 if (!upcoming.isEmpty())
@@ -177,6 +230,7 @@ public class HomeFragment extends Fragment {
                 if (!past.isEmpty())
                     sections.add(new HomeCombinedAdapter.TripSection("Past Trips", "past", past.subList(0, Math.min(3, past.size()))));
 
+                // ✅ Setează adapterul pentru RecyclerView
                 recyclerView.setAdapter(new HomeCombinedAdapter(sections, sectionType -> {
                     TripCardListFragment fragment = TripCardListFragment.newInstance(sectionType);
                     requireActivity().getSupportFragmentManager()
@@ -192,24 +246,20 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(), "Error loading trips", Toast.LENGTH_SHORT).show();
             }
         });
-
         return view;
     }
 
-    @Nullable
-    private Date getFirstTripStartDate(TripConfiguration trip) {
-        List<Destination> destinations = trip.getDestinations();
-        if (destinations != null && !destinations.isEmpty()) {
-            String dateStr = destinations.get(0).getTripStartDate();
-            if (dateStr != null && !dateStr.isEmpty()) {
-                try {
-                    return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(dateStr);
-                } catch (java.text.ParseException e) {
-                    e.printStackTrace();
-                }
-            }
+    private void maybeShowWeatherCard() {
+        if (shortTermDone && longTermDone) {
+            WeatherCardHelper.finalizeAndDisplayWeatherCard(
+                    weatherCard,
+                    weatherCardTitle,
+                    weatherTemperature
+            );
+            // Resetăm flagurile pentru următoarea încărcare
+            shortTermDone = false;
+            longTermDone = false;
         }
-        return null;
     }
 
     @Override
@@ -220,59 +270,4 @@ public class HomeFragment extends Fragment {
             shouldResetTripConfiguration = false;
         }
     }
-
-    private void importCitiesToFirestore() {
-        try {
-            InputStream is = requireContext().getAssets().open("cities_part2.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
-            String json = new String(buffer, StandardCharsets.UTF_8);
-            JSONArray jsonArray = new JSONArray(json);
-            Log.d("FIREBASE_city", "Total cities: " + jsonArray.length());
-
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            WriteBatch batch = db.batch();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject cityObj = jsonArray.getJSONObject(i);
-
-                String cityName = cityObj.getString("city");
-                String cityAscii = cityObj.getString("city_ascii");
-                String country = cityObj.getString("country");
-                String iso2 = cityObj.getString("iso2");
-                String lat = cityObj.getString("lat");
-                String lng = cityObj.getString("lng");
-
-                Map<String, Object> cityData = new HashMap<>();
-                cityData.put("city", cityName);
-                cityData.put("city_ascii", cityAscii);
-                cityData.put("country", country);
-                cityData.put("iso2", iso2);
-                cityData.put("lat", lat);
-                cityData.put("lng", lng);
-
-                DocumentReference docRef = db.collection("cities").document(); // Firestore generează ID automat
-                batch.set(docRef, cityData);
-                Thread.sleep(20);
-                if ((i + 1) % 100 == 0 || i == jsonArray.length() - 1) {
-                    int current = i + 1;
-                    Log.d("FIREBASE_city", "Imported cities: " + current);
-                    batch.commit()
-                            .addOnSuccessListener(unused -> Log.d("FIREBASE_city", "Batch of cities committed."))
-                            .addOnFailureListener(e -> Log.e("FIREBASE_city", "Batch commit failed", e));
-                    batch = db.batch(); // pornim un nou batch
-                }
-            }
-
-        } catch (IOException | JSONException e) {
-            Log.e("FIREBASE_city", "Error loading JSON or writing to Firestore", e);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            Log.e("FIREBASE_city", "Thread sleep interrupted", e);
-        }
-    }
-
 }

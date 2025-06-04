@@ -4,34 +4,21 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
-
-<!--    <com.airbnb.lottie.LottieAnimationView-->
-<!--        android:id="@+id/home_animation"-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        app:lottie_autoPlay="true"-->
-<!--        app:lottie_loop="true"-->
-<!--        app:lottie_fileName="home_loading.lottie" />-->
-
+    android:paddingHorizontal="12dp"
+    android:paddingBottom="0dp"
+    android:paddingTop="12dp">
 
     <TextView
         android:id="@+id/user_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello!"
+        android:paddingTop="12dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:paddingBottom="12dp" />
+        android:paddingBottom="2dp" />
 
-<!--    <Button-->
-<!--        android:id="@+id/importCitiesButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Import Cities"-->
-<!--        android:layout_marginTop="24dp"/>-->
+    <include layout="@layout/item_weather_card" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_combined_recycler"
