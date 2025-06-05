@@ -1,6 +1,7 @@
 package com.example.luggageassistant.view;
 
 import android.animation.ValueAnimator;
+import android.net.ParseException;
 import android.os.Bundle;
 
 import android.text.TextUtils;
@@ -54,6 +55,9 @@ public class HomeFragment extends Fragment {
     private TextView weatherTemperature, weatherCardTitle;
     private boolean shortTermDone = false;
     private boolean longTermDone = false;
+    private boolean shortTermRequired = false;
+    private boolean longTermRequired = false;
+    private String currentTripIdForWeather;
 
     @Nullable
     @Override
@@ -160,6 +164,33 @@ public class HomeFragment extends Fragment {
 
                     TripConfiguration nextTrip = upcoming.get(0);
                     String tripId = nextTrip.getTripId();
+                    // Resetăm flagurile
+                    shortTermRequired = false;
+                    longTermRequired = false;
+
+                    // Verificăm ce tipuri de forecast sunt necesare
+                    List<Destination> destinations = nextTrip.getDestinations();
+                    Date today = new Date();
+                    long todayMillis = today.getTime();
+
+                    for (Destination dest : destinations) {
+                        List<String> dateRange = WeatherCardHelper.generateDateRange(dest.getTripStartDate(), dest.getTripEndDate());
+
+                        for (String dateStr : dateRange) {
+                            try {
+                                Date day = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(dateStr);
+                                long diffDays = (day.getTime() - todayMillis) / (1000 * 60 * 60 * 24);
+
+                                if (diffDays < 0 || diffDays > 500) continue;
+
+                                if (diffDays <= 14) shortTermRequired = true;
+                                else longTermRequired = true;
+
+                            } catch (java.text.ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
 
                     PackingListRepository.getInstance().getFinalPackingItems(userId, tripId, new OnItemsLoadedListener() {
                         @Override
@@ -194,7 +225,7 @@ public class HomeFragment extends Fragment {
                     });
 
                     // ✅ VERIFICĂ DACĂ AVEM CACHE PENTRU AZI
-                    if (WeatherCacheHelper.isCachedForToday(requireContext())) {
+                    if (WeatherCacheHelper.isValidForTodayTrip(requireContext(), tripId)) {
                         float minTemp = WeatherCacheHelper.getMinTemp(requireContext());
                         float maxTemp = WeatherCacheHelper.getMaxTemp(requireContext());
                         List<String> cities = WeatherCacheHelper.getCities(requireContext());
@@ -208,6 +239,10 @@ public class HomeFragment extends Fragment {
                                 maxTemp
                         );
                     } else {
+                        weatherCard.setVisibility(View.GONE);
+                        WeatherCacheHelper.clearCache(requireContext());
+                        WeatherCardHelper.resetGlobalWeatherState();
+
                         // ✅ APELĂM LOGICA DE FORECAST DOAR DACĂ NU AVEM CACHE
                         view.post(() -> WeatherCardHelper.processAndDisplayAggregatedWeather(
                                 weatherCard,
@@ -250,15 +285,25 @@ public class HomeFragment extends Fragment {
     }
 
     private void maybeShowWeatherCard() {
-        if (shortTermDone && longTermDone) {
+        Log.d("WEATHER_CHECK", "maybeShowWeatherCard(): shortTermDone=" + shortTermDone +
+                ", longTermDone=" + longTermDone +
+                ", required: short=" + shortTermRequired + ", long=" + longTermRequired);
+
+
+        boolean shortOk = !shortTermRequired || shortTermDone;
+        boolean longOk = !longTermRequired || longTermDone;
+
+        if (shortOk && longOk) {
             WeatherCardHelper.finalizeAndDisplayWeatherCard(
                     weatherCard,
                     weatherCardTitle,
-                    weatherTemperature
+                    weatherTemperature,
+                    upcomingTrips.get(0).getTripId()
             );
-            // Resetăm flagurile pentru următoarea încărcare
             shortTermDone = false;
             longTermDone = false;
+            shortTermRequired = false;
+            longTermRequired = false;
         }
     }
 

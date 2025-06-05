@@ -17,14 +17,16 @@ public class WeatherCacheHelper {
     private static final String KEY_MAX_TEMP = "max_temp";
     private static final String KEY_DATE = "forecast_date";
     private static final String KEY_CITIES = "forecast_cities";
+    private static final String KEY_TRIP_ID = "trip_id";
 
-    public static void saveAggregatedForecast(Context context, float minTemp, float maxTemp, List<String> cities) {
+    public static void saveAggregatedForecast(Context context, float minTemp, float maxTemp, List<String> cities, String tripId) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         prefs.edit()
                 .putFloat(KEY_MIN_TEMP, minTemp)
                 .putFloat(KEY_MAX_TEMP, maxTemp)
                 .putString(KEY_DATE, getTodayDate())
                 .putString(KEY_CITIES, TextUtils.join(",", cities))
+                .putString(KEY_TRIP_ID, tripId)
                 .apply();
     }
 
@@ -49,6 +51,18 @@ public class WeatherCacheHelper {
 
     private static String getTodayDate() {
         return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    }
+
+    public static boolean isValidForTodayTrip(Context context, String currentTripId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String savedDate = prefs.getString(KEY_DATE, null);
+        String savedTripId = prefs.getString(KEY_TRIP_ID, null);
+        return getTodayDate().equals(savedDate) && currentTripId.equals(savedTripId);
+    }
+
+    public static void clearCache(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        prefs.edit().clear().apply();
     }
 }
 

@@ -190,7 +190,8 @@ public class WeatherCardHelper {
                     Log.d("FORECAST_DEBUG", "City: " + city + ", Date: " + dateStr +
                             ", Min: " + forecastDay.temp.min + "°C, Max: " + forecastDay.temp.max + "°C");
 
-                    updateMaxOnly(globalMaxTemps, forecastDay.temp.max);
+//                    updateMaxOnly(globalMaxTemps, forecastDay.temp.max);
+                    updateGlobalMinAndMax(forecastDay.temp.min, forecastDay.temp.max);
                 } catch (ParseException e) {
                     Log.e("PARSE_ERR", "Bad date", e);
                 }
@@ -227,7 +228,8 @@ public class WeatherCardHelper {
                 }
             }
 
-            updateMaxOnly(globalMaxTemps, max);
+//            updateMaxOnly(globalMaxTemps, max);
+            updateGlobalMinAndMax(min, max);
         } catch (JSONException e) {
             Log.e("PARSE_ERR", "Failed JSON", e);
         }
@@ -241,14 +243,10 @@ public class WeatherCardHelper {
             return "";
         }
     }
-
-    private static void updateMaxOnly(float[] globalMinMaxMax, float max) {
-        globalMinMaxMax[0] = Math.min(globalMinMaxMax[0], max); // min dintre maxime
-        globalMinMaxMax[1] = Math.max(globalMinMaxMax[1], max); // max dintre maxime
-    }
     public static void finalizeAndDisplayWeatherCard(CardView weatherCard,
                                                      TextView weatherLocation,
-                                                     TextView weatherTemperature) {
+                                                     TextView weatherTemperature,
+                                                     String tripId) {
         if (globalMaxTemps[0] == Float.MAX_VALUE || globalMaxTemps[1] == Float.MIN_VALUE) {
             weatherCard.setVisibility(View.GONE);
             return;
@@ -263,7 +261,8 @@ public class WeatherCardHelper {
                 context,
                 globalMaxTemps[0],
                 globalMaxTemps[1],
-                new ArrayList<>(globalCityLabels)
+                new ArrayList<>(globalCityLabels),
+                tripId
         );
 
         // Resetăm valorile pentru următorul apel
@@ -271,4 +270,22 @@ public class WeatherCardHelper {
         globalMaxTemps[1] = Float.MIN_VALUE;
         globalCityLabels.clear();
     }
+
+    public static void resetGlobalWeatherState() {
+        globalMaxTemps[0] = Float.MAX_VALUE;
+        globalMaxTemps[1] = Float.MIN_VALUE;
+        globalCityLabels.clear();
+    }
+
+    private static void updateMaxOnly(float[] globalMinMaxMax, float max) {
+        globalMinMaxMax[0] = Math.min(globalMinMaxMax[0], max); // min dintre maxime
+        globalMinMaxMax[1] = Math.max(globalMinMaxMax[1], max); // max dintre maxime
+    }
+
+    private static void updateGlobalMinAndMax(float min, float max) {
+        globalMaxTemps[0] = Math.min(globalMaxTemps[0], min); // actualizează minimul
+        globalMaxTemps[1] = Math.max(globalMaxTemps[1], max); // actualizează maximul
+    }
+
+
 }
