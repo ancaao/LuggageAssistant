@@ -89,8 +89,11 @@ public class FinalPersonPackingListFragment extends Fragment {
 
             if (deleteMode) {
                 btnDelete.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.error));
+                btnDelete.setTextColor(ContextCompat.getColor(requireContext(), R.color.background));
+
             } else {
-                btnDelete.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.surface)); // sau culoarea implicită
+                btnDelete.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.background)); // sau culoarea implicită
+                btnDelete.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary));
             }
         });
 
@@ -102,6 +105,7 @@ public class FinalPersonPackingListFragment extends Fragment {
             recentlyDeletedItem = itemToDelete;
 
             Snackbar.make(view, "Item deleted", Snackbar.LENGTH_LONG)
+                    .setAnchorView(R.id.actionButtonsLayout)
                     .setAction("UNDO", v1 -> {
                         adapter.restoreItem(itemToDelete); // readaugă în listă
                         recentlyDeletedItem = null; // anulăm ștergerea

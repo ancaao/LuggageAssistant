@@ -58,6 +58,9 @@ public class WeatherCardHelper {
             String city = dest.getCity();
             String country = dest.getCountry();
 
+            if (!globalCityLabels.contains(city)) {
+                globalCityLabels.add(city);
+            }
             List<String> dateRange = generateDateRange(dest.getTripStartDate(), dest.getTripEndDate());
 
             boolean needsShortTerm = false;
@@ -277,15 +280,8 @@ public class WeatherCardHelper {
         globalCityLabels.clear();
     }
 
-    private static void updateMaxOnly(float[] globalMinMaxMax, float max) {
-        globalMinMaxMax[0] = Math.min(globalMinMaxMax[0], max); // min dintre maxime
-        globalMinMaxMax[1] = Math.max(globalMinMaxMax[1], max); // max dintre maxime
-    }
-
     private static void updateGlobalMinAndMax(float min, float max) {
         globalMaxTemps[0] = Math.min(globalMaxTemps[0], min); // actualizează minimul
         globalMaxTemps[1] = Math.max(globalMaxTemps[1], max); // actualizează maximul
     }
-
-
 }

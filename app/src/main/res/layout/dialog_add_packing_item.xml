@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="@android:color/white">
+    android:background="@color/background">
 
     <!-- Item name (cu TextInputLayout ca la login) -->
     <com.google.android.material.textfield.TextInputLayout
@@ -13,10 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="12dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/itemNameInput"
+            android:backgroundTint="@color/background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Item name" />
@@ -25,16 +26,17 @@
     <!-- Spinner pentru categorie -->
     <Spinner
         android:id="@+id/categorySpinner"
+        android:backgroundTint="@color/primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="24dp" />
 
     <!-- Categorie personalizată -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/customCategoryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:visibility="gone">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -49,6 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Quantity"
+        android:textSize="18dp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp" />
@@ -59,7 +62,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMinus"
@@ -104,6 +107,8 @@
             android:layout_weight="1"
             android:minWidth="0dp"
             android:paddingHorizontal="0dp"
+            android:backgroundTint="@color/error"
+            android:textColor="@color/background"
             android:layout_marginEnd="8dp" />
 
         <Button
@@ -111,6 +116,8 @@
             android:text="Save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/success"
+            android:textColor="@color/background"
             android:layout_weight="1"
             android:minWidth="0dp"
             android:paddingHorizontal="0dp"
