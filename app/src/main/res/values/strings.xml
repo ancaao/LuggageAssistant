@@ -34,7 +34,7 @@
     <string name="select_partner_s_special_preferences">Select Partner\'s Special Preferences</string>
     <string name="name">Name</string>
     <string name="add_luggage">Add luggage</string>
-    <string name="add_another_luggage">Add luggage (+)</string>
+    <string name="add_another_luggage">Add luggage</string>
     <string name="back">Back</string>
     <string-array name="special_preferences">
         <item>Medication</item>

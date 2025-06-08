@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,18 @@ import com.example.luggageassistant.R;
 import com.example.luggageassistant.utils.InputValidator;
 import com.example.luggageassistant.viewmodel.AccountViewModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class AccountFragment extends Fragment {
     private MaterialButton logoutButton, btnChangePassword, btnDeleteAccount;
@@ -34,6 +45,10 @@ public class AccountFragment extends Fragment {
     private TextInputEditText editTextFirstName, editTextLastName, editTextEmail, editTextPhone;
     private TextView btnEditFirstName, btnEditLastName, btnEditEmail, btnEditPhone;
     private TextInputLayout layoutFirstName, layoutLastName, layoutEmail, layoutPhone;
+    private CircularProgressIndicator countryProgressIndicator;
+//    private TextView textCountryCount;
+    TextView textCountryInsideCircle;
+
 
     @Nullable
     @Override
@@ -57,6 +72,11 @@ public class AccountFragment extends Fragment {
         btnEditLastName = view.findViewById(R.id.btnEditLastName);
         btnEditEmail = view.findViewById(R.id.btnEditEmail);
         btnEditPhone = view.findViewById(R.id.btnEditPhone);
+
+        countryProgressIndicator = view.findViewById(R.id.countryProgressIndicator);
+        countryProgressIndicator.setIndeterminate(false);
+        textCountryInsideCircle = view.findViewById(R.id.textCountryInsideCircle);
+
 
         logoutButton = view.findViewById(R.id.btn_logout);
         btnChangePassword = view.findViewById(R.id.btn_change_password);
@@ -201,23 +221,51 @@ public class AccountFragment extends Fragment {
 
             dialog.show();
 
-//            Window window = dialog.getWindow();
-//            if (window != null) {
-//                GradientDrawable background = new GradientDrawable();
-//                background.setCornerRadius(30f);
-//                window.setBackgroundDrawable(background);
-//            }
-
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(requireContext(), R.color.primary));
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(requireContext(), R.color.primary));
 
         });
 
-
+        loadVisitedCountries();
         accountViewModel.loadUserData();
-
         return view;
     }
+
+    private void loadVisitedCountries() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .document(user.getUid())
+                .collection("trips")
+                .get()
+                .addOnSuccessListener(tripsSnapshot -> {
+                    Set<String> uniqueCountries = new HashSet<>();
+
+                    for (DocumentSnapshot tripDoc : tripsSnapshot) {
+                        List<Map<String, Object>> destinations = (List<Map<String, Object>>) tripDoc.get("destinations");
+                        if (destinations != null) {
+                            for (Map<String, Object> dest : destinations) {
+                                String country = (String) dest.get("country");
+                                if (country != null && !country.trim().isEmpty()) {
+                                    uniqueCountries.add(country.trim());
+                                }
+                            }
+                        }
+                    }
+
+                    int visitedCount = uniqueCountries.size();
+                    countryProgressIndicator.setProgressCompat(visitedCount, true);
+                    textCountryInsideCircle.setText(visitedCount + " / 195");
+
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("AccountFragment", "Failed to load trips", e);
+                    Toast.makeText(requireContext(), "Error loading countries", Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
     private void showPasswordDialogForDeletion() {
         final EditText input = new EditText(requireContext());

@@ -3,6 +3,7 @@
     <!-- Backgrounds -->
     <color name="background">#EFE7D9</color>
     <color name="surface">#F9F5EB</color>
+    <color name="white">#FFFFFF</color>
 
     <!-- Primary, Secondary, Tertiary -->
     <color name="primary">#304875</color>

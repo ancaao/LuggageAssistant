@@ -22,7 +22,7 @@
             android:id="@+id/removeDestinationButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Remove destination (-)"
+            android:text="Remove destination"
             android:backgroundTint="@color/error"
             android:textColor="@color/onPrimary" />
 
@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Country"
+            android:text="Country *"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onBackground" />
 
@@ -40,8 +40,8 @@
             android:layout_height="wrap_content"
             android:text="Select Country"
             android:layout_marginTop="4dp"
-            android:backgroundTint="@color/surface"
-            android:textColor="@color/inputText"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/surface"
             app:cornerRadius="24dp"
             android:strokeWidth="1"
             android:strokeColor="@color/inputBorder"
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onBackground"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="0dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dynamicCityInputLayout"
@@ -84,10 +84,14 @@
                 android:id="@+id/dynamicCitySpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="City"
+                android:hint="City *"
                 android:inputType="text"
-                android:minHeight="56dp"
                 android:paddingVertical="16dp"
+                android:minHeight="56dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:textColor="@color/onBackground"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -97,7 +101,7 @@
             android:id="@+id/dynamicStartDateInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Start Date"
+            android:hint="Start Date *"
             android:layout_marginTop="16dp"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/inputBorder"
@@ -112,7 +116,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="date"
-                android:hint="dd/MM/yyyy"
+                android:minHeight="56dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:textColor="@color/inputText"
                 android:focusable="false"
                 android:clickable="true" />
@@ -123,8 +131,8 @@
             android:id="@+id/dynamicEndDateInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="End Date"
-            android:layout_marginTop="12dp"
+            android:hint="End Date *"
+            android:paddingTop="12dp"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/inputBorder"
             app:boxBackgroundColor="@color/surface"
@@ -138,7 +146,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="date"
-                android:hint="dd/MM/yyyy"
+                android:minHeight="56dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:textColor="@color/inputText"
                 android:focusable="false"
                 android:clickable="true" />

@@ -20,7 +20,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Travel Purpose"
+            android:text="Travel Purpose *"
+            android:textStyle="bold"
             android:textColor="@color/onBackground"
             android:paddingTop="16dp"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
@@ -49,7 +50,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Planned Activities"
+            android:text="Planned Activities *"
+            android:textStyle="bold"
             android:textColor="@color/onBackground"
             android:paddingTop="16dp"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
@@ -79,6 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Special Events"
+            android:textStyle="bold"
             android:textColor="@color/onBackground"
             android:paddingTop="16dp"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
@@ -109,7 +112,7 @@
                 android:text="@string/back"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@color/surface"
-                android:textColor="@color/onPrimary" />
+                android:textColor="@color/primary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/submitButton"

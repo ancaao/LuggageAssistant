@@ -314,5 +314,6 @@ public class HomeFragment extends Fragment {
             tripConfigurationViewModel.resetTripConfiguration();
             shouldResetTripConfiguration = false;
         }
+
     }
 }

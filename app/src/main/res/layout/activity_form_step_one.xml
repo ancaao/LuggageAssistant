@@ -29,9 +29,15 @@
                 android:id="@+id/nameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
+                android:hint="Name *"
+                android:minHeight="56dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:inputType="textCapWords"
-                android:textColor="@color/inputText" />
+                android:backgroundTint="@color/background"
+                android:textColor="@color/primary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -49,9 +55,15 @@
                 android:id="@+id/ageInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Age"
+                android:hint="Age *"
+                android:minHeight="56dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:inputType="number"
-                android:textColor="@color/inputText" />
+                android:backgroundTint="@color/background"
+                android:textColor="@color/primary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -64,9 +76,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gender"
+                android:text="Gender *"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:textColor="@color/onBackground" />
+                android:textColor="@color/primary" />
 
             <RadioGroup
                 android:id="@+id/genderGroup"
@@ -80,7 +92,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/onBackground"
-                    android:text="Female" />
+                    android:text="Female"
+                    android:textStyle="bold"/>
 
                 <RadioButton
                     android:id="@+id/maleRadio"
@@ -88,7 +101,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:textColor="@color/onBackground"
-                    android:text="Male" />
+                    android:text="Male"
+                    android:textStyle="bold" />
 
                 <RadioButton
                     android:id="@+id/otherRadio"
@@ -96,7 +110,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:textColor="@color/onBackground"
-                    android:text="Other" />
+                    android:text="Other"
+                    android:textStyle="bold"/>
             </RadioGroup>
 
             <TextView
@@ -125,7 +140,7 @@
             android:layout_height="wrap_content"
             android:text="No preferences selected"
             android:textColor="@color/onBackground"
-            android:paddingTop="8dp"
+            android:paddingTop="0dp"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
         <LinearLayout
@@ -141,8 +156,18 @@
             android:layout_height="wrap_content"
             android:text="Add Trip Partner"
             android:layout_marginTop="8dp"
-            android:backgroundTint="@color/primary"
-            android:textColor="@color/onPrimary" />
+            android:backgroundTint="@color/tertiary"
+            android:textColor="@color/onPrimary"
+            android:layout_marginVertical="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+
+            android:layout_gravity="center_horizontal"
+            app:cornerRadius="24dp"/>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -158,8 +183,8 @@
                 android:layout_height="wrap_content"
                 android:text="Cancel"
                 android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/surface"
-                android:textColor="@color/onPrimary" />
+                android:backgroundTint="@color/error"
+                android:textColor="@color/background" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/stepOneNextButton"
@@ -169,7 +194,7 @@
                 android:text="Next"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="@color/success"
-                android:textColor="@color/onPrimary" />
+                android:textColor="@color/background" />
         </LinearLayout>
 
     </LinearLayout>

@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:hint="Name"
+        android:hint="Name *"
         app:boxBackgroundMode="outline"
         app:boxStrokeWidth="2dp"
         app:boxBackgroundColor="@color/surface"
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:hint="Age"
+        android:hint="Age *"
         app:boxBackgroundMode="outline"
         app:boxStrokeWidth="2dp"
         app:boxBackgroundColor="@color/surface"
@@ -75,7 +75,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gender"
+            android:text="Gender *"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onBackground" />
 
@@ -91,7 +91,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Female"
-                android:textColor="@color/onBackground" />
+                android:textColor="@color/onBackground"
+                android:textStyle="bold"/>
 
             <RadioButton
                 android:id="@+id/partnerMaleRadio"
@@ -99,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Male"
-                android:textColor="@color/onBackground" />
+                android:textColor="@color/onBackground"
+                android:textStyle="bold"/>
 
             <RadioButton
                 android:id="@+id/partnerOtherRadio"
@@ -107,7 +109,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Other"
-                android:textColor="@color/onBackground" />
+                android:textColor="@color/onBackground"
+                android:textStyle="bold"/>
         </RadioGroup>
 
         <TextView
@@ -136,7 +139,7 @@
         android:layout_height="wrap_content"
         android:text="No preferences selected"
         android:textColor="@color/onBackground"
-        android:paddingTop="8dp"
+        android:paddingTop="0dp"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
 </LinearLayout>

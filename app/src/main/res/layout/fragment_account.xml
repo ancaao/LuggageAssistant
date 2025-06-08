@@ -182,6 +182,48 @@
             android:focusable="true" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textCountryTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Countries visited:"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/onBackground" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/countryProgressIndicator"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:indicatorSize="150dp"
+            app:trackThickness="12dp"
+            app:indicatorInset="0dp"
+            app:indicatorColor="@color/primary"
+            app:trackColor="@color/surface"
+            android:max="195"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/textCountryInsideCircle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0 / 195"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/onBackground"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+
+
     <LinearLayout
         android:id="@+id/accountButtonsContainer"
         android:layout_width="match_parent"

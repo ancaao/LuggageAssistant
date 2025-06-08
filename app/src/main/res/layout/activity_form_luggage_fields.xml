@@ -21,7 +21,7 @@
             android:id="@+id/removeLuggageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Remove luggage (-)"
+            android:text="Remove luggage"
             android:backgroundTint="@color/error"
             android:textColor="@color/onPrimary" />
 
@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Owner(s)"
+            android:text="Owner(s) *"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onBackground"
             android:paddingTop="16dp" />
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:text="Select owner(s)"
             android:layout_marginTop="4dp"
-            android:backgroundTint="@color/surface"
+            android:backgroundTint="@color/white"
             android:textColor="@color/inputText"
             app:cornerRadius="24dp"
             android:strokeWidth="1"
@@ -64,7 +64,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Luggage Type"
+            android:text="Luggage Type *"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onBackground"
             android:paddingTop="16dp" />
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:text="Luggage type"
             android:layout_marginTop="4dp"
-            android:backgroundTint="@color/surface"
+            android:backgroundTint="@color/white"
             android:textColor="@color/inputText"
             app:cornerRadius="24dp"
             android:strokeWidth="1"
@@ -94,93 +94,115 @@
             android:visibility="gone"
             android:paddingTop="4dp"/>
 
-        <!-- Length -->
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="12dp"
-            android:hint="Length (cm)"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lengthInput"
+            android:weightSum="2">
+            <!-- Length -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@color/inputText" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:errorEnabled="true"
+                android:layout_marginTop="12dp">
 
-        <!-- Width -->
-        <com.google.android.material.textfield.TextInputLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lengthInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:hint="Length (cm)"
+                    android:inputType="number"
+                    android:textColor="@color/inputText" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Width -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:errorEnabled="true"
+                android:layout_marginTop="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/widthInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Width (cm)"
+                    android:backgroundTint="@color/white"
+                    android:inputType="number"
+                    android:textColor="@color/inputText" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Width (cm)"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/widthInput"
+            android:orientation="horizontal"
+            android:layout_marginTop="0dp"
+            android:weightSum="2">
+            <!-- Height -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@color/inputText" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:errorEnabled="true"
+                android:layout_marginTop="12dp">
 
-        <!-- Height -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Height (cm)"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/heightInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Height (cm)"
+                    android:backgroundTint="@color/white"
+                    android:inputType="number"
+                    android:textColor="@color/inputText" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/heightInput"
+            <!-- Weight -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@color/inputText" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:errorEnabled="true"
+                android:layout_marginTop="12dp">
 
-        <!-- Weight -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Weight (kg)"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/inputBorder"
-            app:boxBackgroundColor="@color/surface"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/weightInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:textColor="@color/inputText" />
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/weightInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Weight (kg)"
+                    android:backgroundTint="@color/white"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/inputText" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
         <!-- Accessories -->
         <com.google.android.material.button.MaterialButton
@@ -189,8 +211,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Select accessories"
-            android:backgroundTint="@color/surface"
-            android:textColor="@color/inputText"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/surface"
             app:cornerRadius="24dp"
             android:strokeWidth="1"
             android:strokeColor="@color/inputBorder"
@@ -205,7 +227,6 @@
             android:layout_height="wrap_content"
             android:text="No accessories selected"
             android:textColor="@color/onBackground"
-            android:paddingTop="8dp"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

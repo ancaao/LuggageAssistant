@@ -15,7 +15,7 @@
             android:innerRadiusRatio="3"
             android:thicknessRatio="8"
             android:useLevel="true">
-            <solid android:color="#B388EB"/> <!-- mov pastel -->
+            <solid android:color="@color/primary"/> <!-- mov pastel -->
         </shape>
     </item>
 </layer-list>
