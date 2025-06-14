@@ -266,14 +266,27 @@ public class HomeFragment extends Fragment {
                     sections.add(new HomeCombinedAdapter.TripSection("Past Trips", "past", past.subList(0, Math.min(3, past.size()))));
 
                 // ✅ Setează adapterul pentru RecyclerView
-                recyclerView.setAdapter(new HomeCombinedAdapter(sections, sectionType -> {
-                    TripCardListFragment fragment = TripCardListFragment.newInstance(sectionType);
-                    requireActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_container, fragment)
-                            .addToBackStack(null)
-                            .commit();
-                }));
+                recyclerView.setAdapter(new HomeCombinedAdapter(
+                        sections,
+                        sectionType -> {
+                            TripCardListFragment fragment = TripCardListFragment.newInstance(sectionType);
+                            requireActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_container, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        },
+                        trip -> {
+                            // Navigare către FinalPackingListFragment
+                            FinalPackingListFragment fragment = FinalPackingListFragment.newInstance(trip.getTripId());
+                            requireActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_container, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                ));
+
             }
 
             @Override

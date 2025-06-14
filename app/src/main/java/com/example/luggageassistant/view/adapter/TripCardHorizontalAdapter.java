@@ -32,11 +32,15 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
     private final List<TripConfiguration> trips;
     private final String sectionType;
     private final HomeCombinedAdapter.OnSeeAllClickListener listener;
+    private final OnTripCardClickListener tripCardClickListener;
 
-    public TripCardHorizontalAdapter(List<TripConfiguration> trips, String sectionType, HomeCombinedAdapter.OnSeeAllClickListener listener) {
+    public TripCardHorizontalAdapter(List<TripConfiguration> trips, String sectionType,
+                                     HomeCombinedAdapter.OnSeeAllClickListener listener,
+                                     OnTripCardClickListener tripCardClickListener) {
         this.trips = new ArrayList<>(trips);
         this.sectionType = sectionType;
         this.listener = listener;
+        this.tripCardClickListener = tripCardClickListener;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
         if (viewType == VIEW_TYPE_TRIP) {
             View view = inflater.inflate(R.layout.item_home_trip_card, parent, false);
             ViewGroup.LayoutParams params = view.getLayoutParams();
-            params.width = (int)(parent.getResources().getDisplayMetrics().widthPixels / 2.5f);
+            params.width = (int) (parent.getResources().getDisplayMetrics().widthPixels / 2.5f);
 
 
             view.setLayoutParams(params);
@@ -59,7 +63,7 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
         } else {
             View view = inflater.inflate(R.layout.item_home_trip_card, parent, false);
             ViewGroup.LayoutParams params = view.getLayoutParams();
-            params.width = (int)(parent.getResources().getDisplayMetrics().widthPixels / 2.5f);
+            params.width = (int) (parent.getResources().getDisplayMetrics().widthPixels / 2.5f);
 
 
             view.setLayoutParams(params);
@@ -104,6 +108,8 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
                         }
                         vh.persons.setText(TextUtils.join(", ", names));
                     });
+
+            vh.itemView.setOnClickListener(v -> tripCardClickListener.onTripCardClick(trip));
 
         } else {
             SeeAllViewHolder vh = (SeeAllViewHolder) holder;
@@ -163,6 +169,7 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
         TextView city, country, startDate, endDate, purpose, persons;
         LinearLayout cityCountryContainer;
         ImageView iconPurpose, iconPersons, iconStartDate, iconEndDate;
+
         public SeeAllViewHolder(@NonNull View itemView) {
             super(itemView);
             city = itemView.findViewById(R.id.tv_city);
@@ -179,5 +186,8 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
             iconEndDate = itemView.findViewById(R.id.icon_end_date);
         }
     }
-}
 
+    public interface OnTripCardClickListener {
+        void onTripCardClick(TripConfiguration trip);
+    }
+}

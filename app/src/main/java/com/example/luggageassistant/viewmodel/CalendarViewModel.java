@@ -77,8 +77,14 @@ public class CalendarViewModel extends ViewModel {
         List<Pair<TripConfiguration, Destination>> results = new ArrayList<>();
         String clickedDateStr = clickedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-        for (TripConfiguration trip : tripsLiveData.getValue()) {
-            for (Destination destination : trip.getDestinations()) {
+        List<TripConfiguration> trips = tripsLiveData.getValue();
+        if (trips == null) return results; // 🔐 protecție reală împotriva crash-ului
+
+        for (TripConfiguration trip : trips) {
+            List<Destination> destinations = trip.getDestinations();
+            if (destinations == null) continue; // 🔒 fix crash here
+
+            for (Destination destination : destinations) {
                 if (isDateInRange(clickedDateStr, destination.getTripStartDate(), destination.getTripEndDate())) {
                     results.add(new Pair<>(trip, destination));
                 }
@@ -104,6 +110,5 @@ public class CalendarViewModel extends ViewModel {
     public Map<LocalDate, List<TripConfiguration>> getVacationDaysMap() {
         return vacationDaysMap;
     }
-
 }
 

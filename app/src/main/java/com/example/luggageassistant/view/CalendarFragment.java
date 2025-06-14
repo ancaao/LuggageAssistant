@@ -141,6 +141,3 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         calendarViewModel.loadTrips(userId);
     }
 }
-
-
-

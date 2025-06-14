@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeCombinedAdapter extends RecyclerView.Adapter<HomeCombinedAdapter.SectionViewHolder> {
+    private final TripCardHorizontalAdapter.OnTripCardClickListener tripCardClickListener;
 
     public interface OnSeeAllClickListener {
         void onSeeAllClick(String sectionType);
@@ -30,9 +31,10 @@ public class HomeCombinedAdapter extends RecyclerView.Adapter<HomeCombinedAdapte
     private final List<TripSection> sections;
     private final OnSeeAllClickListener listener;
 
-    public HomeCombinedAdapter(List<TripSection> sections, OnSeeAllClickListener listener) {
+    public HomeCombinedAdapter(List<TripSection> sections, OnSeeAllClickListener listener, TripCardHorizontalAdapter.OnTripCardClickListener tripCardClickListener) {
         this.sections = sections;
         this.listener = listener;
+        this.tripCardClickListener = tripCardClickListener;
     }
 
     @NonNull
@@ -66,7 +68,12 @@ public class HomeCombinedAdapter extends RecyclerView.Adapter<HomeCombinedAdapte
         }
 
 
-        TripCardHorizontalAdapter adapter = new TripCardHorizontalAdapter(section.getTrips(), section.getType(), listener);
+        TripCardHorizontalAdapter adapter = new TripCardHorizontalAdapter(
+                section.getTrips(),
+                section.getType(),
+                listener,
+                tripCardClickListener
+        );
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerView.setAdapter(adapter);
     }

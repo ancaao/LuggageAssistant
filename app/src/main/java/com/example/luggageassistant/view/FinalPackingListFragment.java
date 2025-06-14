@@ -1,5 +1,7 @@
 package com.example.luggageassistant.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +40,14 @@ public class FinalPackingListFragment extends Fragment {
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
 
+    public static FinalPackingListFragment newInstance(String tripId) {
+        FinalPackingListFragment fragment = new FinalPackingListFragment();
+        Bundle args = new Bundle();
+        args.putString("tripId", tripId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Nullable
     @Override
@@ -55,9 +65,20 @@ public class FinalPackingListFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(FinalListViewModel.class);
 
-        tripId = requireContext()
-                .getSharedPreferences("app_prefs", getContext().MODE_PRIVATE)
-                .getString("current_trip_id", null);
+        if (getArguments() != null && getArguments().containsKey("tripId")) {
+            tripId = getArguments().getString("tripId");
+
+            SharedPreferences.Editor editor = requireContext()
+                    .getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                    .edit();
+            editor.putString("current_trip_id", tripId);
+            editor.apply();
+
+        } else {
+            tripId = requireContext()
+                    .getSharedPreferences("app_prefs", getContext().MODE_PRIVATE)
+                    .getString("current_trip_id", null);
+        }
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -99,16 +120,17 @@ public class FinalPackingListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        tripId = requireContext()
-                .getSharedPreferences("app_prefs", getContext().MODE_PRIVATE)
-                .getString("current_trip_id", null);
+        if (tripId == null || tripId.isEmpty()) {
+            tripId = requireContext()
+                    .getSharedPreferences("app_prefs", getContext().MODE_PRIVATE)
+                    .getString("current_trip_id", null);
+        }
 
         if (tripId != null && !tripId.isEmpty()) {
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             viewModel.loadItems(userId, tripId); // 🔁 Reîncarcă lista din Firebase
         } else {
             Toast.makeText(getContext(), "Missing trip ID", Toast.LENGTH_LONG).show();
         }
     }
-
 }
