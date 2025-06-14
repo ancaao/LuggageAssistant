@@ -168,8 +168,14 @@ public class StepThreeActivity extends AppCompatActivity {
 
             startActivity(new Intent(this, StepFourActivity.class));
         });
-
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveCurrentDestinations(); // 🧠 salvăm chiar dacă userul apasă „Back”
+    }
+
 
     private void loadCountriesFromJson() {
         try {
@@ -421,6 +427,14 @@ public class StepThreeActivity extends AppCompatActivity {
         isValid &= InputValidator.isFieldNotEmpty(startDateInputLayout);
         isValid &= InputValidator.isFieldNotEmpty(endDateInputLayout);
 
+        ArrayAdapter<String> cityAdapter = (ArrayAdapter<String>) cityEditText.getAdapter();
+        if (cityAdapter == null || cityAdapter.getPosition(cityEditText.getText().toString()) < 0) {
+            cityInputLayout.setError("Please select a valid city");
+            isValid = false;
+        } else {
+            cityInputLayout.setError(null);
+        }
+
         isValid &= InputValidator.isEndDateAfterOrEqual(
                 startDateInput.getText().toString(),
                 endDateInput.getText().toString(),
@@ -457,10 +471,6 @@ public class StepThreeActivity extends AppCompatActivity {
             }
 
 
-//            isValid &= InputValidator.isStartDateAfterPreviousEnd(
-//                    start.getText().toString(), previousEndDate, start, this
-//            );
-
             isValid &= InputValidator.isEndDateAfterOrEqual(
                     start.getText().toString(), end.getText().toString(), end, this
             );
@@ -469,5 +479,35 @@ public class StepThreeActivity extends AppCompatActivity {
         }
 
         return isValid;
+    }
+
+    private void saveCurrentDestinations() {
+        tripConfigurationViewModel.clearDestinations();
+
+        // Salvează prima destinație
+        Destination first = new Destination(
+                countrySelectorButton.getText().toString(),
+                cityEditText.getText().toString().trim(),
+                startDateInput.getText().toString().trim(),
+                endDateInput.getText().toString().trim()
+        );
+        tripConfigurationViewModel.addDestination(first);
+
+        // Salvează destinațiile dinamice
+        for (int i = 0; i < container.getChildCount(); i++) {
+            View child = container.getChildAt(i);
+            MaterialButton countryBtn = child.findViewById(R.id.dynamicCountrySelectorButton);
+            AutoCompleteTextView city = child.findViewById(R.id.dynamicCitySpinner);
+            TextInputEditText start = child.findViewById(R.id.dynamicStartDateInput);
+            TextInputEditText end = child.findViewById(R.id.dynamicEndDateInput);
+
+            Destination destination = new Destination(
+                    countryBtn.getText().toString(),
+                    city.getText().toString().trim(),
+                    start.getText().toString().trim(),
+                    end.getText().toString().trim()
+            );
+            tripConfigurationViewModel.addDestination(destination);
+        }
     }
 }

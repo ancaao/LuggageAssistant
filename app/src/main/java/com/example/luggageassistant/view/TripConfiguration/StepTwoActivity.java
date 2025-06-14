@@ -19,8 +19,10 @@ import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.Luggage;
 import com.example.luggageassistant.model.TravelPartner;
 import com.example.luggageassistant.model.TripConfiguration;
+import com.example.luggageassistant.utils.InputValidator;
 import com.example.luggageassistant.utils.StepperUtils;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,10 +69,7 @@ public class StepTwoActivity extends AppCompatActivity {
 
         populateSavedData();
 
-        String[] namesArray = allNames.toArray(new String[0]);
-        boolean[] checkedItems = new boolean[namesArray.length];
-
-        setupOwnerSelection(selectOwnersButton, namesArray, checkedItems);
+        setupOwnerSelection(selectOwnersButton);
 
         String[] luggageTypes = getResources().getStringArray(R.array.luggage_type_options);
 
@@ -101,6 +100,16 @@ public class StepTwoActivity extends AppCompatActivity {
         nextButton.setOnClickListener(view -> {
             boolean isValid = true;
 
+            TextInputLayout lengthLayout = findViewById(R.id.lengthInputLayout);
+            TextInputLayout widthLayout = findViewById(R.id.widthInputLayout);
+            TextInputLayout heightLayout = findViewById(R.id.heightInputLayout);
+            TextInputLayout weightLayout = findViewById(R.id.weightInputLayout);
+
+            isValid &= InputValidator.isDimensionValid(lengthLayout, 200, "Length");
+            isValid &= InputValidator.isDimensionValid(widthLayout, 200, "Width");
+            isValid &= InputValidator.isDimensionValid(heightLayout, 200, "Height");
+            isValid &= InputValidator.isDimensionValid(weightLayout, 50, "Weight");
+
             // Verificăm owners selectați (minim unul)
             if (selectedOwners.isEmpty()) {
                 selectOwnersErrorText.setText("Please select at least one owner");
@@ -113,6 +122,17 @@ public class StepTwoActivity extends AppCompatActivity {
 
             // Verificăm fiecare bagaj
             for (View luggageView : luggageViews) {
+
+                TextInputLayout dynLengthLayout = luggageView.findViewById(R.id.lengthInputLayout);
+                TextInputLayout dynWidthLayout = luggageView.findViewById(R.id.widthInputLayout);
+                TextInputLayout dynHeightLayout = luggageView.findViewById(R.id.heightInputLayout);
+                TextInputLayout dynWeightLayout = luggageView.findViewById(R.id.weightInputLayout);
+
+                isValid &= InputValidator.isDimensionValid(dynLengthLayout, 200, "Length");
+                isValid &= InputValidator.isDimensionValid(dynWidthLayout, 200, "Width");
+                isValid &= InputValidator.isDimensionValid(dynHeightLayout, 200, "Height");
+                isValid &= InputValidator.isDimensionValid(dynWeightLayout, 50, "Weight");
+
                 Button ownerButton = luggageView.findViewById(R.id.ownerSelectedText);
                 Button typeButton = luggageView.findViewById(R.id.luggageTypeSpinner);
 
@@ -237,8 +257,28 @@ public class StepTwoActivity extends AppCompatActivity {
         });
     }
 
-    private void setupOwnerSelection(Button ownerButton, String[] namesArray, boolean[] checkedItems) {
+    private void setupOwnerSelection(Button ownerButton) {
         ownerButton.setOnClickListener(view -> {
+            // 🧠 🔁 FIX: reconstruim lista actuală de nume
+            TripConfiguration config = tripConfigurationViewModel.getTripConfiguration();
+            List<String> currentNames = new ArrayList<>();
+            if (config.getName() != null) currentNames.add(config.getName());
+            if (config.getPartner() != null) {
+                for (TravelPartner partner : config.getPartner()) {
+                    if (partner.getName() != null) currentNames.add(partner.getName());
+                }
+            }
+
+            // 🧹 eliminăm selecțiile invalide
+            selectedOwners.retainAll(currentNames);
+
+            // 🧩 reconstruim namesArray și checkedItems
+            final String[] namesArray = currentNames.toArray(new String[0]);
+            final boolean[] checkedItems = new boolean[namesArray.length];
+            for (int i = 0; i < namesArray.length; i++) {
+                checkedItems[i] = selectedOwners.contains(namesArray[i]);
+            }
+
             AlertDialog.Builder builder = new AlertDialog.Builder(StepTwoActivity.this);
             builder.setTitle("Select owner(s)");
 
@@ -473,6 +513,7 @@ public class StepTwoActivity extends AppCompatActivity {
                 EditText heightInput = luggageView.findViewById(R.id.heightInput);
                 EditText weightInput = luggageView.findViewById(R.id.weightInput);
                 TextView accessoriesSummaryExtra = luggageView.findViewById(R.id.accessoriesSummary);
+                Button extraAccessoriesButton = luggageView.findViewById(R.id.accessoriesSelectedText);
 
                 extraOwnerButton.setText(String.join(", ", luggage.getOwners()));
                 extraTypeButton.setText(luggage.getLuggageType());
@@ -486,9 +527,9 @@ public class StepTwoActivity extends AppCompatActivity {
                 String[] allNamesArray = allNames.toArray(new String[0]);
                 setupOwnerSelectionForLuggageButton(extraOwnerButton, allNamesArray);
                 setupLuggageTypeDropdownForLuggage(extraTypeButton);
-                setupAccessoriesSelection(extraOwnerButton, accessoriesSummaryExtra);
+                setupAccessoriesSelection(extraAccessoriesButton, accessoriesSummaryExtra);
 
-                Button removeButton = luggageView.findViewById(R.id.removePartnerButton);
+                Button removeButton = luggageView.findViewById(R.id.removeLuggageButton);
                 removeButton.setText("Remove luggage");
                 removeButton.setOnClickListener(v -> {
                     luggageContainer.removeView(luggageView);

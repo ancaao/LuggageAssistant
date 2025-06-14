@@ -184,4 +184,33 @@ public class InputValidator implements TextWatcher {
         }
     }
 
+    public static boolean isDimensionValid(TextInputLayout layout, int maxValue, String fieldName) {
+        EditText editText = layout.getEditText();
+        if (editText == null) return true;
+
+        String value = editText.getText().toString().trim();
+        if (value.isEmpty()) {
+            layout.setError(null); // câmp gol → valid
+            return true;
+        }
+
+        try {
+            int number = Integer.parseInt(value);
+            if (number <= 0) {
+                layout.setError(fieldName + " must be greater than 0");
+                return false;
+            }
+            if (number > maxValue) {
+                layout.setError(fieldName + " must be ≤ " + maxValue);
+                return false;
+            }
+            layout.setError(null); // valid
+            return true;
+        } catch (NumberFormatException e) {
+            layout.setError("Invalid number for " + fieldName);
+            return false;
+        }
+    }
+
+
 }

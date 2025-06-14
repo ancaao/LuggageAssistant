@@ -68,7 +68,6 @@ public class PackingListFragment extends Fragment {
             for (PackingItem item : categorizedItems.get(category)) {
                 CheckBox checkBox = new CheckBox(getContext());
                 checkBox.setText(item.getItem() + " (" + item.getQuantity() + ")");
-                checkBox.setTextColor(getResources().getColor(R.color.onBackground));
                 checkBox.setButtonTintList(ContextCompat.getColorStateList(requireContext(), R.color.linkColor));
 
                 checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
