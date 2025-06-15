@@ -1,30 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/home_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingHorizontal="12dp"
-    android:paddingBottom="0dp"
-    android:paddingTop="12dp">
+    android:layout_marginBottom="16dp"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/user_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello!"
-        android:paddingTop="12dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:paddingBottom="2dp" />
-
-    <include layout="@layout/item_weather_card" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/home_combined_recycler"
+    <!-- 🔁 LOADING OVERLAY -->
+    <LinearLayout
+        android:id="@+id/home_loading_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="32dp"/>
-</LinearLayout>
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/background"
+        android:visibility="gone">
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/home_progress_indicator"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:indeterminate="true"
+            app:indicatorSize="48dp"
+            app:trackThickness="4dp"
+            app:indicatorColor="@color/primary" />
+    </LinearLayout>
+
+    <!-- 🔁 CONȚINUTUL PAGINII -->
+    <LinearLayout
+        android:id="@+id/home_content"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="12dp"
+        android:paddingBottom="0dp"
+        android:paddingTop="12dp"
+        android:visibility="gone"> <!-- INIȚIAL ASCUNS -->
+
+        <TextView
+            android:id="@+id/user_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello!"
+            android:paddingTop="12dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingBottom="2dp" />
+
+        <include layout="@layout/item_weather_card" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/home_combined_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="32dp"/>
+    </LinearLayout>
+
+</FrameLayout>

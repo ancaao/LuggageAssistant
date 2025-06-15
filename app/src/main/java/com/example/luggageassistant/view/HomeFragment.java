@@ -35,6 +35,7 @@ import com.example.luggageassistant.view.adapter.HomeCombinedAdapter;
 import com.example.luggageassistant.viewmodel.MainViewModel;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
 import com.example.luggageassistant.viewmodel.WeatherViewModel;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -58,11 +59,19 @@ public class HomeFragment extends Fragment {
     private boolean shortTermRequired = false;
     private boolean longTermRequired = false;
     private String currentTripIdForWeather;
+    private View homeLoadingLayout;
+    private View homeContentLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        homeLoadingLayout = view.findViewById(R.id.home_loading_layout);
+        homeContentLayout = view.findViewById(R.id.home_content);
+
+        homeLoadingLayout.setVisibility(View.VISIBLE);   // 🔁 Arată doar loaderul
+        homeContentLayout.setVisibility(View.GONE);      // 🔁 Ascunde restul
 
         mainViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())).get(MainViewModel.class);
         tripConfigurationViewModel = new ViewModelProvider(requireActivity()).get(TripConfigurationViewModel.class);
@@ -143,6 +152,9 @@ public class HomeFragment extends Fragment {
         TripConfigurationRepository.getInstance().getAllTripConfigurations(userId, new OnTripConfigurationsLoadedListener() {
             @Override
             public void onTripsLoaded(List<TripConfiguration> trips) {
+                homeLoadingLayout.setVisibility(View.GONE);
+                homeContentLayout.setVisibility(View.VISIBLE);
+
                 List<HomeCombinedAdapter.TripSection> sections = new ArrayList<>();
 
                 // ✅ Obține listele de pinned/upcoming/past direct din utils
@@ -291,6 +303,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onError(Exception e) {
+                homeLoadingLayout.setVisibility(View.GONE);
+                homeContentLayout.setVisibility(View.VISIBLE); // sau lasă ascuns, dacă vrei să apară doar loader + toast
                 Toast.makeText(getContext(), "Error loading trips", Toast.LENGTH_SHORT).show();
             }
         });
@@ -327,6 +341,5 @@ public class HomeFragment extends Fragment {
             tripConfigurationViewModel.resetTripConfiguration();
             shouldResetTripConfiguration = false;
         }
-
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.luggageassistant.R;
 import com.example.luggageassistant.model.PackingItem;
 import com.example.luggageassistant.model.PersonPackingList;
@@ -21,6 +23,7 @@ import com.example.luggageassistant.repository.PackingListRepository;
 import com.example.luggageassistant.utils.PackingListParser;
 import com.example.luggageassistant.utils.PromptBuilder;
 import com.example.luggageassistant.utils.Triple;
+import com.example.luggageassistant.view.TripConfiguration.StepOneActivity;
 import com.example.luggageassistant.view.adapter.PackingPagerAdapter;
 import com.example.luggageassistant.viewmodel.PackingListViewModel;
 import com.example.luggageassistant.viewmodel.TripConfigurationViewModel;
@@ -37,38 +40,52 @@ public class PackingListActivity extends AppCompatActivity {
 
     private PackingListViewModel packingListViewModel;
     private TripConfigurationViewModel tripConfigurationViewModel;
-    private ProgressBar loadingIndicator;
+    private LottieAnimationView lottieAnimationView;
     private TextView statusText;
+    private LinearLayout loadingLayout;
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
     private Button saveButton;
     private List<PersonPackingList> personLists;
     private String tripId;
+    private Button tryAgainButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_packing_list);
 
-        loadingIndicator = findViewById(R.id.loadingIndicator);
+        lottieAnimationView = findViewById(R.id.lottieAnimationView);
         statusText = findViewById(R.id.statusText);
+        loadingLayout = findViewById(R.id.loadingLayout);
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         saveButton = findViewById(R.id.saveButton);
+        tryAgainButton = findViewById(R.id.tryAgainButton);
 
-        statusText.setVisibility(View.GONE);
-        loadingIndicator.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+        lottieAnimationView.cancelAnimation();
         saveButton.setVisibility(View.GONE);
+
+        tabLayout.setVisibility(View.GONE);
 
         packingListViewModel = new ViewModelProvider(this).get(PackingListViewModel.class);
         tripConfigurationViewModel = new ViewModelProvider(this).get(TripConfigurationViewModel.class);
+
+        tryAgainButton.setOnClickListener(v -> {
+            Intent intent = new Intent(PackingListActivity.this, StepOneActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish(); // închide activitatea curentă
+        });
 
         // 🔽 Primim datele din intent
         String tripJson = getIntent().getStringExtra("trip_config");
         tripId = getIntent().getStringExtra("trip_id");
 
         if (tripJson == null || tripId == null) {
-            statusText.setVisibility(View.VISIBLE);
+            loadingLayout.setVisibility(View.VISIBLE);
+            lottieAnimationView.cancelAnimation();
             statusText.setText("Missing trip configuration or ID.");
             return;
         }
@@ -77,9 +94,10 @@ public class PackingListActivity extends AppCompatActivity {
         String promptJson = PromptBuilder.buildPromptFromTrip(tripConfiguration);
 
         // 🔽 Trimitem promptul către GPT
-        loadingIndicator.setVisibility(View.VISIBLE);
-        statusText.setText("Generating packing list...");
-        statusText.setVisibility(View.VISIBLE);
+        loadingLayout.setVisibility(View.VISIBLE);
+        lottieAnimationView.playAnimation();
+        statusText.setText("Working on you packing list suggestion...");
+
         packingListViewModel.requestPackingList(promptJson, tripId);
 
         // 🔽 Observăm rezultatul
@@ -88,8 +106,10 @@ public class PackingListActivity extends AppCompatActivity {
                 Log.d("GPT_JSON_RESPONSE", response);
                 this.personLists = PackingListParser.parsePerPerson(response);
 
-                loadingIndicator.setVisibility(View.GONE);
-                statusText.setVisibility(View.GONE);
+                loadingLayout.setVisibility(View.GONE);
+                lottieAnimationView.cancelAnimation();
+
+                tryAgainButton.setVisibility(View.GONE);
                 saveButton.setVisibility(View.VISIBLE);
 
                 PackingPagerAdapter adapter = new PackingPagerAdapter(this, personLists);
@@ -110,20 +130,23 @@ public class PackingListActivity extends AppCompatActivity {
                 }).attach();
 
                 tabLayout.setOnTouchListener((v, event) -> true);
-
+                tabLayout.setVisibility(View.VISIBLE);
             } catch (Exception e) {
-                loadingIndicator.setVisibility(View.GONE);
-                statusText.setVisibility(View.VISIBLE);
+                loadingLayout.setVisibility(View.VISIBLE);
+                lottieAnimationView.cancelAnimation();
                 statusText.setText("Error processing the list.");
+                tryAgainButton.setVisibility(View.VISIBLE);
+                tabLayout.setVisibility(View.GONE);
                 Log.e("PackingListParse", "Error parsing JSON", e);
             }
         });
 
         packingListViewModel.getErrorLiveData().observe(this, error -> {
-            loadingIndicator.setVisibility(View.GONE);
-            statusText.setVisibility(View.VISIBLE);
+            loadingLayout.setVisibility(View.VISIBLE);
+            lottieAnimationView.cancelAnimation();
             statusText.setText("GPT Error: " + error);
-            Toast.makeText(this, "GPT Error: " + error, Toast.LENGTH_SHORT).show();
+            tryAgainButton.setVisibility(View.VISIBLE);
+            tabLayout.setVisibility(View.GONE);
         });
 
         // 🔽 Salvăm doar la apăsarea pe buton

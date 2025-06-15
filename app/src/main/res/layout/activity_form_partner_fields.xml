@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:hint="Name *"
+
         app:boxBackgroundMode="outline"
         app:boxStrokeWidth="2dp"
         app:boxBackgroundColor="@color/surface"
@@ -37,6 +38,11 @@
             android:id="@+id/partnerNameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:inputType="textCapWords"
             android:textColor="@color/inputText" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -61,6 +67,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:minHeight="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:textColor="@color/inputText" />
     </com.google.android.material.textfield.TextInputLayout>
 

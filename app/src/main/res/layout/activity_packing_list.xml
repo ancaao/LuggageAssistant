@@ -42,24 +42,46 @@
         android:backgroundTint="@color/linkColor"
         android:textColor="@android:color/white"/>
 
-    <ProgressBar
-        android:id="@+id/loadingIndicator"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="12dp"
-        android:visibility="gone"
-        android:indeterminate="true" />
-
-    <TextView
-        android:id="@+id/statusText"
+    <LinearLayout
+        android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:padding="8dp"
-        android:visibility="gone" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="16dp">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimationView"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:lottie_fileName="loop_airplane.json"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Generating packing list..."
+            android:textSize="16sp"
+            android:textColor="@color/onBackground"
+            android:gravity="center"
+            android:textAlignment="center"/>
+
+        <Button
+            android:id="@+id/tryAgainButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Try again"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/secondary"
+            android:textColor="@color/onSecondary"
+            android:textAllCaps="false"/>
+    </LinearLayout>
 </LinearLayout>
 
 

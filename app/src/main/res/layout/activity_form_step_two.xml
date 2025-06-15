@@ -110,6 +110,11 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/background"
                     android:hint="Length (cm)"
+                    android:minHeight="56dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     android:inputType="number"
                     android:textColor="@color/inputText" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -136,6 +141,11 @@
                     android:hint="Width (cm)"
                     android:backgroundTint="@color/background"
                     android:inputType="number"
+                    android:minHeight="56dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     android:textColor="@color/inputText" />
             </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -166,6 +176,11 @@
                 android:layout_height="wrap_content"
                 android:hint="Height (cm)"
                 android:backgroundTint="@color/background"
+                android:minHeight="56dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:inputType="number"
                 android:textColor="@color/inputText" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -190,6 +205,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Weight (kg)"
+                android:minHeight="56dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:backgroundTint="@color/background"
                 android:inputType="numberDecimal"
                 android:textColor="@color/inputText" />

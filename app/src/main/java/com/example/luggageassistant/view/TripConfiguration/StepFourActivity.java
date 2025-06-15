@@ -100,7 +100,7 @@ public class StepFourActivity extends AppCompatActivity {
         TripConfigurationRepository.getInstance().saveTripConfiguration(userId, tripId, tripConfiguration, new TripConfigurationRepository.OnDataSavedCallback() {
             @Override
             public void onSuccess() {
-                Toast.makeText(StepFourActivity.this, "Trip configuration saved successfully!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(StepFourActivity.this, "Trip configuration saved successfully!", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(StepFourActivity.this, PackingListActivity.class);
                 intent.putExtra("trip_config", new Gson().toJson(tripConfiguration));

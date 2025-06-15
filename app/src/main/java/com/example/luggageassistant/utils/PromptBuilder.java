@@ -11,22 +11,24 @@ public class PromptBuilder {
             JSONObject jsonObject = new JSONObject(trip.toMap());
 
             // Construcția promptului complet pentru GPT
-            return "Generate a very detailed JSON list of everything a luggage could contain for a person or more " +
-                    "traveling according to the trip configuration below." +
-                    "Don't assume they share their personal items." +
-                    "Include categories toiletries, clothing, medication, documents, electronics, " +
-                    "special accessories (only if not null), special preferences (only if not null) and other." +
-                    "The format or your response should look like" +
+            return "Return only a raw JSON object (not a string) with this exact structure:\n\n" +
                     "{\n" +
-                    "  \"Name\": {\n" +
-                    "    \"Clothing\": [ { \"item\": \"t-shit\", \"quantity\": 3 } ],\n" +
-                    "    \"Toiletries\": [ {...} ]\n" +
-                    "  },\n" +
-                    "  \"Name\": {\n" +
-                    "    \"Clothing\": [ {...} ]\n" +
+                    "  \"PersonName\": {\n" +
+                    "    \"Clothing\": [ { \"item\": \"T-shirt\", \"quantity\": 3 } ],\n" +
+                    "    \"Toiletries\": [ { \"item\": \"Toothbrush\", \"quantity\": 1 } ],\n" +
+                    "    \"Medications\": [...],\n" +
+                    "    \"Documents\": [...],\n" +
+                    "    \"Electronics\": [...],\n" +
+                    "    \"Other\": [...]\n" +
                     "  }\n" +
-                    "}\n" +
-                    jsonObject.toString(2);
+                    "}\n\n" +
+                    "Important:\n" +
+                    "- Respond with a JSON object only, NOT inside a string.\n" +
+                    "- Do not include any explanation or extra text.\n" +
+                    "- Do not assume shared items between people.\n" +
+                    "- If special accessories or preferences are null, skip them.\n\n" +
+                    "- The list should be as detailed as possible, covering the needs of each person, also considering the luggage dimension." +
+                    "Trip configuration:\n" + jsonObject.toString(2);
 
         } catch (Exception e) {
             e.printStackTrace();
