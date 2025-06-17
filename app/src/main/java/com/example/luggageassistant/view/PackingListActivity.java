@@ -73,6 +73,7 @@ public class PackingListActivity extends AppCompatActivity {
         tripConfigurationViewModel = new ViewModelProvider(this).get(TripConfigurationViewModel.class);
 
         tryAgainButton.setOnClickListener(v -> {
+            tripConfigurationViewModel.resetTripConfiguration();
             Intent intent = new Intent(PackingListActivity.this, StepOneActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

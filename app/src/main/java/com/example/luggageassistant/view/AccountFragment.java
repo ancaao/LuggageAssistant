@@ -46,7 +46,7 @@ public class AccountFragment extends Fragment {
     private TextView btnEditFirstName, btnEditLastName, btnEditEmail, btnEditPhone;
     private TextInputLayout layoutFirstName, layoutLastName, layoutEmail, layoutPhone;
     private CircularProgressIndicator countryProgressIndicator;
-//    private TextView textCountryCount;
+    //    private TextView textCountryCount;
     TextView textCountryInsideCircle;
 
 
@@ -332,5 +332,4 @@ public class AccountFragment extends Fragment {
     public interface Callback {
         void onComplete(boolean success);
     }
-
 }

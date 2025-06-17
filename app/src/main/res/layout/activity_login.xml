@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="25dp"
-
+    android:gravity="center_horizontal"
     tools:context=".view.LoginActivity">
 
     <TextView
@@ -29,6 +29,7 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/surface"
             android:hint="@string/email" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,6 +42,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:hint="@string/password"
+            android:backgroundTint="@color/surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"/>
@@ -55,6 +57,7 @@
     <Button
         android:id="@+id/btn_login"
         android:text="@string/login"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -62,7 +65,7 @@
         android:textStyle="bold"
         android:textSize="12sp"
         android:gravity="center"
-        android:layout_marginTop="5sp"
+        android:layout_marginTop="5dp"
         android:id="@+id/registerNow"
         android:text = "@string/click_here_to_register"
         android:layout_width="wrap_content"
