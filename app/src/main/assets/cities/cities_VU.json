@@ -1,0 +1,80 @@
+[
+  {
+    "city": "Port-Vila",
+    "city_ascii": "Port-Vila",
+    "lat": "-17.7333",
+    "lng": "168.3167",
+    "country": "Vanuatu",
+    "iso2": "VU",
+    "iso3": "VUT",
+    "admin_name": "Shefa",
+    "capital": "primary",
+    "population": "51437",
+    "id": "1548805075"
+  },
+  {
+    "city": "Luganville",
+    "city_ascii": "Luganville",
+    "lat": "-15.5333",
+    "lng": "167.1667",
+    "country": "Vanuatu",
+    "iso2": "VU",
+    "iso3": "VUT",
+    "admin_name": "Sanma",
+    "capital": "admin",
+    "population": "18062",
+    "id": "1548569362"
+  },
+  {
+    "city": "Isangel",
+    "city_ascii": "Isangel",
+    "lat": "-19.5300",
+    "lng": "169.2800",
+    "country": "Vanuatu",
+    "iso2": "VU",
+    "iso3": "VUT",
+    "admin_name": "Tafea",
+    "capital": "admin",
+    "population": "1200",
+    "id": "1548941443"
+  },
+  {
+    "city": "Lakatoro",
+    "city_ascii": "Lakatoro",
+    "lat": "-16.1069",
+    "lng": "167.4208",
+    "country": "Vanuatu",
+    "iso2": "VU",
+    "iso3": "VUT",
+    "admin_name": "Malampa",
+    "capital": "admin",
+    "population": "705",
+    "id": "1548761183"
+  },
+  {
+    "city": "Saratamata",
+    "city_ascii": "Saratamata",
+    "lat": "-15.2875",
+    "lng": "167.9903",
+    "country": "Vanuatu",
+    "iso2": "VU",
+    "iso3": "VUT",
+    "admin_name": "Penama",
+    "capital": "admin",
+    "population": "",
+    "id": "1548907051"
+  },
+  {
+    "city": "Sola",
+    "city_ascii": "Sola",
+    "lat": "-13.8750",
+    "lng": "167.5500",
+    "country": "Vanuatu",
+    "iso2": "VU",
+    "iso3": "VUT",
+    "admin_name": "Torba",
+    "capital": "admin",
+    "population": "",
+    "id": "1548600754"
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "city": "Douglas",
+    "city_ascii": "Douglas",
+    "lat": "54.1450",
+    "lng": "-4.4820",
+    "country": "Isle Of Man",
+    "iso2": "IM",
+    "iso3": "IMN",
+    "admin_name": "",
+    "capital": "primary",
+    "population": "27938",
+    "id": "1833688345"
+  },
+  {
+    "city": "Onchan",
+    "city_ascii": "Onchan",
+    "lat": "54.1750",
+    "lng": "-4.4550",
+    "country": "Isle Of Man",
+    "iso2": "IM",
+    "iso3": "IMN",
+    "admin_name": "",
+    "capital": "",
+    "population": "9172",
+    "id": "1833737971"
+  }
+]

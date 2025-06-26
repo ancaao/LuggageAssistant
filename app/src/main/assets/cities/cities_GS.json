@@ -1,0 +1,28 @@
+[
+  {
+    "city": "King Edward Point",
+    "city_ascii": "King Edward Point",
+    "lat": "-54.2833",
+    "lng": "-36.5000",
+    "country": "South Georgia And South Sandwich Islands",
+    "iso2": "GS",
+    "iso3": "SGS",
+    "admin_name": "",
+    "capital": "primary",
+    "population": "",
+    "id": "1239048838"
+  },
+  {
+    "city": "Grytviken",
+    "city_ascii": "Grytviken",
+    "lat": "-54.2806",
+    "lng": "-36.5080",
+    "country": "South Georgia and South Sandwich Islands",
+    "iso2": "GS",
+    "iso3": "SGS",
+    "admin_name": "",
+    "capital": "",
+    "population": "99",
+    "id": "1239048837"
+  }
+]

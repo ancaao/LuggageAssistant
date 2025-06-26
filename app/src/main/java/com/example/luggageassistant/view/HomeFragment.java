@@ -41,6 +41,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -163,18 +164,57 @@ public class HomeFragment extends Fragment {
                 List<TripConfiguration> upcoming = categorized.upcoming;
                 List<TripConfiguration> past = categorized.past;
 
-                if (!upcoming.isEmpty()) {
+                // ✅ Include și pinned trips care sunt în viitor, pentru cardul meteo
+                List<TripConfiguration> pinnedFuture = new ArrayList<>();
+                Date now = new Date();
+                for (TripConfiguration trip : pinned) {
+                    if (trip.getDestinations() != null && !trip.getDestinations().isEmpty()) {
+                        Destination lastDestination = trip.getDestinations().get(trip.getDestinations().size() - 1);
+                        try {
+                            Date endDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(lastDestination.getTripEndDate());
+                            if (endDate != null && endDate.after(now)) {
+                                pinnedFuture.add(trip);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                // ✅ Combinăm upcoming cu pinnedFuture
+                List<TripConfiguration> weatherRelevantTrips = new ArrayList<>(upcoming);
+                for (TripConfiguration pinnedTrip : pinnedFuture) {
+                    if (!weatherRelevantTrips.contains(pinnedTrip)) {
+                        weatherRelevantTrips.add(pinnedTrip);
+                    }
+                }
+
+                // ✅ Sortăm după prima zi a vacanței
+                Collections.sort(weatherRelevantTrips, (t1, t2) -> {
+                    try {
+                        String d1 = t1.getDestinations().get(0).getTripStartDate();
+                        String d2 = t2.getDestinations().get(0).getTripStartDate();
+                        Date date1 = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(d1);
+                        Date date2 = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(d2);
+                        return date1.compareTo(date2);
+                    } catch (Exception e) {
+                        return 0;
+                    }
+                });
+
+
+                if (!weatherRelevantTrips.isEmpty()) {
                     // Verificăm dacă fragmentul este încă atașat
                     if (!isAdded()) return;
                     // ✅ Salvează în fieldul HomeFragment
-                    HomeFragment.this.upcomingTrips = upcoming;
+                    HomeFragment.this.upcomingTrips = weatherRelevantTrips;
 
                     LinearProgressIndicator progressBar = view.findViewById(R.id.packing_progress_bar);
                     TextView progressText = view.findViewById(R.id.packing_progress_text);
                     progressText.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
 
-                    TripConfiguration nextTrip = upcoming.get(0);
+                    TripConfiguration nextTrip = weatherRelevantTrips.get(0);
                     String tripId = nextTrip.getTripId();
                     // Resetăm flagurile
                     shortTermRequired = false;

@@ -1,0 +1,28 @@
+[
+  {
+    "city": "Mata-Utu",
+    "city_ascii": "Mata-Utu",
+    "lat": "-13.2825",
+    "lng": "-176.1736",
+    "country": "Wallis and Futuna",
+    "iso2": "WF",
+    "iso3": "WLF",
+    "admin_name": "Uvea",
+    "capital": "primary",
+    "population": "",
+    "id": "1876784844"
+  },
+  {
+    "city": "Leava",
+    "city_ascii": "Leava",
+    "lat": "-14.2933",
+    "lng": "-178.1583",
+    "country": "Wallis and Futuna",
+    "iso2": "WF",
+    "iso3": "WLF",
+    "admin_name": "Sigave",
+    "capital": "admin",
+    "population": "",
+    "id": "1876731744"
+  }
+]

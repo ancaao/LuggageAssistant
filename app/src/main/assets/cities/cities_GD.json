@@ -1,0 +1,28 @@
+[
+  {
+    "city": "Saint George’s",
+    "city_ascii": "Saint George's",
+    "lat": "12.0500",
+    "lng": "-61.7500",
+    "country": "Grenada",
+    "iso2": "GD",
+    "iso3": "GRD",
+    "admin_name": "Saint George",
+    "capital": "primary",
+    "population": "4315",
+    "id": "1308891766"
+  },
+  {
+    "city": "Saint David’s",
+    "city_ascii": "Saint David's",
+    "lat": "12.0444",
+    "lng": "-61.6806",
+    "country": "Grenada",
+    "iso2": "GD",
+    "iso3": "GRD",
+    "admin_name": "Saint David",
+    "capital": "",
+    "population": "12486",
+    "id": "1308183777"
+  }
+]

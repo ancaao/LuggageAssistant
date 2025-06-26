@@ -72,6 +72,8 @@ public class StepThreeActivity extends AppCompatActivity {
     private TextInputLayout startDateInputLayout, endDateInputLayout;
     private LinearLayout container;
     private MaterialButton addButton;
+    private final Map<String, List<String>> cityCache = new HashMap<>();
+
 
 
     @Override
@@ -202,19 +204,37 @@ public class StepThreeActivity extends AppCompatActivity {
     }
 
     private void loadCitiesForSelectedCountry(String selectedCountry) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("cities")
-                .whereEqualTo("country", selectedCountry)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<String> cityList = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        cityList.add(doc.getString("city"));
-                    }
-                    tripConfigurationViewModel.setCachedCities(cityList);
-                    updateCityDropdown(cityList);
-                })
-                .addOnFailureListener(e -> Log.e("FIREBASE", "Failed to load cities", e));
+        String iso2 = countryCodeMap.get(selectedCountry);
+        if (iso2 == null) return;
+
+        if (cityCache.containsKey(iso2)) {
+            updateCityDropdown(cityCache.get(iso2));
+            return;
+        }
+
+        try {
+            InputStream is = getAssets().open("cities/cities_" + iso2 + ".json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String json = new String(buffer, StandardCharsets.UTF_8);
+
+            JSONArray jsonArray = new JSONArray(json);
+            List<String> cityList = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                cityList.add(obj.getString("city"));
+            }
+
+            cityCache.put(iso2, cityList);
+            tripConfigurationViewModel.setCachedCities(cityList); // păstrăm pentru continuitate
+            updateCityDropdown(cityList);
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Nu s-au putut încărca orașele pentru " + selectedCountry, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateCityDropdown(List<String> cityList) {
@@ -349,19 +369,38 @@ public class StepThreeActivity extends AppCompatActivity {
     }
 
     private void loadCitiesForDynamicCountry(String selectedCountry, AutoCompleteTextView cityField) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("cities")
-                .whereEqualTo("country", selectedCountry)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<String> cityList = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        cityList.add(doc.getString("city"));
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, cityList);
-                    cityField.setAdapter(adapter);
-                })
-                .addOnFailureListener(e -> Log.e("FIREBASE", "Failed to load cities", e));
+        String iso2 = countryCodeMap.get(selectedCountry);
+        if (iso2 == null) return;
+
+        if (cityCache.containsKey(iso2)) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, cityCache.get(iso2));
+            cityField.setAdapter(adapter);
+            return;
+        }
+
+        try {
+            InputStream is = getAssets().open("cities/cities_" + iso2 + ".json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String json = new String(buffer, StandardCharsets.UTF_8);
+
+            JSONArray jsonArray = new JSONArray(json);
+            List<String> cityList = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                cityList.add(obj.getString("city"));
+            }
+
+            cityCache.put(iso2, cityList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, cityList);
+            cityField.setAdapter(adapter);
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Eroare la încărcarea orașelor pentru " + selectedCountry, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateLabel(TextInputEditText editText, Calendar calendar) {

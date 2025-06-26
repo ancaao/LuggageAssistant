@@ -1,0 +1,93 @@
+[
+  {
+    "city": "Andorra la Vella",
+    "city_ascii": "Andorra la Vella",
+    "lat": "42.5000",
+    "lng": "1.5000",
+    "country": "Andorra",
+    "iso2": "AD",
+    "iso3": "AND",
+    "admin_name": "Andorra la Vella",
+    "capital": "primary",
+    "population": "22615",
+    "id": "1020828846"
+  },
+  {
+    "city": "Escaldes-Engordany",
+    "city_ascii": "Escaldes-Engordany",
+    "lat": "42.5089",
+    "lng": "1.5408",
+    "country": "Andorra",
+    "iso2": "AD",
+    "iso3": "AND",
+    "admin_name": "Escaldes-Engordany",
+    "capital": "admin",
+    "population": "14521",
+    "id": "1020008674"
+  },
+  {
+    "city": "Encamp",
+    "city_ascii": "Encamp",
+    "lat": "42.5361",
+    "lng": "1.5828",
+    "country": "Andorra",
+    "iso2": "AD",
+    "iso3": "AND",
+    "admin_name": "Encamp",
+    "capital": "admin",
+    "population": "12338",
+    "id": "1020417470"
+  },
+  {
+    "city": "La Massana",
+    "city_ascii": "La Massana",
+    "lat": "42.5444",
+    "lng": "1.5144",
+    "country": "Andorra",
+    "iso2": "AD",
+    "iso3": "AND",
+    "admin_name": "La Massana",
+    "capital": "admin",
+    "population": "10076",
+    "id": "1020543453"
+  },
+  {
+    "city": "Sant Julià de Lòria",
+    "city_ascii": "Sant Julia de Loria",
+    "lat": "42.4650",
+    "lng": "1.4911",
+    "country": "Andorra",
+    "iso2": "AD",
+    "iso3": "AND",
+    "admin_name": "Sant Julià de Lòria",
+    "capital": "admin",
+    "population": "9156",
+    "id": "1020885733"
+  },
+  {
+    "city": "Ordino",
+    "city_ascii": "Ordino",
+    "lat": "42.5550",
+    "lng": "1.5331",
+    "country": "Andorra",
+    "iso2": "AD",
+    "iso3": "AND",
+    "admin_name": "Ordino",
+    "capital": "admin",
+    "population": "4858",
+    "id": "1020655238"
+  },
+  {
+    "city": "Canillo",
+    "city_ascii": "Canillo",
+    "lat": "42.5667",
+    "lng": "1.6000",
+    "country": "Andorra",
+    "iso2": "AD",
+    "iso3": "AND",
+    "admin_name": "Canillo",
+    "capital": "admin",
+    "population": "4103",
+    "id": "1020594179"
+  }
+]
