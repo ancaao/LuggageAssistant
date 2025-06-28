@@ -32,7 +32,8 @@ public class StepTwoActivity extends AppCompatActivity {
     private TripConfigurationViewModel tripConfigurationViewModel;
     private List<String> allNames = new ArrayList<>();
     private List<String> selectedOwners = new ArrayList<>();
-    private final List<String> selectedAccessories = new ArrayList<>();
+//    private final List<String> selectedAccessories = new ArrayList<>();
+    private List<String> mainAccessoriesList;
     private LinearLayout luggageContainer;
     private Button addLuggageButton;
     private List<View> luggageViews = new ArrayList<>();
@@ -86,7 +87,9 @@ public class StepTwoActivity extends AppCompatActivity {
 
         Button accessoriesButton = findViewById(R.id.selectSpecialAccessoriesButton);
         TextView accessoriesSummary = findViewById(R.id.accessoriesSelectedText);
-        setupAccessoriesSelection(accessoriesButton, accessoriesSummary);
+        mainAccessoriesList = new ArrayList<>();
+        setupAccessoriesSelection(accessoriesButton, accessoriesSummary, mainAccessoriesList);
+
 
         addLuggageButton.setOnClickListener(view -> addLuggageFields());
 
@@ -189,7 +192,7 @@ public class StepTwoActivity extends AppCompatActivity {
 
             List<String> owners = new ArrayList<>(selectedOwners);
             String type = typeButton.getText().toString();
-            List<String> accessories = new ArrayList<>(selectedAccessories);
+            List<String> accessories = new ArrayList<>(mainAccessoriesList);
 
             Luggage mainLuggage = new Luggage(owners, type, 0, 0, 0, 0, accessories);
             luggages.add(mainLuggage);
@@ -205,7 +208,7 @@ public class StepTwoActivity extends AppCompatActivity {
         });
     }
 
-    private void setupAccessoriesSelection(Button triggerButton, TextView summaryTextView) {
+    private void setupAccessoriesSelection(Button triggerButton, TextView summaryTextView, List<String> accessoriesList) {
         String[] accessoriesOptions = {
                 "Baby equipment",
                 "Musical instruments",
@@ -213,6 +216,10 @@ public class StepTwoActivity extends AppCompatActivity {
                 "Mobility equipment"
         };
         boolean[] checkedItems = new boolean[accessoriesOptions.length];
+
+        for (int i = 0; i < accessoriesOptions.length; i++) {
+            checkedItems[i] = accessoriesList.contains(accessoriesOptions[i]);
+        }
 
         triggerButton.setOnClickListener(view -> {
             LinearLayout dialogLayout = new LinearLayout(this);
@@ -228,11 +235,11 @@ public class StepTwoActivity extends AppCompatActivity {
             builder.setTitle("Select accessories");
             builder.setMultiChoiceItems(accessoriesOptions, checkedItems, (dialog, which, isChecked) -> {
                 if (isChecked) {
-                    if (!selectedAccessories.contains(accessoriesOptions[which])) {
-                        selectedAccessories.add(accessoriesOptions[which]);
+                    if (!accessoriesList.contains(accessoriesOptions[which])) {
+                        accessoriesList.add(accessoriesOptions[which]);
                     }
                 } else {
-                    selectedAccessories.remove(accessoriesOptions[which]);
+                    accessoriesList.remove(accessoriesOptions[which]);
                 }
             });
 
@@ -240,14 +247,14 @@ public class StepTwoActivity extends AppCompatActivity {
 
             builder.setPositiveButton("OK", (dialog, which) -> {
                 String other = otherInput.getText().toString().trim();
-                if (!other.isEmpty() && !selectedAccessories.contains(other)) {
-                    selectedAccessories.add(other);
+                if (!other.isEmpty() && !accessoriesList.contains(other)) {
+                    accessoriesList.add(other);
                 }
 
-                if (selectedAccessories.isEmpty()) {
+                if (accessoriesList.isEmpty()) {
                     summaryTextView.setText("No accessories selected");
                 } else {
-                    summaryTextView.setText(String.join(", ", selectedAccessories));
+                    summaryTextView.setText(String.join(", ", accessoriesList));
                 }
                 saveCurrentLuggages();
             });
@@ -330,7 +337,10 @@ public class StepTwoActivity extends AppCompatActivity {
         // Accessories
         Button accessoriesButton = luggageView.findViewById(R.id.accessoriesSelectedText);
         TextView accessoriesSummary = luggageView.findViewById(R.id.accessoriesSummary);
-        setupAccessoriesSelection(accessoriesButton, accessoriesSummary);
+
+        List<String> dynamicAccessoriesList = new ArrayList<>();
+        setupAccessoriesSelection(accessoriesButton, accessoriesSummary, dynamicAccessoriesList);
+        luggageView.setTag(R.id.tag_accessories_list, dynamicAccessoriesList);
 
         EditText lengthInput = luggageView.findViewById(R.id.lengthInput);
         EditText widthInput = luggageView.findViewById(R.id.widthInput);
@@ -413,7 +423,7 @@ public class StepTwoActivity extends AppCompatActivity {
             EditText widthInput = luggageView.findViewById(R.id.widthInput);
             EditText heightInput = luggageView.findViewById(R.id.heightInput);
             EditText weightInput = luggageView.findViewById(R.id.weightInput);
-            TextView accessoriesText = luggageView.findViewById(R.id.accessoriesSelectedText);
+//            TextView accessoriesText = luggageView.findViewById(R.id.accessoriesSelectedText);
             TextView ownerText = luggageView.findViewById(R.id.ownerSelectedText);
 
             List<String> owners = parseListFromText(ownerText.getText().toString());
@@ -422,7 +432,11 @@ public class StepTwoActivity extends AppCompatActivity {
             int width = parseInteger(widthInput.getText().toString());
             int height = parseInteger(heightInput.getText().toString());
             int weight = parseInteger(weightInput.getText().toString());
-            List<String> accessories = parseListFromText(accessoriesText.getText().toString());
+//            List<String> accessories = parseListFromText(accessoriesText.getText().toString());
+            List<String> accessories = (List<String>) luggageView.getTag(R.id.tag_accessories_list);
+            if (accessories == null) {
+                accessories = new ArrayList<>();
+            }
 
             Luggage luggage = new Luggage(owners, type, length, width, height, weight, accessories);
             luggages.add(luggage);
@@ -458,7 +472,7 @@ public class StepTwoActivity extends AppCompatActivity {
 
         List<String> owners = new ArrayList<>(selectedOwners);
         String type = typeButton.getText().toString();
-        List<String> accessories = new ArrayList<>(selectedAccessories);
+        List<String> accessories = new ArrayList<>(mainAccessoriesList);
 
         Luggage mainLuggage = new Luggage(owners, type, 0, 0, 0, 0, accessories);
         currentLuggages.add(mainLuggage);
@@ -495,10 +509,16 @@ public class StepTwoActivity extends AppCompatActivity {
             }
 
             if (mainLuggage.getSpecialAccessories() != null && !mainLuggage.getSpecialAccessories().isEmpty()) {
-                selectedAccessories.clear();
-                selectedAccessories.addAll(mainLuggage.getSpecialAccessories());
-                accessoriesSummary.setText(String.join(", ", selectedAccessories));
+                mainAccessoriesList = new ArrayList<>(mainLuggage.getSpecialAccessories());
+                accessoriesSummary.setText(String.join(", ", mainAccessoriesList));
+
+                Button accessoriesButton = findViewById(R.id.selectSpecialAccessoriesButton);
+                setupAccessoriesSelection(accessoriesButton, accessoriesSummary, mainAccessoriesList);
+
+            } else {
+                mainAccessoriesList = new ArrayList<>();
             }
+
 
             // 3. Restul luggage-urilor sunt cele dinamice
             for (int i = 1; i < savedLuggages.size(); i++) {
@@ -527,7 +547,10 @@ public class StepTwoActivity extends AppCompatActivity {
                 String[] allNamesArray = allNames.toArray(new String[0]);
                 setupOwnerSelectionForLuggageButton(extraOwnerButton, allNamesArray);
                 setupLuggageTypeDropdownForLuggage(extraTypeButton);
-                setupAccessoriesSelection(extraAccessoriesButton, accessoriesSummaryExtra);
+
+                List<String> restoredAccessoriesList = new ArrayList<>(luggage.getSpecialAccessories() != null ? luggage.getSpecialAccessories() : new ArrayList<>());
+                setupAccessoriesSelection(extraAccessoriesButton, accessoriesSummaryExtra, restoredAccessoriesList);
+                luggageView.setTag(R.id.tag_accessories_list, restoredAccessoriesList);
 
                 Button removeButton = luggageView.findViewById(R.id.removeLuggageButton);
                 removeButton.setText("Remove luggage");

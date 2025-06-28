@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "532130403973",
+    "project_id": "luggage-assistant-app",
+    "storage_bucket": "luggage-assistant-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532130403973:android:14b2df168b9e2e119afbec",
+        "android_client_info": {
+          "package_name": "com.example.luggageassistant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKcxyUhfCR_fqgizL4ueswgvG8vP5tL9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
