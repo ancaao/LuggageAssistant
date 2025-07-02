@@ -102,7 +102,6 @@ public class OpenAIRepository {
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving", e));
     }
 
-    // Interfață callback simplă
     public interface OnPackingListReceived {
         void onSuccess(String response);
         void onError(String error);

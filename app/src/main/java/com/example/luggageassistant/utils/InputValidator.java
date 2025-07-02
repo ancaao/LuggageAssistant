@@ -211,6 +211,4 @@ public class InputValidator implements TextWatcher {
             return false;
         }
     }
-
-
 }

@@ -43,7 +43,7 @@ public class GetAllTripData {
 
         List<String> itemList = new ArrayList<>(items);
         for (String item : itemList) {
-            int lengthWithComma = item.length() + (countIncluded > 0 ? 2 : 0); // ", " separator if not first
+            int lengthWithComma = item.length() + (countIncluded > 0 ? 2 : 0);
 
             if (totalLength + lengthWithComma > maxLength) break;
 

@@ -58,9 +58,9 @@ public class TripConfigurationViewModel extends ViewModel {
         if (current == null) current = new ArrayList<>();
 
         if (current.isEmpty()) {
-            current.add(destination); // prima destinație
+            current.add(destination);
         } else {
-            current.set(0, destination); // înlocuiește prima
+            current.set(0, destination);
         }
 
         tripConfiguration.setDestinations(current);

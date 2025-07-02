@@ -57,7 +57,6 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         initWidgets(view);
 
         calendarViewModel.getTripsLiveData().observe(getViewLifecycleOwner(), trips -> {
-            // La încărcarea datelor din Firebase, setează calendarul
             setMonthView();
         });
 
@@ -97,7 +96,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         YearMonth yearMonth = YearMonth.from(date);
         int daysInMonth = yearMonth.lengthOfMonth();
         LocalDate firstOfMonth = selectedDate.withDayOfMonth(1);
-        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue(); // 1 (Mon) to 7 (Sun)
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
 
         for (int i = 1; i <= 42; i++) {
             if (i <= dayOfWeek || i > daysInMonth + dayOfWeek) {

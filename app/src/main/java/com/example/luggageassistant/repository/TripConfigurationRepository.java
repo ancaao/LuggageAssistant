@@ -42,11 +42,11 @@ public class TripConfigurationRepository {
                         callback.onSuccess();
                     })
                     .addOnFailureListener(e -> {
-                        Log.e("DESTINATIONS_DEBUG", "Failed to save trip", e); // ⬅️ debug
+                        Log.e("DESTINATIONS_DEBUG", "Failed to save trip", e);
                         callback.onError(e);
                     });
         } catch (Exception e) {
-            Log.e("DESTINATIONS_DEBUG", "Exception in saveTripConfiguration", e); // ⬅️ debug
+            Log.e("DESTINATIONS_DEBUG", "Exception in saveTripConfiguration", e);
             callback.onError(e);
         }
     }
@@ -109,9 +109,4 @@ public class TripConfigurationRepository {
         void onSuccess();
         void onError(Exception e);
     }
-
-//    public interface OnTripConfigurationsLoadedListener {
-//        void onTripsLoaded(List<TripConfiguration> trips);
-//        void onError(Exception e);
-//    }
 }

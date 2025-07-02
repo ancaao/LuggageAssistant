@@ -95,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            progressBar.setVisibility(View.VISIBLE); // Afișează loading
+            progressBar.setVisibility(View.VISIBLE);
 
             registerViewModel.checkIfEmailExists(email, exists -> {
                 if (exists) {
@@ -110,7 +110,6 @@ public class RegisterActivity extends AppCompatActivity {
                         emailLayout.setBoxStrokeColor(ContextCompat.getColor(RegisterActivity.this, R.color.success));
                     });
 
-                    // Înregistrăm utilizatorul doar dacă email-ul NU există
                     registerViewModel.registerUser(email, password, firstName, lastName, phone, success -> {
                         runOnUiThread(() -> {
                             progressBar.setVisibility(View.GONE);
@@ -140,13 +139,12 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    // Resetarea erorilor când utilizatorul părăsește câmpul
     private void resetError(TextInputLayout layout, TextInputEditText editText) {
         if (!TextUtils.isEmpty(editText.getText().toString().trim())) {
             new InputValidator(this, layout, editText).validateField();
         } else {
             layout.setError(null);
-            layout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.primary)); // Reset la culoarea normală
+            layout.setBoxStrokeColor(ContextCompat.getColor(this, R.color.primary));
         }
     }
 

@@ -44,9 +44,7 @@ public class CalendarViewModel extends ViewModel {
             }
 
             @Override
-            public void onError(Exception e) {
-                // poți trimite un event separat pentru eroare
-            }
+            public void onError(Exception e) {}
         });
     }
 
@@ -78,11 +76,11 @@ public class CalendarViewModel extends ViewModel {
         String clickedDateStr = clickedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
         List<TripConfiguration> trips = tripsLiveData.getValue();
-        if (trips == null) return results; // 🔐 protecție reală împotriva crash-ului
+        if (trips == null) return results;
 
         for (TripConfiguration trip : trips) {
             List<Destination> destinations = trip.getDestinations();
-            if (destinations == null) continue; // 🔒 fix crash here
+            if (destinations == null) continue;
 
             for (Destination destination : destinations) {
                 if (isDateInRange(clickedDateStr, destination.getTripStartDate(), destination.getTripEndDate())) {

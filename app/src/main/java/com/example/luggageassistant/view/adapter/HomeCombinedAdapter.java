@@ -63,7 +63,7 @@ public class HomeCombinedAdapter extends RecyclerView.Adapter<HomeCombinedAdapte
                 holder.icon.setImageResource(R.drawable.ic_hourglass_bottom);
                 break;
             default:
-                holder.icon.setImageResource(R.drawable.ic_remove); // fallback
+                holder.icon.setImageResource(R.drawable.ic_remove);
                 break;
         }
 

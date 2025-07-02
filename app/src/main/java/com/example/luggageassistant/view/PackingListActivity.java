@@ -77,10 +77,9 @@ public class PackingListActivity extends AppCompatActivity {
             Intent intent = new Intent(PackingListActivity.this, StepOneActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            finish(); // închide activitatea curentă
+            finish();
         });
 
-        // 🔽 Primim datele din intent
         String tripJson = getIntent().getStringExtra("trip_config");
         tripId = getIntent().getStringExtra("trip_id");
 
@@ -94,14 +93,12 @@ public class PackingListActivity extends AppCompatActivity {
         TripConfiguration tripConfiguration = new Gson().fromJson(tripJson, TripConfiguration.class);
         String promptJson = PromptBuilder.buildPromptFromTrip(tripConfiguration);
 
-        // 🔽 Trimitem promptul către GPT
         loadingLayout.setVisibility(View.VISIBLE);
         lottieAnimationView.playAnimation();
         statusText.setText("Working on you packing list suggestion...");
 
         packingListViewModel.requestPackingList(promptJson, tripId);
 
-        // 🔽 Observăm rezultatul
         packingListViewModel.getPackingListLiveData().observe(this, response -> {
             try {
                 Log.d("GPT_JSON_RESPONSE", response);
@@ -150,12 +147,10 @@ public class PackingListActivity extends AppCompatActivity {
             tabLayout.setVisibility(View.GONE);
         });
 
-        // 🔽 Salvăm doar la apăsarea pe buton
-
         saveButton.setOnClickListener(v -> {
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            List<Triple<String, String, PackingItem>> itemsToSave = new ArrayList<>(); // personName, category, item
+            List<Triple<String, String, PackingItem>> itemsToSave = new ArrayList<>();
 
             for (PersonPackingList person : personLists) {
                 String personName = person.getPersonName();

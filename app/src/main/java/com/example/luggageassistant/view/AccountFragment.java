@@ -100,17 +100,14 @@ public class AccountFragment extends Fragment {
 
         btnEditFirstName.setOnClickListener(v -> {
             if (editTextFirstName.isEnabled()) {
-                // 1. Verifică dacă nu e null/gol
                 if (!InputValidator.isFieldNotEmpty(layoutFirstName)) return;
 
-                // 2. Verificare suplimentară specifică
                 if (!InputValidator.isNameValid(editTextFirstName.getText().toString())) {
                     layoutFirstName.setError("First name is invalid!");
                     layoutFirstName.setBoxStrokeColor(ContextCompat.getColor(requireContext(), R.color.error));
                     return;
                 }
 
-                // 3. Save
                 layoutFirstName.setError(null);
                 editTextFirstName.setEnabled(false);
                 editTextFirstName.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondary));
@@ -200,8 +197,8 @@ public class AccountFragment extends Fragment {
                     if (success) {
                         Toast.makeText(requireContext(), "Password reset email sent. Please check your inbox.", Toast.LENGTH_LONG).show();
 
-                        // Delogare imediată
-                        accountViewModel.logoutUser(); // va declanșa LiveData și navigare la LoginActivity
+
+                        accountViewModel.logoutUser();
                     } else {
                         Toast.makeText(requireContext(), "Failed to send password reset email.", Toast.LENGTH_SHORT).show();
                     }
@@ -277,13 +274,12 @@ public class AccountFragment extends Fragment {
         input.setBackground(null);
 
         GradientDrawable drawable = new GradientDrawable();
-        drawable.setCornerRadius(30f); // colțuri rotunjite
-//        drawable.setColor(ContextCompat.getColor(requireContext(), R.color.background)); // culoarea de fundal
+        drawable.setCornerRadius(30f);
+//        drawable.setColor(ContextCompat.getColor(requireContext(), R.color.background));
 
-        // Creează view-ul dialogului cu padding
         LinearLayout wrapper = new LinearLayout(requireContext());
         wrapper.setOrientation(LinearLayout.VERTICAL);
-        wrapper.setPadding(40, 50, 40, 20); // spațiu până la margini
+        wrapper.setPadding(40, 50, 40, 20);
         wrapper.setBackground(drawable);
         wrapper.addView(input);
 
@@ -311,7 +307,6 @@ public class AccountFragment extends Fragment {
                 .show();
         dialog.show();
 
-        // Schimbă culorile butoanelor
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(requireContext(), R.color.primary));
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(requireContext(), R.color.primary));
     }

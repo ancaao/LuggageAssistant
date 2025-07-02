@@ -113,7 +113,6 @@ public class StepTwoActivity extends AppCompatActivity {
             isValid &= InputValidator.isDimensionValid(heightLayout, 200, "Height");
             isValid &= InputValidator.isDimensionValid(weightLayout, 50, "Weight");
 
-            // Verificăm owners selectați (minim unul)
             if (selectedOwners.isEmpty()) {
                 selectOwnersErrorText.setText("Please select at least one owner");
                 selectOwnersErrorText.setVisibility(View.VISIBLE);
@@ -123,7 +122,6 @@ public class StepTwoActivity extends AppCompatActivity {
                 selectOwnersErrorText.setVisibility(View.GONE);
             }
 
-            // Verificăm fiecare bagaj
             for (View luggageView : luggageViews) {
 
                 TextInputLayout dynLengthLayout = luggageView.findViewById(R.id.lengthInputLayout);
@@ -171,7 +169,6 @@ public class StepTwoActivity extends AppCompatActivity {
 
             }
 
-            // Validare pentru bagajul principal
             Button mainLuggageType = findViewById(R.id.luggageTypeButton);
             if (mainLuggageType.getText().toString().equals("Luggage type")) {
                 luggageTypeErrorText.setText("Please select a luggage type");
@@ -186,7 +183,6 @@ public class StepTwoActivity extends AppCompatActivity {
 
             List<Luggage> luggages = new ArrayList<>();
 
-            // 1. Adaugă manual bagajul principal
             Button typeButton = findViewById(R.id.luggageTypeButton);
             Button ownerButton = findViewById(R.id.selectOwnersButton);
 
@@ -197,10 +193,8 @@ public class StepTwoActivity extends AppCompatActivity {
             Luggage mainLuggage = new Luggage(owners, type, 0, 0, 0, 0, accessories);
             luggages.add(mainLuggage);
 
-            // 2. Adaugă bagajele dinamice
             luggages.addAll(collectLuggageData());
 
-            // 3. Update corect ViewModel-ul
             tripConfigurationViewModel.getTripConfiguration().setLuggage(luggages);
 
             Intent intent = new Intent(this, StepThreeActivity.class);
@@ -266,7 +260,7 @@ public class StepTwoActivity extends AppCompatActivity {
 
     private void setupOwnerSelection(Button ownerButton) {
         ownerButton.setOnClickListener(view -> {
-            // 🧠 🔁 FIX: reconstruim lista actuală de nume
+
             TripConfiguration config = tripConfigurationViewModel.getTripConfiguration();
             List<String> currentNames = new ArrayList<>();
             if (config.getName() != null) currentNames.add(config.getName());
@@ -276,10 +270,8 @@ public class StepTwoActivity extends AppCompatActivity {
                 }
             }
 
-            // 🧹 eliminăm selecțiile invalide
             selectedOwners.retainAll(currentNames);
 
-            // 🧩 reconstruim namesArray și checkedItems
             final String[] namesArray = currentNames.toArray(new String[0]);
             final boolean[] checkedItems = new boolean[namesArray.length];
             for (int i = 0; i < namesArray.length; i++) {
@@ -324,17 +316,14 @@ public class StepTwoActivity extends AppCompatActivity {
             saveCurrentLuggages();
         });
 
-        // Owner(s)
         Button ownerButton = luggageView.findViewById(R.id.ownerSelectedText);
         String[] allNamesArray = allNames.toArray(new String[0]);
         setupOwnerSelectionForLuggageButton(ownerButton, allNamesArray);
 
-        // Luggage type
         Button luggageTypeButton = luggageView.findViewById(R.id.luggageTypeSpinner);
         luggageTypeButton.setText("Select Luggage Type");
         setupLuggageTypeDropdownForLuggage(luggageTypeButton);
 
-        // Accessories
         Button accessoriesButton = luggageView.findViewById(R.id.accessoriesSelectedText);
         TextView accessoriesSummary = luggageView.findViewById(R.id.accessoriesSummary);
 
@@ -347,7 +336,6 @@ public class StepTwoActivity extends AppCompatActivity {
         EditText heightInput = luggageView.findViewById(R.id.heightInput);
         EditText weightInput = luggageView.findViewById(R.id.weightInput);
 
-        // La fiecare focus lost => salvăm ViewModel
         lengthInput.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) saveCurrentLuggages();
         });
@@ -465,7 +453,6 @@ public class StepTwoActivity extends AppCompatActivity {
     private void saveCurrentLuggages() {
         List<Luggage> currentLuggages = new ArrayList<>();
 
-        // 1. Salvăm bagajul principal
         Button typeButton = findViewById(R.id.luggageTypeButton);
         Button ownerButton = findViewById(R.id.selectOwnersButton);
         TextView accessoriesSummary = findViewById(R.id.accessoriesSelectedText);
@@ -477,7 +464,6 @@ public class StepTwoActivity extends AppCompatActivity {
         Luggage mainLuggage = new Luggage(owners, type, 0, 0, 0, 0, accessories);
         currentLuggages.add(mainLuggage);
 
-        // 2. Salvăm bagajele dinamice
         currentLuggages.addAll(collectLuggageData());
 
         tripConfigurationViewModel.getTripConfiguration().setLuggage(currentLuggages);
@@ -487,12 +473,10 @@ public class StepTwoActivity extends AppCompatActivity {
         TripConfiguration tripConfiguration = tripConfigurationViewModel.getTripConfiguration();
         List<Luggage> savedLuggages = tripConfiguration.getLuggage();
 
-        // 1. Golim containerele ca să nu duplicăm
         luggageContainer.removeAllViews();
         luggageViews.clear();
 
         if (savedLuggages != null && !savedLuggages.isEmpty()) {
-            // 2. Primul luggage e pentru bagajul principal
             Luggage mainLuggage = savedLuggages.get(0);
 
             Button ownerButton = findViewById(R.id.selectOwnersButton);
@@ -519,8 +503,6 @@ public class StepTwoActivity extends AppCompatActivity {
                 mainAccessoriesList = new ArrayList<>();
             }
 
-
-            // 3. Restul luggage-urilor sunt cele dinamice
             for (int i = 1; i < savedLuggages.size(); i++) {
                 Luggage luggage = savedLuggages.get(i);
 
@@ -543,7 +525,6 @@ public class StepTwoActivity extends AppCompatActivity {
                 weightInput.setText(luggage.getWeight() == 0 ? "" : String.valueOf(luggage.getWeight()));
                 accessoriesSummaryExtra.setText(luggage.getSpecialAccessories() != null ? String.join(", ", luggage.getSpecialAccessories()) : "No accessories selected");
 
-                // Setăm listener-ele
                 String[] allNamesArray = allNames.toArray(new String[0]);
                 setupOwnerSelectionForLuggageButton(extraOwnerButton, allNamesArray);
                 setupLuggageTypeDropdownForLuggage(extraTypeButton);

@@ -34,8 +34,8 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public FinalPackingListAdapter(Map<String, List<PackingItem>> categorizedItems) {
         for (Map.Entry<String, List<PackingItem>> entry : categorizedItems.entrySet()) {
-            displayList.add(entry.getKey()); // categoria
-            displayList.addAll(entry.getValue()); // itemele din acea categorie
+            displayList.add(entry.getKey());
+            displayList.addAll(entry.getValue());
         }
     }
 
@@ -127,8 +127,8 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 itemCheckBox.setText(item.getItem());
             }
 
-            itemCheckBox.setOnCheckedChangeListener(null); // 🔥 dezactivezi temporar ascultătorul
-            itemCheckBox.setChecked(item.isChecked());     // ✅ setezi starea reală
+            itemCheckBox.setOnCheckedChangeListener(null);
+            itemCheckBox.setChecked(item.isChecked());
             updateStyle(item.isChecked());
 
             itemCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -152,7 +152,6 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
             deleteIcon.setVisibility(deleteMode ? View.VISIBLE : View.GONE);
             deleteIcon.setOnClickListener(v -> {
                 if (listener != null) {
-                    // Animatie vizuala inainte de stergere
                     itemView.animate()
                             .translationX(-itemView.getWidth())
                             .alpha(0f)
@@ -171,8 +170,7 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                // ✅ obține tripId din SharedPreferences
-                Context context = itemCheckBox.getContext(); // orice view are context
+                Context context = itemCheckBox.getContext();
                 String tripId = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                         .getString("current_trip_id", null);
 
@@ -195,13 +193,10 @@ public class FinalPackingListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
     public void removeItem(PackingItem item) {
         displayList.remove(item);
-        notifyDataSetChanged(); // sau notifyItemRemoved() cu poziție corectă
+        notifyDataSetChanged();
     }
 
     public void restoreItem(PackingItem item) {
-        // Adaugă înapoi în listă și recategorizează dacă e nevoie
-        // Cel mai simplu:
-        // Reîncarcă tot (poți optimiza dacă vrei)
         List<PackingItem> singleItemList = new ArrayList<>();
         for (Object obj : displayList) {
             if (obj instanceof PackingItem) {

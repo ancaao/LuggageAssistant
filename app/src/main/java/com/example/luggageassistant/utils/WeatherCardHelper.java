@@ -84,7 +84,6 @@ public class WeatherCardHelper {
                 }
             }
 
-            // Apelăm o singură dată pe oraș
             if (needsShortTerm) {
                 Log.d("FORECAST_DEBUG", "Loading 16-day forecast for " + city);
                 viewModel.load16DayForecast(city);
@@ -189,7 +188,6 @@ public class WeatherCardHelper {
 
                     WeatherForecastResponse.ForecastDay forecastDay = forecastList.get((int) diffDays);
 
-                    // ✅ Log pentru verificare
                     Log.d("FORECAST_DEBUG", "City: " + city + ", Date: " + dateStr +
                             ", Min: " + forecastDay.temp.min + "°C, Max: " + forecastDay.temp.max + "°C");
 
@@ -258,7 +256,6 @@ public class WeatherCardHelper {
         showAggregatedCard(weatherCard, weatherLocation, weatherTemperature,
                 globalCityLabels, globalMaxTemps[0], globalMaxTemps[1]);
 
-        // ✅ SALVEAZĂ ÎN CACHE
         Context context = weatherCard.getContext();
         WeatherCacheHelper.saveAggregatedForecast(
                 context,
@@ -268,7 +265,6 @@ public class WeatherCardHelper {
                 tripId
         );
 
-        // Resetăm valorile pentru următorul apel
         globalMaxTemps[0] = Float.MAX_VALUE;
         globalMaxTemps[1] = Float.MIN_VALUE;
         globalCityLabels.clear();
@@ -281,7 +277,7 @@ public class WeatherCardHelper {
     }
 
     private static void updateGlobalMinAndMax(float min, float max) {
-        globalMaxTemps[0] = Math.min(globalMaxTemps[0], min); // actualizează minimul
-        globalMaxTemps[1] = Math.max(globalMaxTemps[1], max); // actualizează maximul
+        globalMaxTemps[0] = Math.min(globalMaxTemps[0], min);
+        globalMaxTemps[1] = Math.max(globalMaxTemps[1], max);
     }
 }

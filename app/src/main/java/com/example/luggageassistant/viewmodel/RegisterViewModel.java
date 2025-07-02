@@ -36,7 +36,7 @@ public class RegisterViewModel extends ViewModel {
         registerRepository.checkIfEmailExists(email, exists -> {
             if (exists) {
                 isLoading.postValue(false);
-                callback.onComplete(false); // Email deja folosit
+                callback.onComplete(false);
             } else {
                 registerRepository.registerUser(email, password, firstName, lastName, phone, success -> {
                     isLoading.postValue(false);

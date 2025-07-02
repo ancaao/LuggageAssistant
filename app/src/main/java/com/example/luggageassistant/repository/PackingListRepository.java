@@ -119,13 +119,10 @@ public class PackingListRepository {
     }
 
     public void saveFinalPackingItem(String userId, String tripId, String personName, PackingItem item, Runnable onSuccess) {
-        // Asociază explicit numele persoanei cu itemul (foarte important)
         item.setPersonName(personName);
 
-        // Creează un ID unic (folosim item + categorie)
         String itemId = item.getItem().replaceAll("\\s+", "_") + "_" + item.getCategory();
 
-        // Convertește obiectul într-un Map pentru Firebase
         Map<String, Object> itemMap = new HashMap<>();
         itemMap.put("category", item.getCategory());
         itemMap.put("item", item.getItem());
@@ -133,7 +130,6 @@ public class PackingListRepository {
         itemMap.put("checked", false); // toate pornesc nebifate
         itemMap.put("personName", item.getPersonName()); // salvăm și în Firebase
 
-        // Ne asigurăm că documentul persoanei există (poți sări acest pas dacă nu vrei document gol)
         db.collection("users")
                 .document(userId)
                 .collection("trips")
@@ -142,7 +138,6 @@ public class PackingListRepository {
                 .document(personName)
                 .set(Collections.singletonMap("name", personName), SetOptions.merge());
 
-        // Salvăm efectiv itemul
         db.collection("users")
                 .document(userId)
                 .collection("trips")

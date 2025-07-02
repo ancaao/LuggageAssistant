@@ -96,12 +96,11 @@ public class StepOneActivity extends AppCompatActivity {
                 genderErrorText.setVisibility(View.GONE);
             }
 
-            // Validează și partenerii — chiar dacă userul e invalid
             List<TravelPartner> partners = collectPartnersData();
             boolean validPartners = partners != null;
 
             if (!validUser || !validPartners) {
-                return; // ieșim doar după ce am verificat tot
+                return;
             }
 
             int age = Integer.parseInt(ageText);
@@ -130,10 +129,8 @@ public class StepOneActivity extends AppCompatActivity {
         Button selectPreferencesButton = partnerView.findViewById(R.id.partnerSelectSpecialPreferencesButton);
         TextView partnerPreferencesSummary = partnerView.findViewById(R.id.partnerPreferencesSummary);
 
-        // Dialogul pentru preferințele partenerului
         selectPreferencesButton.setOnClickListener(v -> showSpecialPreferencesDialog(partnerView));
 
-        // Actualizare și afișare preferințe selectate
         partnerPreferencesSummary.setOnClickListener(v -> showSpecialPreferencesDialog(partnerView));
 
         removePartnerButton.setOnClickListener(view -> partnerContainer.removeView(partnerView));

@@ -47,7 +47,6 @@ public class WeatherViewModel extends ViewModel {
         return coordinatesResult;
     }
 
-    // ✅ Apel pentru forecast pe 16 zile
     public void load16DayForecast(String city) {
         weatherRepository.get16DayForecast(city, new WeatherRepository.ForecastCallback() {
             @Override
@@ -62,7 +61,6 @@ public class WeatherViewModel extends ViewModel {
         });
     }
 
-    // ✅ Apel pentru forecast estimativ (1.5 ani) pentru o dată anume
     public void loadApproximateForecast(double lat, double lon, String date) {
         weatherRepository.getApproximateForecast(lat, lon, date, new WeatherRepository.LongTermForecastCallback() {
             @Override

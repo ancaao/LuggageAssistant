@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class PersonPackingList implements Serializable {
     private String personName;
-    private Map<String, List<PackingItem>> categorizedItems; // ex: Clothing → List<PackingItem>
+    private Map<String, List<PackingItem>> categorizedItems;
 
     public PersonPackingList(String personName, Map<String, List<PackingItem>> categorizedItems) {
         this.personName = personName;

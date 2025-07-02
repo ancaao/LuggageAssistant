@@ -107,11 +107,10 @@ public class StepFourActivity extends AppCompatActivity {
                 intent.putExtra("trip_id", tripId);
                 startActivity(intent);
 
-                // ⚠️ Mutăm finish() aici într-un `postDelayed`
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     tripConfigurationViewModel.resetTripConfiguration();
                     finish();
-                }, 300); // 300ms delay ca să se finalizeze tranzacția
+                }, 300);
             }
 
             @Override
@@ -151,7 +150,6 @@ public class StepFourActivity extends AppCompatActivity {
             boolean[] checkedItems = new boolean[options.length];
             List<String> selected = new ArrayList<>();
 
-            // Sincronizăm selected și checkedItems cu ce avem în ViewModel
             if (tripConfiguration.getTravelPurpose() != null) {
                 selected.addAll(tripConfiguration.getTravelPurpose());
 

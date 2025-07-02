@@ -151,7 +151,6 @@ public class TripCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String endDate = GetAllTripData.getLatestEndDate(destinations);
             tripDate.setText(startDate + " - " + endDate);
 
-            // 🧹 Curăță containerul înainte de reumplere
             locationContainer.removeAllViews();
 
             itemView.setOnClickListener(v -> {
@@ -168,7 +167,6 @@ public class TripCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return false;
             });
 
-            // 🌍 Grupăm orașele pe țări
             Map<String, List<String>> countryToCities = new LinkedHashMap<>();
             if (destinations != null) {
                 for (Destination d : destinations) {
@@ -185,13 +183,11 @@ public class TripCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
 
-            // 🔁 Construiește vizual fiecare linie
             for (Map.Entry<String, List<String>> entry : countryToCities.entrySet()) {
                 String country = entry.getKey();
                 List<String> cities = entry.getValue();
-                String cityText = GetAllTripData.buildLimitedString(new LinkedHashSet<>(cities), 30); // 30 caractere total
+                String cityText = GetAllTripData.buildLimitedString(new LinkedHashSet<>(cities), 30);
 
-                // Container pe orizontală: steag + text
                 LinearLayout rowLayout = new LinearLayout(itemView.getContext());
                 rowLayout.setOrientation(LinearLayout.HORIZONTAL);
                 rowLayout.setGravity(Gravity.CENTER_VERTICAL);
@@ -200,7 +196,6 @@ public class TripCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 rowLayout.setPadding(0, 4, 0, 4);
 
-                // 🏳️ Icon cu steagul
                 ImageView flagIcon = new ImageView(itemView.getContext());
                 flagIcon.setLayoutParams(new LinearLayout.LayoutParams(36, 24));
                 flagIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -208,7 +203,6 @@ public class TripCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 flagIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 flagIcon.setImageResource(flagResId);
 
-                // 📍 Text
                 TextView textView = new TextView(itemView.getContext());
                 textView.setText(country + " - " + cityText);
                 textView.setTextSize(16);

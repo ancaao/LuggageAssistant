@@ -79,7 +79,6 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
 
             List<Destination> destinations = trip.getDestinations();
 
-            // ✅ înlocuiește logica veche cu metode din TripUtils
             String city = GetAllTripData.getAllCities(destinations);
             String country = GetAllTripData.getAllCountries(destinations);
             String startDate = GetAllTripData.getEarliestStartDate(destinations);
@@ -92,7 +91,6 @@ public class TripCardHorizontalAdapter extends RecyclerView.Adapter<RecyclerView
 
             vh.purpose.setText(TextUtils.join(", ", trip.getTravelPurpose()));
 
-            // ✅ păstrăm afișarea personelor din Firebase
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             FirebaseFirestore.getInstance()
                     .collection("users")

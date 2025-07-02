@@ -122,14 +122,13 @@ public class StepThreeActivity extends AppCompatActivity {
         endDateInput.setOnClickListener(v -> showEndDatePicker(startCalendar, endCalendar, endDateInput));
 
         addButton.setOnClickListener(v -> {
-            // obține ultima dată de final din ultima destinație adăugată
             String lastEndDate = null;
             if (container.getChildCount() > 0) {
                 View lastView = container.getChildAt(container.getChildCount() - 1);
                 TextInputEditText lastEndInput = lastView.findViewById(R.id.dynamicEndDateInput);
                 lastEndDate = lastEndInput.getText().toString().trim();
             } else {
-                lastEndDate = endDateInput.getText().toString().trim(); // fallback la prima destinație
+                lastEndDate = endDateInput.getText().toString().trim();
             }
 
             addDestinationView(container, null, lastEndDate);
@@ -142,7 +141,6 @@ public class StepThreeActivity extends AppCompatActivity {
 
             tripConfigurationViewModel.clearDestinations();
 
-            // Salvăm prima destinație
             Destination first = new Destination(
                     countrySelectorButton.getText().toString(),
                     cityEditText.getText().toString().trim(),
@@ -151,7 +149,6 @@ public class StepThreeActivity extends AppCompatActivity {
             );
             tripConfigurationViewModel.addDestination(first);
 
-            // Salvăm destinațiile dinamice
             for (int i = 0; i < container.getChildCount(); i++) {
                 View child = container.getChildAt(i);
                 MaterialButton countryBtn = child.findViewById(R.id.dynamicCountrySelectorButton);
@@ -175,7 +172,7 @@ public class StepThreeActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        saveCurrentDestinations(); // 🧠 salvăm chiar dacă userul apasă „Back”
+        saveCurrentDestinations();
     }
 
 
@@ -228,7 +225,7 @@ public class StepThreeActivity extends AppCompatActivity {
             }
 
             cityCache.put(iso2, cityList);
-            tripConfigurationViewModel.setCachedCities(cityList); // păstrăm pentru continuitate
+            tripConfigurationViewModel.setCachedCities(cityList);
             updateCityDropdown(cityList);
 
         } catch (IOException | JSONException e) {
@@ -268,7 +265,7 @@ public class StepThreeActivity extends AppCompatActivity {
 
         MaterialDatePicker<Long> endDatePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select End Date")
-                .setSelection(startCalendar.getTimeInMillis()) // EndDate default = StartDate
+                .setSelection(startCalendar.getTimeInMillis())
                 .setCalendarConstraints(constraintsBuilder.build())
                 .build();
 
@@ -310,7 +307,6 @@ public class StepThreeActivity extends AppCompatActivity {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                     Date prevEndDate = sdf.parse(previousEndDateString);
 
-                    // setează calendarul la ziua următoare
                     Calendar minStartCalendar = Calendar.getInstance();
                     minStartCalendar.setTime(prevEndDate);
                     minStartCalendar.add(Calendar.DATE, 1);
@@ -318,10 +314,10 @@ public class StepThreeActivity extends AppCompatActivity {
                     showStartDatePickerWithMinDate(localStartCalendar, startInput, minStartCalendar);
                 } catch (java.text.ParseException e) {
                     e.printStackTrace();
-                    showStartDatePicker(localStartCalendar, startInput); // fallback
+                    showStartDatePicker(localStartCalendar, startInput);
                 }
             } else {
-                showStartDatePicker(localStartCalendar, startInput); // fallback
+                showStartDatePicker(localStartCalendar, startInput);
             }
         });
 
@@ -329,7 +325,6 @@ public class StepThreeActivity extends AppCompatActivity {
 
         deleteBtn.setOnClickListener(v -> container.removeView(destinationView));
 
-        // Dacă avem un obiect existent, populăm câmpurile
         if (existing != null) {
             countryBtn.setText(existing.getCountry());
             citySpinner.setText(existing.getCity());
@@ -415,17 +410,14 @@ public class StepThreeActivity extends AppCompatActivity {
         if (savedDestinations != null && !savedDestinations.isEmpty()) {
             Destination firstDestination = savedDestinations.get(0);
 
-            // Setăm country dacă există
             if (firstDestination.getCountry() != null && !firstDestination.getCountry().isEmpty()) {
                 countrySelectorButton.setText(firstDestination.getCountry());
             }
 
-            // Setăm city dacă există
             if (firstDestination.getCity() != null && !firstDestination.getCity().isEmpty()) {
                 cityEditText.setText(firstDestination.getCity());
             }
 
-            // Setăm start date dacă există
             if (firstDestination.getTripStartDate() != null && !firstDestination.getTripStartDate().isEmpty()) {
                 startDateInput.setText(firstDestination.getTripStartDate());
                 try {
@@ -436,7 +428,6 @@ public class StepThreeActivity extends AppCompatActivity {
                 }
             }
 
-            // Setăm end date dacă există
             if (firstDestination.getTripEndDate() != null && !firstDestination.getTripEndDate().isEmpty()) {
                 endDateInput.setText(firstDestination.getTripEndDate());
                 try {
@@ -448,7 +439,6 @@ public class StepThreeActivity extends AppCompatActivity {
             }
         }
 
-        // Afișăm și celelalte destinații (dacă sunt)
         if (savedDestinations != null && savedDestinations.size() > 1) {
             for (int i = 1; i < savedDestinations.size(); i++) {
                 String previousEndDate = savedDestinations.get(i - 1).getTripEndDate();
@@ -460,7 +450,6 @@ public class StepThreeActivity extends AppCompatActivity {
     private boolean validateAllFields() {
         boolean isValid = true;
 
-        // Validare pentru prima destinație
         isValid &= InputValidator.isCountrySelected(countrySelectorButton, countryErrorText);
         isValid &= InputValidator.isFieldNotEmpty(cityInputLayout);
         isValid &= InputValidator.isFieldNotEmpty(startDateInputLayout);
@@ -483,7 +472,6 @@ public class StepThreeActivity extends AppCompatActivity {
 
         String previousEndDate = endDateInput.getText().toString();
 
-        // Validare pentru destinațiile dinamice
         for (int i = 0; i < container.getChildCount(); i++) {
             View child = container.getChildAt(i);
 
@@ -514,7 +502,7 @@ public class StepThreeActivity extends AppCompatActivity {
                     start.getText().toString(), end.getText().toString(), end, this
             );
 
-            previousEndDate = end.getText().toString(); // actualizăm pentru următoarea iterație
+            previousEndDate = end.getText().toString();
         }
 
         return isValid;
@@ -523,7 +511,6 @@ public class StepThreeActivity extends AppCompatActivity {
     private void saveCurrentDestinations() {
         tripConfigurationViewModel.clearDestinations();
 
-        // Salvează prima destinație
         Destination first = new Destination(
                 countrySelectorButton.getText().toString(),
                 cityEditText.getText().toString().trim(),
@@ -532,7 +519,6 @@ public class StepThreeActivity extends AppCompatActivity {
         );
         tripConfigurationViewModel.addDestination(first);
 
-        // Salvează destinațiile dinamice
         for (int i = 0; i < container.getChildCount(); i++) {
             View child = container.getChildAt(i);
             MaterialButton countryBtn = child.findViewById(R.id.dynamicCountrySelectorButton);

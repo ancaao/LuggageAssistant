@@ -89,7 +89,6 @@ public class CalendarBottomSheetDialogFragment extends BottomSheetDialogFragment
                             .addToBackStack(null)
                             .commit();
 
-                    // opțional: închide bottom sheet-ul
                     dismiss();
 
                 });

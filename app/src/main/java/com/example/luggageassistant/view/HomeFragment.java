@@ -71,8 +71,8 @@ public class HomeFragment extends Fragment {
         homeLoadingLayout = view.findViewById(R.id.home_loading_layout);
         homeContentLayout = view.findViewById(R.id.home_content);
 
-        homeLoadingLayout.setVisibility(View.VISIBLE);   // 🔁 Arată doar loaderul
-        homeContentLayout.setVisibility(View.GONE);      // 🔁 Ascunde restul
+        homeLoadingLayout.setVisibility(View.VISIBLE);
+        homeContentLayout.setVisibility(View.GONE);
 
         mainViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())).get(MainViewModel.class);
         tripConfigurationViewModel = new ViewModelProvider(requireActivity()).get(TripConfigurationViewModel.class);
@@ -97,7 +97,6 @@ public class HomeFragment extends Fragment {
 
         WeatherViewModel viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
-        // Forecast pe 16 zile
         viewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastList -> {
             if (upcomingTrips.isEmpty()) return;
             TripConfiguration trip = upcomingTrips.get(0);
@@ -112,7 +111,6 @@ public class HomeFragment extends Fragment {
             maybeShowWeatherCard();
         });
 
-        // Coordonate pentru forecast pe termen lung
         viewModel.getCoordinatesResult().observe(getViewLifecycleOwner(), pair -> {
             if (pair == null) return;
             String coordStr = pair.first;
@@ -125,7 +123,6 @@ public class HomeFragment extends Fragment {
             );
         });
 
-        // Forecast estimativ
         viewModel.getLongTermForecastJson().observe(getViewLifecycleOwner(), json -> {
             if (upcomingTrips.isEmpty()) return;
             TripConfiguration trip = upcomingTrips.get(0);
@@ -158,13 +155,11 @@ public class HomeFragment extends Fragment {
 
                 List<HomeCombinedAdapter.TripSection> sections = new ArrayList<>();
 
-                // ✅ Obține listele de pinned/upcoming/past direct din utils
                 GetAllTripData.CategorizedTrips categorized = GetAllTripData.categorizeTrips(trips);
                 List<TripConfiguration> pinned = categorized.pinned;
                 List<TripConfiguration> upcoming = categorized.upcoming;
                 List<TripConfiguration> past = categorized.past;
 
-                // ✅ Include și pinned trips care sunt în viitor, pentru cardul meteo
                 List<TripConfiguration> pinnedFuture = new ArrayList<>();
                 Date now = new Date();
                 for (TripConfiguration trip : pinned) {
@@ -181,7 +176,6 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
-                // ✅ Combinăm upcoming cu pinnedFuture
                 List<TripConfiguration> weatherRelevantTrips = new ArrayList<>(upcoming);
                 for (TripConfiguration pinnedTrip : pinnedFuture) {
                     if (!weatherRelevantTrips.contains(pinnedTrip)) {
@@ -189,7 +183,6 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
-                // ✅ Sortăm după prima zi a vacanței
                 Collections.sort(weatherRelevantTrips, (t1, t2) -> {
                     try {
                         String d1 = t1.getDestinations().get(0).getTripStartDate();
@@ -204,9 +197,8 @@ public class HomeFragment extends Fragment {
 
 
                 if (!weatherRelevantTrips.isEmpty()) {
-                    // Verificăm dacă fragmentul este încă atașat
+
                     if (!isAdded()) return;
-                    // ✅ Salvează în fieldul HomeFragment
                     HomeFragment.this.upcomingTrips = weatherRelevantTrips;
 
                     LinearProgressIndicator progressBar = view.findViewById(R.id.packing_progress_bar);
@@ -216,11 +208,10 @@ public class HomeFragment extends Fragment {
 
                     TripConfiguration nextTrip = weatherRelevantTrips.get(0);
                     String tripId = nextTrip.getTripId();
-                    // Resetăm flagurile
+
                     shortTermRequired = false;
                     longTermRequired = false;
 
-                    // Verificăm ce tipuri de forecast sunt necesare
                     List<Destination> destinations = nextTrip.getDestinations();
                     Date today = new Date();
                     long todayMillis = today.getTime();
@@ -261,7 +252,7 @@ public class HomeFragment extends Fragment {
 
                             int percent = (int) ((checkedCount * 100.0f) / items.size());
                             ValueAnimator animator = ValueAnimator.ofInt(0, percent);
-                            animator.setDuration(500); // 0.5 secunde
+                            animator.setDuration(500);
                             animator.addUpdateListener(animation -> {
                                 int animatedValue = (int) animation.getAnimatedValue();
                                 progressBar.setProgress(animatedValue);
@@ -276,7 +267,6 @@ public class HomeFragment extends Fragment {
                         }
                     });
 
-                    // ✅ VERIFICĂ DACĂ AVEM CACHE PENTRU AZI
                     if (WeatherCacheHelper.isValidForTodayTrip(requireContext(), tripId)) {
                         float minTemp = WeatherCacheHelper.getMinTemp(requireContext());
                         float maxTemp = WeatherCacheHelper.getMaxTemp(requireContext());
@@ -295,7 +285,6 @@ public class HomeFragment extends Fragment {
                         WeatherCacheHelper.clearCache(requireContext());
                         WeatherCardHelper.resetGlobalWeatherState();
 
-                        // ✅ APELĂM LOGICA DE FORECAST DOAR DACĂ NU AVEM CACHE
                         view.post(() -> WeatherCardHelper.processAndDisplayAggregatedWeather(
                                 weatherCard,
                                 weatherCardTitle,
@@ -309,7 +298,7 @@ public class HomeFragment extends Fragment {
                     weatherCard.setVisibility(View.GONE);
                 }
 
-                // ✅ Creează secțiunile de carduri
+
                 if (!pinned.isEmpty())
                     sections.add(new HomeCombinedAdapter.TripSection("Pinned Trips", "pinned", pinned.subList(0, Math.min(3, pinned.size()))));
                 if (!upcoming.isEmpty())
@@ -317,7 +306,6 @@ public class HomeFragment extends Fragment {
                 if (!past.isEmpty())
                     sections.add(new HomeCombinedAdapter.TripSection("Past Trips", "past", past.subList(0, Math.min(3, past.size()))));
 
-                // ✅ Setează adapterul pentru RecyclerView
                 recyclerView.setAdapter(new HomeCombinedAdapter(
                         sections,
                         sectionType -> {
@@ -329,7 +317,6 @@ public class HomeFragment extends Fragment {
                                     .commit();
                         },
                         trip -> {
-                            // Navigare către FinalPackingListFragment
                             FinalPackingListFragment fragment = FinalPackingListFragment.newInstance(trip.getTripId());
                             requireActivity().getSupportFragmentManager()
                                     .beginTransaction()
@@ -344,7 +331,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onError(Exception e) {
                 homeLoadingLayout.setVisibility(View.GONE);
-                homeContentLayout.setVisibility(View.VISIBLE); // sau lasă ascuns, dacă vrei să apară doar loader + toast
+                homeContentLayout.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), "Error loading trips", Toast.LENGTH_SHORT).show();
             }
         });

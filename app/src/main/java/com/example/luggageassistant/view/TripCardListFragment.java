@@ -115,7 +115,7 @@ public class TripCardListFragment extends Fragment {
             public void onTripPin(TripConfiguration trip, int position) {
                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 repository.updateTripPinned(userId, trip.getTripId(), true, () -> {
-                    trip.setPinned(true); // update local
+                    trip.setPinned(true);
                     sortAndDisplayTrips();
                 });
             }
@@ -124,7 +124,7 @@ public class TripCardListFragment extends Fragment {
             public void onTripUnpin(TripConfiguration trip, int position) {
                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 repository.updateTripPinned(userId, trip.getTripId(), false, () -> {
-                    trip.setPinned(false); // update local
+                    trip.setPinned(false);
                     sortAndDisplayTrips();
                 });
             }
@@ -138,7 +138,6 @@ public class TripCardListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         loadingSpinner.setVisibility(View.VISIBLE);
 
-        // Fetch din Firestore
         repository.getAllTripConfigurations(userId, new OnTripConfigurationsLoadedListener() {
             @Override
             public void onTripsLoaded(List<TripConfiguration> trips) {
@@ -216,7 +215,6 @@ public class TripCardListFragment extends Fragment {
             }
         }
 
-        // sortează și grupează
         futureTrips.sort(Comparator.comparing(trip -> {
             try {
                 return sdf.parse(trip.getFirstDestination().getTripStartDate());
@@ -318,8 +316,6 @@ public class TripCardListFragment extends Fragment {
             }
         }
 
-
-        // Sortează fiecare secțiune dacă vrei
         futureTrips.sort(Comparator.comparing(trip -> {
             try {
                 return sdf.parse(trip.getFirstDestination().getTripStartDate());
@@ -337,7 +333,6 @@ public class TripCardListFragment extends Fragment {
             }
         });
 
-        // Construiește lista finală
         List<Object> displayList = new ArrayList<>();
         tripCategoryMap.clear();
         for (TripConfiguration trip : pinnedTrips) {
@@ -383,7 +378,7 @@ public class TripCardListFragment extends Fragment {
     }
     private int findSectionStartIndex(String sectionType) {
         for (int i = 0; i < adapter.getItemCount(); i++) {
-            Object item = adapter.getItemAt(i); // adaptează în funcție de implementarea ta
+            Object item = adapter.getItemAt(i);
             if (item instanceof String && ((String) item).toLowerCase().contains(sectionType)) {
                 return i;
             }

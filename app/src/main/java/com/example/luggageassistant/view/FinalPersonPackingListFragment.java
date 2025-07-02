@@ -92,7 +92,7 @@ public class FinalPersonPackingListFragment extends Fragment {
                 btnDelete.setTextColor(ContextCompat.getColor(requireContext(), R.color.background));
 
             } else {
-                btnDelete.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.background)); // sau culoarea implicită
+                btnDelete.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.background));
                 btnDelete.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary));
             }
         });
@@ -101,19 +101,18 @@ public class FinalPersonPackingListFragment extends Fragment {
         adapter = new FinalPackingListAdapter(categorizeItems(items));
 
         adapter.setOnDeleteClickListener(itemToDelete -> {
-            adapter.removeItem(itemToDelete); // scoate din listă cu animație
+            adapter.removeItem(itemToDelete);
             recentlyDeletedItem = itemToDelete;
 
             Snackbar.make(view, "Item deleted", Snackbar.LENGTH_LONG)
                     .setAnchorView(R.id.actionButtonsLayout)
                     .setAction("UNDO", v1 -> {
-                        adapter.restoreItem(itemToDelete); // readaugă în listă
-                        recentlyDeletedItem = null; // anulăm ștergerea
+                        adapter.restoreItem(itemToDelete);
+                        recentlyDeletedItem = null;
                     })
                     .addCallback(new Snackbar.Callback() {
                         @Override
                         public void onDismissed(Snackbar snackbar, int event) {
-                            // Dacă nu s-a dat Undo
                             if (event != DISMISS_EVENT_ACTION && recentlyDeletedItem != null) {
                                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                 String tripId = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
@@ -149,7 +148,6 @@ public class FinalPersonPackingListFragment extends Fragment {
         viewModel.loadItems(userId, tripId);
 
         viewModel.getItems().observe(getViewLifecycleOwner(), items -> {
-            // Filtrăm doar pentru persoana curentă
             List<PackingItem> personItems = new ArrayList<>();
             for (PackingItem item : items) {
                 if (item.getPersonName().equals(personName)) {
@@ -158,7 +156,6 @@ public class FinalPersonPackingListFragment extends Fragment {
             }
 
             currentItems = personItems;
-            // aici actualizezi adapterul sau UI-ul cu noile date
             adapter.updateData(FinalPackingListAdapter.categorizeItems(personItems));
         });
     }
@@ -175,14 +172,13 @@ public class FinalPersonPackingListFragment extends Fragment {
         Button btnMinus = dialogView.findViewById(R.id.btnMinus);
 
         List<String> categoryList = new ArrayList<>();
-        categoryList.add("Select Category"); // hint
+        categoryList.add("Select Category");
         categoryList.addAll(Arrays.asList("Toiletries", "Clothing", "Medication", "Documents", "Electronics", "Special Accessories", "Special Preferences", "Other"));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, categoryList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);
 
-        // evită selectarea primei opțiuni (hint)
         categorySpinner.setSelection(0);
 
 

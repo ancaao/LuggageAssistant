@@ -22,7 +22,7 @@ public class CountryCode {
         if (initialized) return;
         try {
             AssetManager assetManager = context.getAssets();
-            InputStream is = assetManager.open("countries.json"); // numele fișierului tău
+            InputStream is = assetManager.open("countries.json");
 
             Scanner scanner = new Scanner(is).useDelimiter("\\A");
             String json = scanner.hasNext() ? scanner.next() : "";
@@ -32,7 +32,7 @@ public class CountryCode {
                 JSONObject obj = array.getJSONObject(i);
                 String name = obj.getString("name");
                 String code = obj.getString("code");
-                countryToIsoMap.put(name, code.toLowerCase()); // ex: "France" -> "fr"
+                countryToIsoMap.put(name, code.toLowerCase());
             }
 
             initialized = true;

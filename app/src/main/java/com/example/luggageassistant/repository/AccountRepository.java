@@ -66,7 +66,6 @@ public class AccountRepository {
 
         currentUser.reauthenticate(credential)
                 .addOnSuccessListener(authResult -> {
-                    // Șterge din Firestore
                     db.collection("users").document(currentUser.getUid())
                             .delete()
                             .addOnSuccessListener(unused -> {

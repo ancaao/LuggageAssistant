@@ -22,9 +22,8 @@ public class MainNavigationActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser == null) {
-            // Utilizatorul NU e logat → mergem la LoginActivity
             Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // evită back la acest ecran
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
             return;
@@ -56,7 +55,6 @@ public class MainNavigationActivity extends AppCompatActivity {
             }else if (id == R.id.nav_list) {
                 selectedFragment = new TripCardListFragment();
             } else if (id == R.id.nav_add) {
-                // Deschide o activitate nouă în loc de fragment
                 Intent intent = new Intent(this, StepOneActivity.class);
                 startActivity(intent);
                 return false;
@@ -73,19 +71,16 @@ public class MainNavigationActivity extends AppCompatActivity {
             return true;
         });
 
-        // Fragment implicit la lansare
         if (savedInstanceState == null) {
             Fragment defaultFragment;
 
             if ("final_list".equals(target)) {
                 bottomNav.setSelectedItemId(R.id.nav_list);
 
-                // Mai întâi încarcă TripCardListFragment fără să-l adaugi în back stack
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new TripCardListFragment())
                         .commit();
 
-                // Apoi încarcă FinalPackingListFragment și îl adaugi în back stack
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new FinalPackingListFragment())
                         .addToBackStack(null)

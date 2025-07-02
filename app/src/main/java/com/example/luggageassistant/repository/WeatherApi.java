@@ -24,14 +24,14 @@ public interface WeatherApi {
     Call<ResponseBody> getLongTermForecast(
             @Query("lat") double lat,
             @Query("lon") double lon,
-            @Query("date") String date,     // Format: yyyy-MM-dd
+            @Query("date") String date,
             @Query("appid") String apiKey,
             @Query("units") String units
     );
 
     @GET("geo/1.0/direct")
     Call<List<GeocodingResponse>> getCoordinatesFromCity(
-            @Query("q") String location,          // ex: "Paris,FR"
+            @Query("q") String location,
             @Query("limit") int limit,
             @Query("appid") String apiKey
     );

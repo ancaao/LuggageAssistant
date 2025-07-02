@@ -108,7 +108,6 @@ public class FinalPackingListFragment extends Fragment {
             personToItems.get(personName).add(item);
         }
 
-        // → Aici folosești ViewPager cu câte o pagină pentru fiecare persoană
         FinalPackingPagerAdapter pagerAdapter = new FinalPackingPagerAdapter(this, personToItems);
         viewPager.setAdapter(pagerAdapter);
 
@@ -128,7 +127,7 @@ public class FinalPackingListFragment extends Fragment {
 
         if (tripId != null && !tripId.isEmpty()) {
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            viewModel.loadItems(userId, tripId); // 🔁 Reîncarcă lista din Firebase
+            viewModel.loadItems(userId, tripId);
         } else {
             Toast.makeText(getContext(), "Missing trip ID", Toast.LENGTH_LONG).show();
         }

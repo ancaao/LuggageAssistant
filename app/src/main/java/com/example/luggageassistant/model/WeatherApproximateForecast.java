@@ -1,7 +1,7 @@
 package com.example.luggageassistant.model;
 
 public class WeatherApproximateForecast {
-    public String date; // în format yyyy-MM-dd
+    public String date;
     public float minTemp;
     public float maxTemp;
     public String city;

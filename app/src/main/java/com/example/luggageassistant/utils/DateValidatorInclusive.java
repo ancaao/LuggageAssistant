@@ -15,7 +15,7 @@ public class DateValidatorInclusive implements CalendarConstraints.DateValidator
 
     @Override
     public boolean isValid(long date) {
-        return date >= minDate; // Acceptă date egale sau după
+        return date >= minDate;
     }
 
     @Override

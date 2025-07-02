@@ -17,7 +17,6 @@ import java.util.Map;
 public class PackingListParser {
 
     public static List<PersonPackingList> parsePerPerson(String rawText) throws Exception {
-        // Dacă e string serializat, îl deserializăm
         if (rawText.trim().startsWith("\"{")) {
             rawText = new Gson().fromJson(rawText, String.class);
         }

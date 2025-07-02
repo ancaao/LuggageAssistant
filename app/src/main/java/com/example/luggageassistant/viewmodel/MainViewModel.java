@@ -42,7 +42,6 @@ public class MainViewModel extends ViewModel {
         mainRepository.getUserData(user -> {
             userData.postValue(user);
         }, error -> {
-            // Log error sau tratament
             Log.e("MainViewModel", "Error loading user: " + error.getMessage());
         });
     }

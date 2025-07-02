@@ -70,7 +70,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>
             Context context = holder.itemView.getContext();
 
             if (isSelected && isToday && hasTrip) {
-                // ziua curentă și selectată și are trip
                 holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.error));
                 holder.dayOfMonth.setTypeface(null, Typeface.BOLD);
                 holder.dayOfMonth.setTextColor(ContextCompat.getColor(context, R.color.onPrimary));
